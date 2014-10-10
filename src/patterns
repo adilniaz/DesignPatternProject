@@ -1,0 +1,13 @@
+Factory:
+	Characters
+	Platforms
+
+Strategy:
+	Characters
+	Behaviours
+
+Observer:
+	EtatMajor
+
+Decorator:
+	Accessories(Power, Health, Strength, Magic, Character Specialty)
