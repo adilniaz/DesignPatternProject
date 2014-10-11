@@ -6,7 +6,7 @@ import abstracts_interfaces.behaviours.BehaviourTalkAbstract;
 public class TalkArcher extends BehaviourTalkAbstract{
 
 	@Override
-	public String EmmettreUnSon() {
+	public String speak() {
 		// TODO Auto-generated method stub
 		return "I am an Archer.";
 	}

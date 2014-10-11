@@ -1,25 +1,22 @@
 package implementations.organisations;
 
-import abstracts_interfaces.SujetObserveAbstrait;
+import main_package.GameSimulation.Strategy;
+import abstracts_interfaces.ObservedSubjectAbstract;
 
-public class Organisation extends SujetObserveAbstrait{
+public class Organisation extends ObservedSubjectAbstract{
 	
-	public enum modeFonctionnement{
-		MODE_GUERRE, MODE_PAIX, MODE_NON_DEFINI, MODE_REPLI
-	}
-	
-	public String modeFonctionnement;
-	
-	public String getModeFonctionnement() {
-		return modeFonctionnement;
-	}
-
-	public void setModeFonctionnement(String modeFonctionnement) {
-		this.modeFonctionnement = modeFonctionnement;
-		Notify();
-	}
-
+	public String operatingMode;
 	public Organisation Parent;
+	
+	public String getOperatingMode() {
+		return operatingMode;
+	}
+
+	public void setOperatingMode(Strategy strategy) {
+		this.operatingMode = strategy.toString();
+		notifyObservers();
+	}
+	
 	
 	public Organisation getParent() {
 		return Parent;
@@ -28,5 +25,5 @@ public class Organisation extends SujetObserveAbstrait{
 	public void setParent(Organisation parent) {
 		Parent = parent;
 	}
-	
+
 }

@@ -5,7 +5,7 @@ import implementations.characters.FootSoldier;
 import implementations.characters.Knight;
 import implementations.characters.Princess;
 import implementations.organisations.Organisation;
-import main_package.SimulationJeu.typeCharacters;
+import main_package.GameSimulation.CharactersType;
 import abstracts_interfaces.CharacterAbstract;
 import abstracts_interfaces.factories.characters.CreateCharactersFactoryAbstract;
 
@@ -13,19 +13,18 @@ public class CreateCharactersMiddleAgeFactory extends CreateCharactersFactoryAbs
 
 	@Override
 	public CharacterAbstract createCharacter(String name, Organisation org,
-			typeCharacters typeCharacter) {
+			CharactersType typeCharacter) {
 		switch (typeCharacter) {
-		case ARCHER:
-			return new Archer(name, org);
-		case PRINCESS:
-			return new Princess(name, org);
-		case KNIGHT:
-			return new Knight(name, org);
-		case FOOTSOLDIER:
-			return new FootSoldier(name, org);
-
-		default:
-			return null;
+			case ARCHER:
+				return new Archer(name, org);
+			case PRINCESS:
+				return new Princess(name, org);
+			case KNIGHT:
+				return new Knight(name, org);
+			case FOOTSOLDIER:
+				return new FootSoldier(name, org);
+			default:
+				return null;
 		}
 	}
 }

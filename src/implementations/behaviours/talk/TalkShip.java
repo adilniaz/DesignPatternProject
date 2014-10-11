@@ -6,8 +6,7 @@ import abstracts_interfaces.behaviours.BehaviourTalkAbstract;
 public class TalkShip extends BehaviourTalkAbstract{
 
 	@Override
-	public String EmmettreUnSon() {
-		// TODO Auto-generated method stub
+	public String speak() {
 		return "I am an Ship.";
 	}
 

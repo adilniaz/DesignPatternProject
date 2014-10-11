@@ -5,7 +5,7 @@ import abstracts_interfaces.behaviours.BehaviourCombatAbstract;
 public class CombatFighterAirCraft extends BehaviourCombatAbstract{
 
 	@Override
-	public String Combattre() {
+	public String fight() {
 		return "Bombs Away!!";
 	}
 

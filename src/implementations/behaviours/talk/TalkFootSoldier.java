@@ -5,8 +5,7 @@ import abstracts_interfaces.behaviours.BehaviourTalkAbstract;
 public class TalkFootSoldier extends BehaviourTalkAbstract{
 
 	@Override
-	public String EmmettreUnSon() {
-		// TODO Auto-generated method stub
+	public String speak() {
 		return "I am a Swordsman.";
 	}
 

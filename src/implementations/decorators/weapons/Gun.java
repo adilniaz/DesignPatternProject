@@ -3,7 +3,11 @@ package implementations.decorators.weapons;
 import abstracts_interfaces.decorators.weapons.WeaponAbstract;
 
 public class Gun extends WeaponAbstract{
-
+	
+	public Gun(){
+		name = "Gun";
+	}
+	
 	@Override
 	public int getDamage() {
 		return 3;

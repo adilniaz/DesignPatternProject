@@ -3,26 +3,25 @@ package implementations.characters;
 import abstracts_interfaces.CharacterAbstract;
 import implementations.behaviours.combat.CombatSoldier;
 import implementations.behaviours.talk.TalkSoldier;
+import implementations.decorators.weapons.Gun;
 import implementations.organisations.Organisation;
 
 public class Soldier extends CharacterAbstract{
 	
-	public Soldier(String lenom, Organisation theSubject) {
-		super(theSubject, lenom);
-		comportement = new CombatSoldier();
-		son = new TalkSoldier();
+	public Soldier(String theName, Organisation theSubject) {
+		super(theSubject, theName);
+		behaviour = new CombatSoldier();
+		speech = new TalkSoldier();
+		weapon = new Gun();
 	}
 	
-
 	@Override
-	public String Afficher() {
-		// TODO Auto-generated method stub
+	public String display() {
 		return null;
 	}
 
 	@Override
-	public String SeDeplacer() {
-		// TODO Auto-generated method stub
+	public String move() {
 		return null;
 	}
 }

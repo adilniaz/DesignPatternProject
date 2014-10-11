@@ -1,7 +1,7 @@
 package implementations.factories.gameplatforms.platformtypes;
 
-import implementations.factories.gameplatforms.accesses.Neighbour;
-import implementations.factories.gameplatforms.zones.Square;
+import implementations.factories.gameplatforms.accesses.Border;
+import implementations.factories.gameplatforms.zones.Country;
 
 import java.util.ArrayList;
 
@@ -13,10 +13,14 @@ public class WorldMapFactory extends GamePlatformFactoryAbstract{
 	
 	private ArrayList<ZoneAbstract> country;
 	private ArrayList<AccessAbstract> borders;
-	
+
+	public WorldMapFactory(){
+		this.name = "";
+		buildZonesAndAccesses();
+	}
+
 	public WorldMapFactory(String str){
 		this.name = str;
-		
 		buildZonesAndAccesses();
 	}
 	
@@ -35,29 +39,21 @@ public class WorldMapFactory extends GamePlatformFactoryAbstract{
 		this.borders = access;
 	}
 	
-	public WorldMapFactory(){
-		
-		this.name = "";
-		
-		buildZonesAndAccesses();
-		
-	}
-
 	@Override
 	public void buildZonesAndAccesses() {
 		country = new ArrayList<ZoneAbstract>();
 		borders = new ArrayList<AccessAbstract>();
 		
 		ZoneAbstract zone;
-		ZoneAbstract zone0 = new Square("country 0");
+		ZoneAbstract zone0 = new Country("country 0");
 		for (int i = 0; i < 5; i++) {
-			zone = new Square("country " + i);
+			zone = new Country("country " + i);
 			country.add(zone);
 		}
 		for (int i = 0; i < 5; i++) {
-			AccessAbstract neigh = new Neighbour();
+			AccessAbstract neigh = new Border();
 			if (i<4) {
-				neigh.CreateAccess(zone0, country.get(i+1));
+				neigh.createAccess(zone0, country.get(i+1));
 				borders.add(neigh);
 			}
 		}

@@ -3,26 +3,26 @@ package implementations.characters;
 import abstracts_interfaces.CharacterAbstract;
 import implementations.behaviours.combat.CombatArcher;
 import implementations.behaviours.talk.TalkArcher;
+import implementations.decorators.weapons.Bow;
 import implementations.organisations.Organisation;
 
 public class Archer extends CharacterAbstract{
 	
-	public Archer(String lenom, Organisation theSubject) {
-		super(theSubject, lenom);
-		comportement = new CombatArcher();
-		son = new TalkArcher();
+	public Archer(String theName, Organisation theSubject) {
+		super(theSubject, theName);
+		behaviour = new CombatArcher();
+		speech = new TalkArcher();
+		weapon = new Bow();
 	}
 	
 
 	@Override
-	public String Afficher() {
-		// TODO Auto-generated method stub
+	public String display() {
 		return null;
 	}
 
 	@Override
-	public String SeDeplacer() {
-		// TODO Auto-generated method stub
+	public String move() {
 		return null;
 	}
 }

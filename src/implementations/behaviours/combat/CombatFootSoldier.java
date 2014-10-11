@@ -5,8 +5,7 @@ import abstracts_interfaces.behaviours.BehaviourCombatAbstract;
 public class CombatFootSoldier extends BehaviourCombatAbstract{
 
 	@Override
-	public String Combattre() {
-		// TODO Auto-generated method stub
+	public String fight() {
 		return "Swordsmen Attack!!";
 	}
 

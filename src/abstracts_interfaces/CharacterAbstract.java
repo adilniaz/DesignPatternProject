@@ -2,55 +2,74 @@ package abstracts_interfaces;
 
 import abstracts_interfaces.behaviours.BehaviourCombatAbstract;
 import abstracts_interfaces.behaviours.BehaviourTalkAbstract;
+import abstracts_interfaces.decorators.weapons.WeaponAbstract;
 import implementations.organisations.Organisation;
 
 
 public abstract class CharacterAbstract extends ObserverAbstract{
 	
 
-	private String nom;
-	protected BehaviourCombatAbstract comportement;
-	protected BehaviourTalkAbstract son;
+	private String name;
+	protected BehaviourCombatAbstract behaviour;
+	protected BehaviourTalkAbstract speech;
 	protected Organisation subject;
-	protected String etatObservé;
+	protected String operatingState;
+	protected WeaponAbstract weapon;
 	
-	public enum etatFonctionnement{
-		MODE_GUERRE, MODE_PAIX, MODE_NON_DEFINI, MODE_REPLI
-	};
-	
-	public abstract String Afficher();
-	
-	public String getEtatObservé() {
-		return etatObservé;
+	public WeaponAbstract getWeapon() {
+		return weapon;
 	}
 
-	public abstract String SeDeplacer();
+	public void setWeapon(WeaponAbstract weapon) {
+		this.weapon = weapon;
+	}
+
+	public void setOperatingState(String operatingState) {
+		this.operatingState = operatingState;
+	}
+
+	public abstract String display();
+	
+	public String getOperatingState() {
+		return operatingState;
+	}
+
+	public abstract String move();
 
 	
-	public CharacterAbstract(Organisation theSubject, String lenom){
-		nom=lenom;
-		comportement=null;
-		son=null;
-		subject= theSubject;
-		if (subject != null) {
-			subject.Attach(this);
+	public CharacterAbstract(Organisation subject, String name){
+		this.name=name;
+		this.behaviour=null;
+		this.speech=null;
+		this.weapon= null;
+		this.subject= subject;
+		if (this.subject != null) {
+			this.subject.attach(this);
 		}
 	}
 	
-	public void Update(){
-		this.etatObservé = subject.getModeFonctionnement();
+	public void update(){
+		this.operatingState = subject.getOperatingMode();
 	}
 
-	public  String Combattre(){
-		if (comportement != null) {
-			return comportement.Combattre();
+	public String fight(){
+		if (behaviour != null) {
+			return behaviour.fight();
 		}
-		return "Je ne combat pas";
+		return "I do not fight.";
 	}
 	
-	public  String EmmetreUnSon(){
-		if (son != null) {
-			return son.EmmettreUnSon();
+	public String checkWeapons(){
+		if (weapon != null) {
+			
+			return "I have a " + weapon.name +".";
+		}
+		return "I do not have a weapon";
+	}
+	
+	public String speak(){
+		if (speech != null) {
+			return speech.speak();
 		}
 		return "";
 	}
@@ -63,28 +82,28 @@ public abstract class CharacterAbstract extends ObserverAbstract{
 		this.subject = subject;
 	}
 
-	public String getNom() {
-		return nom;
+	public String getName() {
+		return name;
 	}
 	
-	public void setNom(String nom) {
-		this.nom = nom;
+	public void setName(String name) {
+		this.name = name;
 	}
 	
-	public BehaviourCombatAbstract getComportement() {
-		return comportement;
+	public BehaviourCombatAbstract getBehaviour() {
+		return behaviour;
 	}
 	
-	public void setComportement(BehaviourCombatAbstract comportement) {
-		this.comportement = comportement;
+	public void setBehaviour(BehaviourCombatAbstract behaviour) {
+		this.behaviour = behaviour;
 	}
 	
-	public BehaviourTalkAbstract getSon() {
-		return son;
+	public BehaviourTalkAbstract getSpeech() {
+		return speech;
 	}
 	
-	public void setSon(BehaviourTalkAbstract son) {
-		this.son = son;
+	public void setSpeech(BehaviourTalkAbstract speech) {
+		this.speech = speech;
 	}
 	
 }

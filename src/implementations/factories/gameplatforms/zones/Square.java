@@ -14,7 +14,7 @@ public class Square extends ZoneAbstract{
 	}
 	
 	@Override
-	public String CreateZone() {
+	public String createZone() {
 		return "Square "+ name +" Created";
 	}
 	

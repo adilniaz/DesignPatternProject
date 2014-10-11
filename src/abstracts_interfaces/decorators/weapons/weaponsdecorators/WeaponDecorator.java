@@ -2,28 +2,27 @@ package abstracts_interfaces.decorators.weapons.weaponsdecorators;
 
 import abstracts_interfaces.decorators.weapons.WeaponAbstract;
 
-public abstract class AxeDecorator extends WeaponAbstract{
+public abstract class WeaponDecorator extends WeaponAbstract{
+
+	protected final WeaponAbstract weapon;
 	
-	protected final WeaponAbstract axe;
-	
-	public AxeDecorator(WeaponAbstract axe) {
-		this.axe = axe;
+	public WeaponDecorator(WeaponAbstract weapon) {
+		this.weapon = weapon;
 	}
-	
 	
 	@Override
 	public int getDamage() {
-		return axe.getDamage();
+		return weapon.getDamage();
 	}
 
 	@Override
 	public int getAccuracy() {
-		return axe.getAccuracy();
+		return weapon.getAccuracy();
 	}
 
 	@Override
 	public int getRange() {
-		return axe.getRange();
+		return weapon.getRange();
 	}
 
 }

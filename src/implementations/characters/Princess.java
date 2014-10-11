@@ -6,26 +6,21 @@ import implementations.organisations.Organisation;
 
 public class Princess extends CharacterAbstract{
 	
-	public Princess(String lenom, Organisation theSubject) {
-		super(theSubject, lenom);
-		son = new TalkPrincess();
+	public Princess(String theName, Organisation theSubject) {
+		super(theSubject, theName);
+		speech = new TalkPrincess();
 	}
 
 	@Override
-	public String Afficher() {
-		// TODO Auto-generated method stub
+	public String display() {
 		return null;
 	}
 	
 	@Override
-	public String SeDeplacer() {
-		// TODO Auto-generated method stub
+	public String move() {
 		return null;
 	}
 
 	@Override
-	public void Update() {
-		// TODO Auto-generated method stub
-		
-	}
+	public void update() { }
 }

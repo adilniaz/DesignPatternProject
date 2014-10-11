@@ -5,8 +5,7 @@ import abstracts_interfaces.behaviours.BehaviourCombatAbstract;
 public class CombatShip extends BehaviourCombatAbstract{
 
 	@Override
-	public String Combattre() {
-		// TODO Auto-generated method stub
+	public String fight() {
 		return "Ships Attack!!";
 	}
 

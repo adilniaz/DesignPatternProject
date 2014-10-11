@@ -5,7 +5,7 @@ import abstracts_interfaces.behaviours.BehaviourCombatAbstract;
 public class CombatTank extends BehaviourCombatAbstract{
 
 	@Override
-	public String Combattre() {
+	public String fight() {
 		return "Tank Attack!!";
 	}
 

@@ -4,6 +4,10 @@ import abstracts_interfaces.decorators.weapons.WeaponAbstract;
 
 public class Axe extends WeaponAbstract{
 
+	public Axe(){
+		name="Axe";
+	}
+	
 	@Override
 	public int getDamage() {
 		return 2;

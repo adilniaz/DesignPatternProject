@@ -14,7 +14,7 @@ public class Country extends ZoneAbstract{
 	}
 	
 	@Override
-	public String CreateZone() {
+	public String createZone() {
 		return "Country "+ name +" Created";
 	}
 	

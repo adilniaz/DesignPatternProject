@@ -56,7 +56,7 @@ public class MazeFactory extends GamePlatformFactoryAbstract{
 		for (int i = 0; i < 5; i++) {
 			AccessAbstract neigh = new Neighbour();
 			if (i<4) {
-				neigh.CreateAccess(zone0, squares.get(i+1));
+				neigh.createAccess(zone0, squares.get(i+1));
 			neighbours.add(neigh);
 			}
 		}
