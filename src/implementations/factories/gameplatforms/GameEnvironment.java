@@ -2,7 +2,7 @@ package implementations.factories.gameplatforms;
 
 import implementations.factories.gameplatforms.platformtypes.MazeFactory;
 import implementations.factories.gameplatforms.platformtypes.WorldMapFactory;
-import main_package.GameSimulation.GamePlatformType;
+import main_package.GUIPlatformMenu.GamePlatformType;
 import abstracts_interfaces.factories.gameplatforms.GamePlatformAbstract;
 import abstracts_interfaces.factories.gameplatforms.GamePlatformFactoryAbstract;
 
