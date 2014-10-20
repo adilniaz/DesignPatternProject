@@ -4,7 +4,6 @@ public abstract class StatisticsAbstract {
 	public int health;
 	public int speed;
 	public int agility;
-	public int strength;
 	
 	
 	public int getHealth(){
@@ -15,8 +14,5 @@ public abstract class StatisticsAbstract {
 	}	
 	public int getAgility(){
 		return agility;
-	}
-	public int getStrength(){
-		return strength;
 	}
 }

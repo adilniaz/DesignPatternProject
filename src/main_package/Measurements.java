@@ -12,7 +12,7 @@ public class Measurements {
 	int framePositionY;
 	
 	public Measurements() {
-		frameWidth = 600;
+		frameWidth = 800;
 		frameHeight = 847;
 		buttonWidth = 200;
 		buttonHeight = 40;

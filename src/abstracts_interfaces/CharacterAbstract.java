@@ -2,6 +2,7 @@ package abstracts_interfaces;
 
 import abstracts_interfaces.behaviours.BehaviourCombatAbstract;
 import abstracts_interfaces.behaviours.BehaviourTalkAbstract;
+import abstracts_interfaces.decorators.statistics.StatisticsAbstract;
 import abstracts_interfaces.decorators.weapons.WeaponAbstract;
 import implementations.organisations.Organisation;
 
@@ -15,6 +16,7 @@ public abstract class CharacterAbstract extends ObserverAbstract{
 	protected Organisation subject;
 	protected String operatingState;
 	protected WeaponAbstract weapon;
+	protected StatisticsAbstract stats;
 	
 	public WeaponAbstract getWeapon() {
 		return weapon;
@@ -43,11 +45,20 @@ public abstract class CharacterAbstract extends ObserverAbstract{
 		this.speech=null;
 		this.weapon= null;
 		this.subject= subject;
+		this.stats = null;
 		if (this.subject != null) {
 			this.subject.attach(this);
 		}
 	}
 	
+	public StatisticsAbstract getStats() {
+		return stats;
+	}
+
+	public void setStats(StatisticsAbstract stats) {
+		this.stats = stats;
+	}
+
 	public void update(){
 		this.operatingState = subject.getOperatingMode();
 	}
@@ -61,8 +72,8 @@ public abstract class CharacterAbstract extends ObserverAbstract{
 	
 	public String checkWeapons(){
 		if (weapon != null) {
-			return "I have a " + weapon.name +".\n"
-					+ "(Damage "+ weapon.damage
+			return  "(" + weapon.name
+					+ ": Damage "+ weapon.damage
 					+ ", Accuracy " + weapon.accuracy
 					+ ", Range " + weapon.range
 					+")";

@@ -25,8 +25,4 @@ public abstract class StatisticsDecorator extends StatisticsAbstract{
 		return stats.getAgility();
 	}
 	
-	@Override
-	public int getStrength(){
-		return stats.getStrength();
-	}
 }

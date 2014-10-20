@@ -1,6 +1,11 @@
 package main_package;
 
+import implementations.decorators.statistics.statisticsdecorators.Agility;
+import implementations.decorators.statistics.statisticsdecorators.Health;
+import implementations.decorators.statistics.statisticsdecorators.Speed;
 import implementations.decorators.weapons.weapondecorators.WeaponAccuracy;
+import implementations.decorators.weapons.weapondecorators.WeaponDamage;
+import implementations.decorators.weapons.weapondecorators.WeaponRange;
 import implementations.organisations.Organisation;
 
 import java.awt.BorderLayout;
@@ -18,6 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import abstracts_interfaces.CharacterAbstract;
+import abstracts_interfaces.decorators.statistics.StatisticsAbstract;
 import abstracts_interfaces.decorators.weapons.WeaponAbstract;
 import abstracts_interfaces.factories.characters.CreateCharactersFactoryAbstract;
 
@@ -35,9 +41,16 @@ public class GameSimulation extends JFrame implements ActionListener{
 	
 	private JFrame frame;
 	private JPanel panel, paneltextArea;
-	private JButton buttonChar1, buttonChar2, buttonChar3, buttonChar4;
 	private JTextArea textArea;
 	private JScrollPane scrollPane;
+	/**
+	 * 		CREATE CHARACTERS
+	 */
+	private JButton buttonChar1, buttonChar2, buttonChar3, buttonChar4;
+	private int firstUnit, secondUnit, thirdUnit, forthUnit;
+	/**
+	 * 		OPTIONS
+	 */
 	private JButton buttonShowCharacterNames;
 	private JButton buttonShowCharacterStats;
 	private JButton buttonSpeak;
@@ -46,34 +59,27 @@ public class GameSimulation extends JFrame implements ActionListener{
 	private JButton buttonPeaceMode;
 	private JButton buttonUndefinedMode;
 	private JButton buttonRetreatMode;
+	/**
+	 * 		OTHER OPTIONS
+	 */
 	private JButton buttonClearText;
 	private JButton buttonBack;
 	private JButton buttonExit;
-
 	/**
 	 * 		FOR WEAPON DECORATION
-	 * 
 	 */
 	private JButton buttonIncreaseAccuracy;
 	private JButton buttonIncreaseDamage;
 	private JButton buttonIncreaseRange;
-
 	/**
 	 * 		FOR STAT DECORATION
-	 * 
 	 */
 	private JButton buttonIncreaseAgility;
 	private JButton buttonIncreaseHealth;
 	private JButton buttonIncreaseSpeed;
-	private JButton buttonIncreaseStrength;
 
-	private int firstUnit, secondUnit, thirdUnit, forthUnit;
-	
-	private WeaponAbstract wA;
-	
-	
 	/**
-	 * 		FOR DIMENTIONS OF COMPONENTS
+	 * 		FOR COMPONENTS DIMENTIONS
 	 */
 	private Measurements measurements;
 	private int frameHeight;
@@ -93,13 +99,19 @@ public class GameSimulation extends JFrame implements ActionListener{
 		UNDEFINED,
 		WARMODE, PEACEMODE, RETREATMODE
 	}
+
+	private WeaponAbstract weaponAbstract;
+	private StatisticsAbstract statAbs;
 	
 	private CreateCharactersFactoryAbstract factory;
+	
+	private Functionnalities functionnalities;
 	
 	public GameSimulation(CreateCharactersFactoryAbstract factory, ArrayList<String> charList){
 		
 		measurements = new Measurements();
-
+		functionnalities = new Functionnalities();
+		
 		this.buttonWidth = measurements.buttonWidth;
 		this.buttonHeight = measurements.buttonHeight;
 		this.frameWidth = measurements.frameWidth;
@@ -119,13 +131,11 @@ public class GameSimulation extends JFrame implements ActionListener{
 		initComponentsGame();
 	}
 	
-	
 	public void createCharacters(String name, Organisation subj, CharactersType characType){
 		CharacterAbstract character = factory.createCharacter(name, subj, characType);
 		addCharactersToList(character);
 		textArea.setText(textArea.getText() + name + " created.\n");
 	}
-	
 	
 	public void addCharactersToList(CharacterAbstract... characs) {
 		for (CharacterAbstract charac : characs) {
@@ -139,13 +149,12 @@ public class GameSimulation extends JFrame implements ActionListener{
 		frame.setLocation(framePositionX, framePositionY);
 		frame.setSize(frameWidth, frameHeight);
 		
-		
 		int width = frameWidth-buttonWidth-2;
 		int height = frameHeight-2;
 		
 		panel = new JPanel();
 		panel = new JPanel();
-		panel.setBorder(BorderFactory.createLineBorder(Color.black));
+		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 		
 		paneltextArea = new JPanel();
 		paneltextArea.setBounds(buttonWidth+1, 1, width, height);
@@ -155,160 +164,64 @@ public class GameSimulation extends JFrame implements ActionListener{
 		scrollPane = new JScrollPane(textArea);
 		scrollPane.setPreferredSize(new Dimension(width-5, height-10));
 		
-		buttonChar1 = new JButton(charList.get(0));
-		buttonChar1.addActionListener(this);
-		buttonChar1.setSize(buttonWidth, buttonHeight);
-		buttonChar1.setBounds(1, 1,
-				buttonWidth, buttonHeight);
+		/**
+		 * 		CREATE CHARACTERS
+		 */
+		buttonChar1 = buttonInitialiser(charList.get(0), 0, 1);
+		buttonChar2 = buttonInitialiser(charList.get(1), 1, 1);
+		buttonChar3 = buttonInitialiser(charList.get(2), 2, 1);
+		buttonChar4 = buttonInitialiser(charList.get(3), 3, 1);
 		
-		buttonChar2 = new JButton(charList.get(1));
-		buttonChar2.addActionListener(this);
-		buttonChar2.setSize(buttonWidth, buttonHeight);
-		buttonChar2.setBounds(1, buttonHeight+1,
-				buttonWidth, buttonHeight);
-		
-		buttonChar3 = new JButton(charList.get(2));
-		buttonChar3.addActionListener(this);
-		buttonChar3.setSize(buttonWidth, buttonHeight);
-		buttonChar3.setBounds(1, buttonHeight*2+1,
-				buttonWidth, buttonHeight);
-		
-		buttonChar4 = new JButton(charList.get(3));
-		buttonChar4.addActionListener(this);
-		buttonChar4.setSize(buttonWidth, buttonHeight);
-		buttonChar4.setBounds(1, buttonHeight*3+1,
-				buttonWidth, buttonHeight);
-		
-
-		buttonShowCharacterNames = new JButton("SHOW ALL CHARACTERS");
-		buttonShowCharacterNames.addActionListener(this);
-		buttonShowCharacterNames.setBounds(1, buttonHeight*4+2,
-				buttonWidth, buttonHeight);
-		
-		buttonShowCharacterStats = new JButton("CHARACTERS' STATS");
-		buttonShowCharacterStats.addActionListener(this);
-		buttonShowCharacterStats.setBounds(1, buttonHeight*5+2,
-				buttonWidth, buttonHeight);
-		
-		buttonSpeak = new JButton("SPEAK");
-		buttonSpeak.addActionListener(this);
-		buttonSpeak.setBounds(1, buttonHeight*6+2,
-				buttonWidth, buttonHeight);
-		
-		buttonFight = new JButton("ATTACK!!");
-		buttonFight.addActionListener(this);
-		buttonFight.setBounds(1, buttonHeight*7+2,
-				buttonWidth, buttonHeight);
-		
-		buttonWarMode = new JButton("WAR MODE");
-		buttonWarMode.addActionListener(this);
-		buttonWarMode.setBounds(1, buttonHeight*8+2,
-				buttonWidth, buttonHeight);
-		
-		buttonPeaceMode = new JButton("PEACE MODE");
-		buttonPeaceMode.addActionListener(this);
-		buttonPeaceMode.setBounds(1, buttonHeight*9+2,
-				buttonWidth, buttonHeight);
-		buttonRetreatMode = new JButton("RETREAT MODE");
-		buttonRetreatMode.addActionListener(this);
-		buttonRetreatMode.setBounds(1, buttonHeight*10+2,
-				buttonWidth, buttonHeight);
-
-		/*
-		buttonUndefinedMode = new JButton("UNDEFINED MODE");
-		buttonUndefinedMode.addActionListener(this);
-		buttonUndefinedMode.setBounds(1, 1+buttonsHeight*11,
-				buttonsWidth, buttonsHeight);
-		*/
+		/**
+		 * 		OPTIONS
+		 */
+		buttonShowCharacterNames = buttonInitialiser("SHOW ALL CHARACTERS", 4, 2);
+		buttonShowCharacterStats = buttonInitialiser("CHARACTERS' STATS", 5, 2);
+		buttonSpeak = buttonInitialiser("SPEAK", 6, 2);
+		buttonFight = buttonInitialiser("ATTACK!!", 7, 2);
+		buttonWarMode = buttonInitialiser("WAR MODE", 8, 2);
+		buttonPeaceMode = buttonInitialiser("PEACE MODE", 9, 2);
+		buttonRetreatMode = buttonInitialiser("RETREAT MODE", 10, 2);
+//		buttonUndefinedMode = buttonInitialiser("UNDEFINED MODE", 11, 2);
 		
 		/**
 		 * 		FOR WEAPON DECORATION
-		 * 
 		 */
-//		buttonIncreaseAccuracy = buttonInitialiser(buttonIncreaseAccuracy, "INCREASE ACCURACY", 11, 3);
-		buttonIncreaseAccuracy = new JButton("INCREASE ACCURACY");
-		buttonIncreaseAccuracy.addActionListener(this);
-		buttonIncreaseAccuracy.setBounds(1, buttonHeight*11+3,
-				buttonWidth, buttonHeight);
-		buttonIncreaseDamage = new JButton("INCREASE Damage");
-		buttonIncreaseDamage.addActionListener(this);
-		buttonIncreaseDamage.setBounds(1, buttonHeight*12+3,
-				buttonWidth, buttonHeight);
-		
-		//	Applicable only some Specialties
-		buttonIncreaseRange = new JButton("INCREASE RANGE");
-		buttonIncreaseRange.addActionListener(this);
-		buttonIncreaseRange.setBounds(1, buttonHeight*13+3,
-				buttonWidth, buttonHeight);
+		buttonIncreaseAccuracy = buttonInitialiser("INCREASE ACCURACY", 11, 3);
+		buttonIncreaseDamage = buttonInitialiser("INCREASE DAMAGE", 12, 3);
+		buttonIncreaseRange = buttonInitialiser("INCREASE RANGE", 13, 3);		//	Applicable to only some Specialties
 		
 		/**
 		 * 		FOR STAT DECORATION
-		 * 
 		 */
-		buttonIncreaseAgility = new JButton("INCREASE RANGE");
-		buttonIncreaseAgility.addActionListener(this);
-		buttonIncreaseAgility.setBounds(1, buttonHeight*14+4,
-				buttonWidth, buttonHeight);
-		
-		buttonIncreaseHealth = new JButton("INCREASE HEALTH");
-		buttonIncreaseHealth.addActionListener(this);
-		buttonIncreaseHealth.setBounds(1, buttonHeight*15+4,
-				buttonWidth, buttonHeight);
-		
-		buttonIncreaseSpeed = new JButton("INCREASE SPEED");
-		buttonIncreaseSpeed.addActionListener(this);
-		buttonIncreaseSpeed.setBounds(1, buttonHeight*16+4,
-				buttonWidth, buttonHeight);
-		
-		buttonIncreaseStrength = new JButton("INCREASE STRENGTH");
-		buttonIncreaseStrength.addActionListener(this);
-		buttonIncreaseStrength.setBounds(1, buttonHeight*17+4,
-				buttonWidth, buttonHeight);
-		
-		
+		buttonIncreaseAgility = buttonInitialiser("INCREASE AGILITY", 14, 4);
+		buttonIncreaseHealth = buttonInitialiser("INCREASE HEALTH", 15, 4);
+		buttonIncreaseSpeed = buttonInitialiser("INCREASE SPEED", 16, 4);
+
 		/**
 		 * 		OTHER OPTIONS
-		 * 
 		 */
-		buttonClearText = new JButton("CLEAR TEXT");
-		buttonClearText.addActionListener(this);
-		buttonClearText.setBounds(1, buttonHeight*18+5,
-				buttonWidth, buttonHeight);
-
-		buttonBack = new JButton("BACK");
-		buttonBack.addActionListener(this);
-		buttonBack.setSize(buttonWidth, buttonHeight);
-		buttonBack.setBounds(1, buttonHeight*19+6,
-				buttonWidth, buttonHeight);
-
-		buttonExit = new JButton("EXIT");
-		buttonExit.addActionListener(this);
-		buttonExit.setSize(buttonWidth, buttonHeight);
-		buttonExit.setBounds(1, buttonHeight*20+6,
-				buttonWidth, buttonHeight);
-
+		buttonClearText = buttonInitialiser("CLEAR TEXT", 18, 5);
+		buttonBack = buttonInitialiser("BACK", 19, 6);
+		buttonExit = buttonInitialiser("EXIT", 20, 6);
 		
 		frame.add(panel);
 		
-		panelManager();
-		
-		paneltextArea.setBackground(Color.BLACK);
-		paneltextArea.add(scrollPane, BorderLayout.CENTER);
+		panelsManager();
 		
 		frame.setUndecorated(true);
 		frame.setVisible(true);
+		
 	}
-
-
-	private JButton buttonInitialiser(JButton button, String name, int i, int j) {
-		button = new JButton(name);
+	
+	private JButton buttonInitialiser(String name, int i, int j) {
+		JButton button = new JButton(name);
 		button.addActionListener(this);
-		button.setBounds(1, buttonHeight*i+j,
-				buttonWidth, buttonHeight);
+		button.setBounds(1, buttonHeight*i+j, buttonWidth, buttonHeight);
 		return button;
 	}
-
-	public void panelManager() {
+	
+	public void panelsManager() {
 		
 		panel.setBackground(Color.BLACK);
 		
@@ -316,7 +229,6 @@ public class GameSimulation extends JFrame implements ActionListener{
 		
 		/**
 		 * 		CREATE CHARACTERS
-		 * 
 		 */
 		panel.add(buttonChar1);
 		panel.add(buttonChar2);
@@ -325,7 +237,6 @@ public class GameSimulation extends JFrame implements ActionListener{
 		
 		/**
 		 * 		OPTIONS
-		 * 
 		 */
 		panel.add(buttonShowCharacterNames);
 		panel.add(buttonShowCharacterStats);
@@ -337,7 +248,6 @@ public class GameSimulation extends JFrame implements ActionListener{
 		
 		/**
 		 * 		FOR WEAPON DECORATION
-		 * 
 		 */
 		panel.add(buttonIncreaseAccuracy);
 		panel.add(buttonIncreaseDamage);
@@ -345,42 +255,43 @@ public class GameSimulation extends JFrame implements ActionListener{
 		
 		/**
 		 * 		FOR STAT DECORATION
-		 * 
 		 */
 		panel.add(buttonIncreaseAgility);
 		panel.add(buttonIncreaseHealth);
 		panel.add(buttonIncreaseSpeed);
-		panel.add(buttonIncreaseStrength);
-		
+	
 		/**
 		 * 		OTHER OPTIONS
-		 * 
 		 */
 		panel.add(buttonClearText);
 		panel.add(buttonBack);
 		panel.add(buttonExit);
 		panel.add(paneltextArea);
+
+		paneltextArea.setBackground(Color.BLACK);
+		paneltextArea.add(scrollPane, BorderLayout.CENTER);
+		
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
 		if (!charactersList.isEmpty()) {
+			
+			/**
+			 * 		OPTIONS
+			 */
 			if(e.getSource()==buttonShowCharacterNames){
-				displayer(everyCharactersName());
+				displayer(functionnalities.everyCharactersName(charactersList));
 			}
 			if(e.getSource()==buttonShowCharacterStats){
-				/*		character's health 
-				 * 		character's speed
-				 * 		character's strength
-				 * 		character's agility
-				 * 		etc.
-				 */
+				displayer(functionnalities.everyCharactersStats(charactersList));
 			}
 			if(e.getSource()==buttonSpeak){
-				displayer(everyCharactersSpeech());
+				displayer(functionnalities.everyCharactersSpeech(charactersList));
 			}
 			if(e.getSource()==buttonFight){
-				displayer(startBattle());
+				displayer(functionnalities.startBattle(charactersList));
 			}
 			if(e.getSource()==buttonWarMode){
 				displayer(strategy(Strategy.WARMODE));
@@ -394,25 +305,64 @@ public class GameSimulation extends JFrame implements ActionListener{
 			if(e.getSource()==buttonRetreatMode){
 				displayer(strategy(Strategy.RETREATMODE));
 			}
+			
+			/**
+			 * 		FOR WEAPON DECORATION
+			 */
 			if(e.getSource()==buttonIncreaseAccuracy){
 				for (int i = 0; i < charactersList.size(); i++) {
-					wA = new WeaponAccuracy(charactersList.get(i).getWeapon());
-					charactersList.get(i).getWeapon().accuracy = wA.getAccuracy();
+					if (charactersList.get(i).getWeapon()!=null) {
+						weaponAbstract = new WeaponAccuracy(charactersList.get(i).getWeapon());
+						charactersList.get(i).getWeapon().accuracy = weaponAbstract.getAccuracy();
+					}
+					
 				}
 			}
-			if(e.getSource()==buttonClearText){
-				textArea.setText("");
+			if(e.getSource()==buttonIncreaseDamage){
+				for (int i = 0; i < charactersList.size(); i++) {
+					if (charactersList.get(i).getWeapon()!=null) {
+						weaponAbstract = new WeaponDamage(charactersList.get(i).getWeapon());
+						charactersList.get(i).getWeapon().damage = weaponAbstract.getDamage();
+					}
+					
+				}
+			}
+			if(e.getSource()==buttonIncreaseRange){
+				for (int i = 0; i < charactersList.size(); i++) {
+					// for some units // To determine
+					if (charactersList.get(i).getWeapon()!=null /*&& some condition*/) {
+						weaponAbstract = new WeaponRange(charactersList.get(i).getWeapon());
+						charactersList.get(i).getWeapon().range = weaponAbstract.getRange();
+					}
+				}
+			}
+			
+			/**
+			 * 		FOR STAT DECORATION
+			 */
+			if(e.getSource()==buttonIncreaseAgility){
+				for (int i = 0; i < charactersList.size(); i++) {
+					statAbs = new Agility(charactersList.get(i).getStats());
+					charactersList.get(i).getStats().agility = statAbs.getAgility();
+				}
+			}
+			if(e.getSource()==buttonIncreaseHealth){
+				for (int i = 0; i < charactersList.size(); i++) {
+					statAbs = new Health(charactersList.get(i).getStats());
+					charactersList.get(i).getStats().health = statAbs.getHealth();
+				}
+			}
+			if(e.getSource()==buttonIncreaseSpeed){
+				for (int i = 0; i < charactersList.size(); i++) {
+					statAbs = new Speed(charactersList.get(i).getStats());
+					charactersList.get(i).getStats().speed = statAbs.getSpeed();
+				}
 			}
 		}
 		
-		if(e.getSource()==buttonBack){
-			GUIEra guiEra = new GUIEra();
-			guiEra.initComponents();
-			frame.dispose();
-		}
-		if(e.getSource()==buttonExit){
-			frame.dispose();
-		}
+		/**
+		 * 		CREATE CHARACTERS
+		 */
 		if(e.getSource()==buttonChar1){
 			firstUnit++;
 			if (charList.get(0)=="PRINCESS") {
@@ -445,11 +395,26 @@ public class GameSimulation extends JFrame implements ActionListener{
 				createCharacters(charList.get(3) + forthUnit, subject, CharactersType.SHIP);
 			}
 		}
+		
+		/**
+		 * 		OTHER OPTIONS
+		 */
+		if(e.getSource()==buttonClearText){
+			textArea.setText("");
+		}
+		if(e.getSource()==buttonBack){
+			GUIEra guiEra = new GUIEra();
+			guiEra.initComponents();
+			frame.dispose();
+		}
+		if(e.getSource()==buttonExit){
+			frame.dispose();
+		}
 	}
 	
 	public String strategy(Strategy strategy) {
 		subject.setOperatingMode(strategy);
-		String text=textArea.getText() + "\n";
+		String text="\n";
 		for (int i = 0; i < charactersList.size(); i++) {
 			text+=charactersList.get(i).getOperatingState();
 			text+="\n";
@@ -457,32 +422,8 @@ public class GameSimulation extends JFrame implements ActionListener{
 		return text;
 	}	
 	public void displayer(String text){
-		textArea.setText(text);
+		textArea.setText(textArea.getText() + text);
 	}	
-	public String everyCharactersName(){
-		String text=textArea.getText() + "\nNames :\n";
-		for (int i = 0; i < charactersList.size(); i++) {
-			text+=charactersList.get(i).getName();
-			text+="\n";
-		}
-		return text;
-	}
-	public String everyCharactersSpeech(){
-		String text=textArea.getText() + "\nSpeech :\n";
-		for (int i = 0; i < charactersList.size(); i++) {
-			text+=charactersList.get(i).speak();
-			text+="\n";
-		}
-		return text;
-	}
-	public String startBattle(){
-		String text=textArea.getText() + "\nFight :\n";
-		for (int i = 0; i < charactersList.size(); i++) {
-			text+=charactersList.get(i).checkWeapons() + "\n";
-			text+=charactersList.get(i).fight();
-			text+="\n";
-		}
-		return text;
-	}
+	
 	public void changeBehaviour(){}
 }
