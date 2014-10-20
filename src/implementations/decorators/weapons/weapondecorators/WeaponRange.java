@@ -13,6 +13,4 @@ public class WeaponRange extends WeaponDecorator{
 	public int getRange() {
 		return super.getRange()+5;
 	}
-
-
 }

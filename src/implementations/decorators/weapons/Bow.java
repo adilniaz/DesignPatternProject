@@ -6,21 +6,9 @@ public class Bow extends WeaponAbstract{
 	
 	public Bow(){
 		name="Bow";
-	}
-	
-	@Override
-	public int getDamage() {
-		return 1;
-	}
-
-	@Override
-	public int getAccuracy() {
-		return 40;
-	}
-
-	@Override
-	public int getRange() {
-		return 60;
+		damage = 1;
+		accuracy = 40;
+		range = 60;
 	}
 
 }

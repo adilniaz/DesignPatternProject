@@ -15,8 +15,14 @@ public abstract class WeaponAbstract {
 	
 	protected WeaponType weapon;
 	*/
-	public abstract int getDamage();
-	public abstract int getAccuracy();
-	public abstract int getRange();
+	public int getDamage(){
+		return damage;
+	}
+	public int getAccuracy(){
+		return accuracy;
+	}
+	public int getRange(){
+		return range;
+	}
 	
 }

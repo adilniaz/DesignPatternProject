@@ -25,12 +25,35 @@ public class GUIPlatformMenu extends JFrame implements ActionListener{
 	private JButton buttonAntColony;
 	private JButton buttonWorldMap;
 	private JButton buttonExit;
+	private JButton buttonBack;
+
+	/**
+	 * 		FOR DIMENTIONS OF COMPONENTS
+	 */
+	private Measurements measurements;
+	private int frameHeight;
+	private int frameWidth;
+	private int buttonHeight;
+	private int buttonWidth;
+	private int framePositionX;
+	private int framePositionY;
 	
 	public enum GamePlatformType{
 		UNDEFINED,
 		MAZE, ANTCOLONY, WORLDMAP
 	}
-	
+	public GUIPlatformMenu() {
+
+		measurements = new Measurements();
+
+		this.buttonWidth = measurements.buttonWidth;
+		this.buttonHeight = measurements.buttonHeight;
+		this.frameWidth = measurements.frameWidth;
+		this.frameHeight = measurements.frameHeight;
+		this.framePositionX = measurements.framePositionX;
+		this.framePositionY = measurements.framePositionY;
+		
+	}
 	public void initComponents3() {
 		/*
 		secondFrame = new JFrame();
@@ -60,43 +83,47 @@ public class GUIPlatformMenu extends JFrame implements ActionListener{
 		
 		
 
-		setLocation(200, 100);
-		setSize(600, 600);
+		setLocation(framePositionX, framePositionY);
+		setSize(frameWidth, frameHeight);
 		
 		panel = new JPanel();
 		panel.setBorder(BorderFactory.createLineBorder(Color.black));
 		
-
-		int buttonsWidth = 200;
-		int buttonsHeight = 40;
-		int centerWidth = getWidth()/2-buttonsWidth/2;
-		int centerHeight = getHeight()/2-buttonsHeight/2;
+		
+		int centerWidth = frameWidth/2-buttonWidth/2;
+		int centerHeight = frameHeight/2-buttonHeight/2;
 		
 		
 		// MAZE, ANTCOLONY, WORLDMAP
 		buttonMaze = new JButton("MAZE (not available)");
 		buttonMaze.addActionListener(this);
-		buttonMaze.setSize(buttonsWidth, buttonsHeight);
+		buttonMaze.setSize(buttonWidth, buttonHeight);
 		buttonMaze.setBounds(centerWidth, centerHeight,
-				buttonsWidth, buttonsHeight);
+				buttonWidth, buttonHeight);
 
 		buttonAntColony = new JButton("ANTCOLONY (not available)");
 		buttonAntColony.addActionListener(this);
-		buttonAntColony.setSize(buttonsWidth, buttonsHeight);
-		buttonAntColony.setBounds(centerWidth, centerHeight+buttonsHeight,
-				buttonsWidth, buttonsHeight);
+		buttonAntColony.setSize(buttonWidth, buttonHeight);
+		buttonAntColony.setBounds(centerWidth, centerHeight+buttonHeight,
+				buttonWidth, buttonHeight);
 
 		buttonWorldMap = new JButton("WORLDMAP");
 		buttonWorldMap.addActionListener(this);
-		buttonWorldMap.setSize(buttonsWidth, buttonsHeight);
-		buttonWorldMap.setBounds(centerWidth, centerHeight+buttonsHeight*2,
-				buttonsWidth, buttonsHeight);
+		buttonWorldMap.setSize(buttonWidth, buttonHeight);
+		buttonWorldMap.setBounds(centerWidth, centerHeight+buttonHeight*2,
+				buttonWidth, buttonHeight);
 
+		buttonBack = new JButton("BACK");
+		buttonBack.addActionListener(this);
+		buttonBack.setSize(buttonWidth, buttonHeight);
+		buttonBack.setBounds(centerWidth, centerHeight+buttonHeight*4,
+				buttonWidth, buttonHeight);
+		
 		buttonExit = new JButton("EXIT");
 		buttonExit.addActionListener(this);
-		buttonExit.setSize(buttonsWidth, buttonsHeight);
-		buttonExit.setBounds(centerWidth, centerHeight+buttonsHeight*4,
-				buttonsWidth, buttonsHeight);
+		buttonExit.setSize(buttonWidth, buttonHeight);
+		buttonExit.setBounds(centerWidth, centerHeight+buttonHeight*5,
+				buttonWidth, buttonHeight);
 		
 		add(panel);
 		
@@ -104,6 +131,7 @@ public class GUIPlatformMenu extends JFrame implements ActionListener{
 		panel.add(buttonMaze);
 		panel.add(buttonAntColony);
 		panel.add(buttonWorldMap);
+		panel.add(buttonBack);
 		panel.add(buttonExit);
 		
 		setUndecorated(true);
@@ -135,6 +163,11 @@ public class GUIPlatformMenu extends JFrame implements ActionListener{
 			GUIEra era = new GUIEra();
 			era.initComponents();
 			
+			dispose();
+		}
+		if(e.getSource()==buttonBack){
+			MainGUI mgui = new MainGUI();
+			mgui.initComponentsS();
 			dispose();
 		}
 		if(e.getSource()==buttonExit){

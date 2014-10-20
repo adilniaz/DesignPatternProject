@@ -6,21 +6,9 @@ public class Gun extends WeaponAbstract{
 	
 	public Gun(){
 		name = "Gun";
+		damage = 3;
+		accuracy = 50;
+		range = 30;
 	}
 	
-	@Override
-	public int getDamage() {
-		return 3;
-	}
-
-	@Override
-	public int getAccuracy() {
-		return 50;
-	}
-
-	@Override
-	public int getRange() {
-		return 30;
-	}
-
 }

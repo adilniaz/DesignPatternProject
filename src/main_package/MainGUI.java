@@ -15,38 +15,59 @@ public class MainGUI extends JFrame implements ActionListener{
 	 */
 	private static final long serialVersionUID = -3541569152389829042L;
 	private JPanel mainFramePanel;
-	private JButton buttonOne;
-	private JButton buttonTwo;
+	private JButton buttonStart;
+	private JButton buttonExit;
+
+	/**
+	 * 		FOR DIMENTIONS OF COMPONENTS
+	 */
+	private Measurements measurements;
+	private int frameHeight;
+	private int frameWidth;
+	private int buttonHeight;
+	private int buttonWidth;
+	private int framePositionX;
+	private int framePositionY;
+	
+	public MainGUI() {
+
+		measurements = new Measurements();
+
+		this.buttonWidth = measurements.buttonWidth;
+		this.buttonHeight = measurements.buttonHeight;
+		this.frameWidth = measurements.frameWidth;
+		this.frameHeight = measurements.frameHeight;
+		this.framePositionX = measurements.framePositionX;
+		this.framePositionY = measurements.framePositionY;
+		
+	}
 	
 	public void initComponentsS() {
 		
-		setLocation(200, 100);
-		setSize(600, 600);
+		setLocation(framePositionX, framePositionY);
+		setSize(frameWidth, frameHeight);
 		
 		mainFramePanel = new JPanel();
 
-		int buttonsWidth = 100;
-		int buttonsHeight = 40;
-		int centerWidth = getWidth()/2-buttonsWidth/2;
-		int centerHeight = getHeight()/2-buttonsHeight/2;
+		int centerWidth = frameWidth/2-buttonWidth/2;
+		int centerHeight = frameHeight/2-buttonHeight/2;
 		
+		buttonStart = new JButton("START");
+		buttonStart.addActionListener(this);
+		buttonStart.setSize(buttonWidth, buttonHeight);
+		buttonStart.setBounds(centerWidth, centerHeight, buttonWidth, buttonHeight);
 		
-		buttonOne = new JButton("START");
-		buttonOne.addActionListener(this);
-		buttonOne.setSize(buttonsWidth, buttonsHeight);
-		buttonOne.setBounds(centerWidth, centerHeight, buttonsWidth, buttonsHeight);
-		
-		buttonTwo = new JButton("EXIT");
-		buttonTwo.addActionListener(this);
-		buttonTwo.setSize(buttonsWidth, buttonsHeight);
-		buttonTwo.setBounds(centerWidth, getHeight()-buttonsHeight-10,
-				buttonsWidth, buttonsHeight);
+		buttonExit = new JButton("EXIT");
+		buttonExit.addActionListener(this);
+		buttonExit.setSize(buttonWidth, buttonHeight);
+		buttonExit.setBounds(centerWidth, centerHeight+buttonHeight*5,
+				buttonWidth, buttonHeight);
 		
 		add(mainFramePanel);
 		
 		mainFramePanel.setLayout(null);
-		mainFramePanel.add(buttonOne);
-		mainFramePanel.add(buttonTwo);
+		mainFramePanel.add(buttonStart);
+		mainFramePanel.add(buttonExit);
 		
 		mainFramePanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		
@@ -56,13 +77,12 @@ public class MainGUI extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
-		if(e.getSource()==buttonOne){
+		if(e.getSource()==buttonStart){
 			GUIPlatformMenu guiPM = new GUIPlatformMenu();
 			guiPM.initComponents3();
 			dispose();
 		}
-		if(e.getSource()==buttonTwo){
+		if(e.getSource()==buttonExit){
 			dispose();
 		}
 	}

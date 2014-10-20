@@ -61,10 +61,13 @@ public abstract class CharacterAbstract extends ObserverAbstract{
 	
 	public String checkWeapons(){
 		if (weapon != null) {
-			
-			return "I have a " + weapon.name +".";
+			return "I have a " + weapon.name +".\n"
+					+ "(Damage "+ weapon.damage
+					+ ", Accuracy " + weapon.accuracy
+					+ ", Range " + weapon.range
+					+")";
 		}
-		return "I do not have a weapon";
+		return "I do not have a weapon.";
 	}
 	
 	public String speak(){

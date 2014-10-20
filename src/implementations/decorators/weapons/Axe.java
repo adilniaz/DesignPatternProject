@@ -6,21 +6,9 @@ public class Axe extends WeaponAbstract{
 
 	public Axe(){
 		name="Axe";
+		damage = 2;
+		accuracy = 80;
+		range = 5;
 	}
 	
-	@Override
-	public int getDamage() {
-		return 2;
-	}
-
-	@Override
-	public int getAccuracy() {
-		return 80;
-	}
-
-	@Override
-	public int getRange() {
-		return 5;
-	}
-
 }
