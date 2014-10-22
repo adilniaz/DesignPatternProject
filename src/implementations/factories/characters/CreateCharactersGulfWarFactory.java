@@ -1,11 +1,11 @@
 package implementations.factories.characters;
 
+import example_main_package.GameSimulation.CharactersType;
 import implementations.characters.FighterAirCraft;
 import implementations.characters.Ship;
 import implementations.characters.Soldier;
 import implementations.characters.Tank;
 import implementations.organisations.Organisation;
-import main_package.GameSimulation.CharactersType;
 import abstracts_interfaces.CharacterAbstract;
 import abstracts_interfaces.factories.characters.CreateCharactersFactoryAbstract;
 

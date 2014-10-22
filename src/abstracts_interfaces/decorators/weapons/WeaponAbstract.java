@@ -2,7 +2,6 @@ package abstracts_interfaces.decorators.weapons;
 
 public abstract class WeaponAbstract {
 	
-	
 	public String name;
 	public int damage;
 	public int accuracy;

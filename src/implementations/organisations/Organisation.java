@@ -1,6 +1,6 @@
 package implementations.organisations;
 
-import main_package.GameSimulation.Strategy;
+import example_main_package.GameSimulation.Strategy;
 import abstracts_interfaces.ObservedSubjectAbstract;
 
 public class Organisation extends ObservedSubjectAbstract{
