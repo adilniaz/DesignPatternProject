@@ -89,7 +89,7 @@ public class GameSimulation extends JFrame implements ActionListener{
 	private int framePositionY;
 	private Color componentColor;
 	
-	public enum CharactersType{
+	public enum CharactersType implements abstracts_interfaces.factories.characters.CharactersType{
 		UNDEFINED,
 		TANK, SOLDIER, FIGHTERAIRCRAFT, SHIP,
 		PRINCESS, KNIGHT, ARCHER, FOOTSOLDIER

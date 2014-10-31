@@ -11,10 +11,13 @@ import abstracts_interfaces.factories.characters.CreateCharactersFactoryAbstract
 
 public class CreateCharactersGulfWarFactory extends CreateCharactersFactoryAbstract{
 
+
 	@Override
-	public CharacterAbstract createCharacter(String name, Organisation org,
-			CharactersType typeCharacter) {
-		switch (typeCharacter) {
+	public CharacterAbstract createCharacter(
+			String name,
+			Organisation org,
+			abstracts_interfaces.factories.characters.CharactersType typeCharacter) {
+		switch ((CharactersType)typeCharacter) {
 			case TANK:
 				return new Tank(name, org);
 			case FIGHTERAIRCRAFT:

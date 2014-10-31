@@ -13,8 +13,8 @@ public class CreateCharactersMiddleAgeFactory extends CreateCharactersFactoryAbs
 
 	@Override
 	public CharacterAbstract createCharacter(String name, Organisation org,
-			CharactersType typeCharacter) {
-		switch (typeCharacter) {
+			abstracts_interfaces.factories.characters.CharactersType typeCharacter) {
+		switch ((CharactersType)typeCharacter) {
 			case ARCHER:
 				return new Archer(name, org);
 			case PRINCESS:

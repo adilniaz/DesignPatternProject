@@ -1,6 +1,7 @@
 package abstracts_interfaces;
 
 import abstracts_interfaces.behaviours.BehaviourCombatAbstract;
+import abstracts_interfaces.behaviours.BehaviourMoveAbstract;
 import abstracts_interfaces.behaviours.BehaviourTalkAbstract;
 import abstracts_interfaces.decorators.statistics.StatisticsAbstract;
 import abstracts_interfaces.decorators.weapons.WeaponAbstract;
@@ -13,6 +14,7 @@ public abstract class CharacterAbstract extends ObserverAbstract{
 	private String name;
 	protected BehaviourCombatAbstract behaviour;
 	protected BehaviourTalkAbstract speech;
+	protected BehaviourMoveAbstract move;
 	protected Organisation subject;
 	protected String operatingState;
 	protected WeaponAbstract weapon;
@@ -118,6 +120,14 @@ public abstract class CharacterAbstract extends ObserverAbstract{
 	
 	public void setSpeech(BehaviourTalkAbstract speech) {
 		this.speech = speech;
+	}
+	
+	public BehaviourMoveAbstract getMove() {
+		return move;
+	}
+	
+	public void setMoveBehaviour(BehaviourMoveAbstract move) {
+		this.move = move;
 	}
 	
 }
