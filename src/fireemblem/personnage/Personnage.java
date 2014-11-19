@@ -4,6 +4,7 @@ import implementations.organisations.Organisation;
 import fireemblem.Position;
 import fireemblem.objet.Arme;
 import fireemblem.objet.Objet;
+import fireemblem.strategie.Strategie;
 import abstracts_interfaces.CharacterAbstract;
 
 public class Personnage extends CharacterAbstract {
@@ -31,12 +32,16 @@ public class Personnage extends CharacterAbstract {
     private Position position;
     
     private ComportementPersonnage comportementPersonnage;
+    private Strategie strategie;
     
     private final Objet[] objets;
+    
+    private boolean aJouer;
     
     public Personnage (String nom, Organisation organisation) {
         super(organisation, nom);
         this.objets = new Objet[5];
+        this.aJouer = false;
     }
 
     public int getNiv() {
@@ -191,7 +196,23 @@ public class Personnage extends CharacterAbstract {
         this.comportementPersonnage = comportementPersonnage;
     }
 
-    public Position getPosition() {
+    public Strategie getStrategie() {
+		return strategie;
+	}
+
+	public void setStrategie(Strategie strategie) {
+		this.strategie = strategie;
+	}
+
+	public boolean isaJouer() {
+		return aJouer;
+	}
+
+	public void setaJouer(boolean aJouer) {
+		this.aJouer = aJouer;
+	}
+
+	public Position getPosition() {
         return position;
     }
 

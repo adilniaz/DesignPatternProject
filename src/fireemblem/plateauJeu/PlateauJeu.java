@@ -15,6 +15,7 @@ public class PlateauJeu extends GamePlatformAbstract {
     private final List<AccessAbstract> acces;
     private final List<CharacterAbstract> personnages;
     private final List<CharacterAbstract> ennemies;
+    private final List<CharacterAbstract> annexes;
     private final int width;
     private final int height;
     
@@ -23,6 +24,7 @@ public class PlateauJeu extends GamePlatformAbstract {
         this.acces = new ArrayList<>();
         this.personnages = new ArrayList<>();
         this.ennemies = new ArrayList<>();
+        this.annexes = new ArrayList<>();
         this.width = 20;
         this.height = 20;
     }
@@ -58,6 +60,14 @@ public class PlateauJeu extends GamePlatformAbstract {
     public List<CharacterAbstract> getEnnemies () {
         return this.ennemies;
     }
+    
+    public void ajouterAnnexe (CharacterAbstract p) {
+        this.annexes.add(p);
+    }
+
+	public List<CharacterAbstract> getAnnexes() {
+		return annexes;
+	}
 
 	@Override
 	public void addAccess(ArrayList<AccessAbstract> access) {

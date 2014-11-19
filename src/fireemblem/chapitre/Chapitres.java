@@ -2,6 +2,6 @@ package fireemblem.chapitre;
 
 public enum Chapitres {
     
-    nergal
+    blazing_sword, sword_of_seal, path_of_radiance
     
 }

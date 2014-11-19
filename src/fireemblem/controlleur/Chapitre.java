@@ -221,7 +221,9 @@ public class Chapitre extends Controlleur {
             case convoi:
                 break;
             case attendre:
-                break;
+            	((Personnage) this.persoEnCours).setaJouer(true);
+                this.finAction();
+            	break;
         }
     }
     
@@ -245,8 +247,38 @@ public class Chapitre extends Controlleur {
                 Combat combat = new Combat(p2, p);
                 Vues.createVue(combat, this.fenetre);
                 combat.combat();
+                p2.setaJouer(true);
+                this.finAction();
                 break;
             }
+        }
+    }
+    
+    public void finAction () {
+    	boolean fin = true;
+    	for (CharacterAbstract perso : this.plateauDeJeu.getPersonnages()) {
+        	Personnage p = (Personnage) perso;
+        	if (!p.isaJouer()) {
+        		fin = false;
+        	}
+        }
+    	if (fin) {
+    		this.tourEnnemie();
+    		this.tourAnnexe();
+    	}
+    }
+    
+    public void tourEnnemie () {
+    	for (CharacterAbstract perso : this.plateauDeJeu.getEnnemies()) {
+    		Personnage p = (Personnage) perso;
+    		p.getStrategie().run(this);
+        }
+    }
+    
+    public void tourAnnexe () {
+    	for (CharacterAbstract perso : this.plateauDeJeu.getAnnexes()) {
+    		Personnage p = (Personnage) perso;
+    		p.getStrategie().run(this);
         }
     }
     

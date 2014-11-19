@@ -14,6 +14,12 @@ public class FactoryPersonnageFireEmblem extends CreateCharactersFactoryAbstract
             TypePersonnageFireEmblem typePersonnage = (TypePersonnageFireEmblem) typeCharacter;
             
             switch (typePersonnage) {
+	            case archer :
+	                Personnage archer = new Personnage(nom, organisation);
+	                /*archer.setComportementPersonnage(new ComportementArcher());
+	                archer.setComportementDeplacement(new DeplacementArcher());
+	                archer.setComportementCombat(new CombatAPiedAvecArc());*/
+	                return archer;
                 case archimage :
                     Personnage athos = new Personnage(nom, organisation);
                     /*athos.setComportementPersonnage(new ComportementArchimange());
@@ -30,14 +36,11 @@ public class FactoryPersonnageFireEmblem extends CreateCharactersFactoryAbstract
                     athos.setResistance(28);
                     athos.setConstitution(9);
                     return athos;
-                case archer :
-                    Personnage archer = new Personnage(nom, organisation);
-                    /*archer.setComportementPersonnage(new ComportementArcher());
-                    archer.setComportementDeplacement(new DeplacementArcher());
-                    archer.setComportementCombat(new CombatAPiedAvecArc());*/
-                    return archer;
                 case chevalier :
                     
+                case chevalier_noir :
+                	Personnage chevalier_noir = new Personnage(nom, organisation);
+                	return chevalier_noir;
                 case combattant :
                     Personnage combattant = new Personnage(nom, organisation);
                     combattant.setComportementPersonnage(new ComportementCombattant());
@@ -54,6 +57,9 @@ public class FactoryPersonnageFireEmblem extends CreateCharactersFactoryAbstract
                     combattant.setResistance(0);
                     combattant.setConstitution(11);
                     return combattant;
+                case corbeau :
+                	Personnage corbeau = new Personnage(nom, organisation);
+                	return corbeau;
                 case dark_druide :
                     Personnage nergal = new Personnage(nom, organisation);
                     nergal.setComportementPersonnage(new ComportementDarkDruide());
@@ -70,6 +76,24 @@ public class FactoryPersonnageFireEmblem extends CreateCharactersFactoryAbstract
                     nergal.setResistance(30);
                     nergal.setConstitution(10);
                     return nergal;
+                case dragon_rouge :
+                	Personnage dragon_rouge = new Personnage(nom, organisation);
+                	return dragon_rouge;
+                case dragon_blanc :
+                	Personnage dragon_blanc = new Personnage(nom, organisation);
+                	return dragon_blanc;
+                case faucon :
+                	Personnage faucon = new Personnage(nom, organisation);
+                	return faucon;
+                case king_daein :
+                	Personnage ashnard = new Personnage(nom, organisation);
+                	return ashnard;
+                case lion :
+                	Personnage lion = new Personnage(nom, organisation);
+                	return lion;
+                case lord_eirika :
+                	Personnage eirika = new Personnage(nom, organisation);
+                	return eirika;
                 case lord_eliwood :
                     Personnage eliwood = new Personnage(nom, organisation);
                     eliwood.setComportementPersonnage(new ComportementLord());
@@ -93,6 +117,9 @@ public class FactoryPersonnageFireEmblem extends CreateCharactersFactoryAbstract
                     eliwood.setPourcentageDefense(30);
                     eliwood.setPourcentageResistance(35);
                     return eliwood;
+                case lord_ephraim :
+                	Personnage ephraim = new Personnage(nom, organisation);
+                	return ephraim;
                 case lord_hector :
                     Personnage hector = new Personnage(nom, organisation);
                     hector.setComportementPersonnage(new ComportementLord());
@@ -139,6 +166,15 @@ public class FactoryPersonnageFireEmblem extends CreateCharactersFactoryAbstract
                     lyn.setPourcentageDefense(20);
                     lyn.setPourcentageResistance(30);
                     return lyn;
+                case lord_roy :
+                	Personnage roy = new Personnage(nom, organisation);
+                	return roy;
+                case marchand :
+                	Personnage marchand = new Personnage(nom, organisation);
+                	return marchand;
+                case ranger :
+                	Personnage ike = new Personnage(nom, organisation);
+                	return ike;
                 default :
                     Personnage perso = new Personnage(nom, organisation);
                     /*perso.setComportementPersonnage(new ComportementArcher());

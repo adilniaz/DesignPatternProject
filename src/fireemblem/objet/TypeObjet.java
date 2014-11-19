@@ -2,6 +2,17 @@ package fireemblem.objet;
 
 public enum TypeObjet {
     
-    potion, epee_fer, hache_fer, ereshkigal
+    /* objet */
+	potion, 
+	/* epee */
+	epee_fer, alondite, 
+	/* hache */
+	hache_fer, 
+	/* lance */
+	lance_fer,
+	/* magie noir */
+	ereshkigal,
+	/* */
+	bec, griffe, souffle
     
 }
