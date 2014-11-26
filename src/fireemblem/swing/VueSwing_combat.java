@@ -18,6 +18,7 @@ import javax.swing.PopupFactory;
 
 import fireemblem.controlleur.Combat;
 import fireemblem.media.personnage.ImagePersonnage;
+import fireemblem.personnage.Personnage;
 
 public class VueSwing_combat {
     
@@ -44,26 +45,18 @@ public class VueSwing_combat {
                     simulerCombat((int[])evt.getOldValue(), (int[])evt.getNewValue());
                 } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.COMBAT)) {
                     combat((int[])evt.getOldValue(), (int[])evt.getNewValue());
-                } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.ANNIMATION_ATTAQUE_PERSO1)) {
-                    annimationAttaquePerso1();
-                } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.ANNIMATION_CRITIQUE_PERSO1)) {
-                    annimationCritiquePerso1();
-                } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.ANNIMATION_DISTANCE_PERSO1)) {
-                    annimationDistancePerso1();
-                } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.ANNIMATION_DISTANCE_CRITIQUE_PERSO1)) {
-                    annimationDistanceCritiquePerso1();
-                } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.ANNIMATION_ESQUIVE_PERSO1)) {
-                    annimationEsquivePerso1();
-                } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.ANNIMATION_ATTAQUE_PERSO2)) {
-                    annimationAttaquePerso2();
-                } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.ANNIMATION_CRITIQUE_PERSO2)) {
-                    annimationCritiquePerso2();
-                } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.ANNIMATION_DISTANCE_PERSO2)) {
-                    annimationDistancePerso2();
-                } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.ANNIMATION_DISTANCE_CRITIQUE_PERSO2)) {
-                    annimationDistanceCritiquePerso2();
-                } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.ANNIMATION_ESQUIVE_PERSO2)) {
-                    annimationEsquivePerso2();
+                } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.ANNIMATION_ATTAQUE_PERSO)) {
+                    annimationAttaquePerso((Personnage)evt.getOldValue());
+                } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.ANNIMATION_CRITIQUE_PERSO)) {
+                    annimationCritiquePerso((Personnage)evt.getOldValue());
+                } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.ANNIMATION_DISTANCE_PERSO)) {
+                    annimationDistancePerso((Personnage)evt.getOldValue());
+                } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.ANNIMATION_DISTANCE_CRITIQUE_PERSO)) {
+                    annimationDistanceCritiquePerso((Personnage)evt.getOldValue());
+                } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.ANNIMATION_ESQUIVE_PERSO)) {
+                    annimationEsquivePerso((Personnage)evt.getOldValue());
+                } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.FIN_COMBAT)) {
+                    finCombat();
                 } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.MODIFY_PV_PERSO1)) {
                     modifyPvPerso1((int)evt.getOldValue());
                 } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.MODIFY_PV_PERSO2)) {
@@ -246,9 +239,13 @@ public class VueSwing_combat {
         panel.add(panelCentre, BorderLayout.CENTER);
         panel.add(panelBottom, BorderLayout.SOUTH);
         
-        this.fenetreSimulationCombat = this.popupFactory.getPopup(this.fenetre, panel, 400, 200);
-        this.fenetreSimulationCombat.show();
+        this.fenetreCombat = this.popupFactory.getPopup(this.fenetre, panel, 400, 200);
+        this.fenetreCombat.show();
         
+    }
+    
+    private void finCombat () {
+    	this.fenetreCombat.hide();
     }
     
     private void modifyPvPerso1 (int pv) {
@@ -261,57 +258,55 @@ public class VueSwing_combat {
         this.panelPvPerso2.enlevePv(pv);
     }
     
-    private void annimationAttaquePerso1 () {
-        threadAnnimationAttaquePerso1 monthread = new threadAnnimationAttaquePerso1();
-        monthread.start();
+    private void annimationAttaquePerso (Personnage perso) {
+        new threadAnnimationAttaquePerso(perso).start();
     }
     
-    private void annimationCritiquePerso1 () {
-        threadAnnimationCritiquePerso1 monthread = new threadAnnimationCritiquePerso1();
-        monthread.start();
+    private void annimationCritiquePerso (Personnage perso) {
+        new threadAnnimationCritiquePerso(perso).start();
     }
     
-    private void annimationDistancePerso1 () {
-        threadAnnimationDistancePerso1 monthread = new threadAnnimationDistancePerso1();
-        monthread.start();
+    private void annimationDistancePerso (Personnage perso) {
+        new threadAnnimationDistancePerso(perso).start();
     }
     
-    private void annimationDistanceCritiquePerso1 () {
-        threadAnnimationDistanceCritiquePerso1 monthread = new threadAnnimationDistanceCritiquePerso1();
-        monthread.start();
+    private void annimationDistanceCritiquePerso (Personnage perso) {
+        new threadAnnimationDistanceCritiquePerso(perso).start();
     }
     
-    private void annimationEsquivePerso1 () {
-        threadAnnimationEsquivePerso1 monthread = new threadAnnimationEsquivePerso1();
-        monthread.start();
-    }
-    
-    private void annimationAttaquePerso2 () {
-        threadAnnimationAttaquePerso2 monthread = new threadAnnimationAttaquePerso2();
-        monthread.start();
-    }
-    
-    private void annimationCritiquePerso2 () {
-        threadAnnimationCritiquePerso2 monthread = new threadAnnimationCritiquePerso2();
-        monthread.start();
-    }
-    
-    private void annimationDistancePerso2 () {
-        threadAnnimationDistancePerso2 monthread = new threadAnnimationDistancePerso2();
-        monthread.start();
-    }
-    
-    private void annimationDistanceCritiquePerso2 () {
-        threadAnnimationDistanceCritiquePerso2 monthread = new threadAnnimationDistanceCritiquePerso2();
-        monthread.start();
-    }
-    
-    private void annimationEsquivePerso2 () {
-        threadAnnimationEsquivePerso2 monthread = new threadAnnimationEsquivePerso2();
-        monthread.start();
+    private void annimationEsquivePerso (Personnage perso) {
+        new threadAnnimationEsquivePerso(perso).start();
     }
     
     public abstract class annimationThread extends Thread {
+    	
+    	protected Personnage perso;
+    	protected boolean continuer;
+    	
+    	public annimationThread (Personnage perso) {
+    		this.perso = perso;
+    		this.continuer = true;
+    	}
+    	
+    	protected void runAnnimation (Map<Integer, ImageManager> images) {
+    		PanelImage panelImage;
+        	if (combat.getPerso1().equals(this.perso)) {
+        		panelImage = panelPerso1;
+            } else {
+            	panelImage = panelPerso2;
+            }
+        	for (Map.Entry<Integer, ImageManager> e : images.entrySet()){
+        		panelImage.setBufferedImage(e.getValue().getImage(), 150, 150);
+                if (e.getValue().getDisplayTime() == -1) {
+                	break;
+                } else {
+                	this.attendre(e.getValue().getDisplayTime());
+                }
+            }
+        	if (this.continuer)
+        	combat.continuer();
+    	}
+    	
         public synchronized void attendre (int time) {
             try {
                 this.wait(time);
@@ -321,113 +316,64 @@ public class VueSwing_combat {
         }
     }
     
-    public class threadAnnimationAttaquePerso1 extends annimationThread {
+    public class threadAnnimationAttaquePerso extends annimationThread {
+    	
+    	public threadAnnimationAttaquePerso(Personnage perso) {
+    		super(perso);
+    	}
+    	
         @Override
         public void run() {
-          Map<Integer, ImageManager> images = ImagePersonnage.getImageCombatAttaqueFromPersonnage(combat.getPerso1());
-            for (Map.Entry<Integer, ImageManager> e : images.entrySet()){
-                panelPerso1.setBufferedImage(e.getValue().getImage(), 150, 150);
-                this.attendre(e.getValue().getDisplayTime());
-            }
+            this.runAnnimation(ImagePersonnage.getImageCombatAttaqueFromPersonnage(this.perso));
         }
     }
     
-    public class threadAnnimationCritiquePerso1 extends annimationThread {
+    public class threadAnnimationCritiquePerso extends annimationThread {
+    	
+    	public threadAnnimationCritiquePerso(Personnage perso) {
+    		super(perso);
+    	}
+    	
         @Override
         public void run() {
-          Map<Integer, ImageManager> images = ImagePersonnage.getImageCombatAttaqueCritiqueFromPersonnage(combat.getPerso1());
-            for (Map.Entry<Integer, ImageManager> e : images.entrySet()){
-                panelPerso1.setBufferedImage(e.getValue().getImage(), 150, 150);
-                this.attendre(e.getValue().getDisplayTime());
-            }
+        	this.runAnnimation(ImagePersonnage.getImageCombatAttaqueCritiqueFromPersonnage(this.perso));
         }
     }
     
-    public class threadAnnimationDistancePerso1 extends annimationThread {
+    public class threadAnnimationDistancePerso extends annimationThread {
+    	
+    	public threadAnnimationDistancePerso(Personnage perso) {
+    		super(perso);
+    	}
+    	
         @Override
         public void run() {
-          Map<Integer, ImageManager> images = ImagePersonnage.getImageCombatDistantFromPersonnage(combat.getPerso1());
-            for (Map.Entry<Integer, ImageManager> e : images.entrySet()){
-                panelPerso1.setBufferedImage(e.getValue().getImage(), 150, 150);
-                this.attendre(e.getValue().getDisplayTime());
-            }
+        	this.runAnnimation(ImagePersonnage.getImageCombatDistantFromPersonnage(this.perso));
         }
     }
     
-    public class threadAnnimationDistanceCritiquePerso1 extends annimationThread {
+    public class threadAnnimationDistanceCritiquePerso extends annimationThread {
+    	
+    	public threadAnnimationDistanceCritiquePerso(Personnage perso) {
+    		super(perso);
+    	}
+    	
         @Override
         public void run() {
-          Map<Integer, ImageManager> images = ImagePersonnage.getImageCombatDistantCritiqueFromPersonnage(combat.getPerso1());
-            for (Map.Entry<Integer, ImageManager> e : images.entrySet()){
-                panelPerso1.setBufferedImage(e.getValue().getImage(), 150, 150);
-                this.attendre(e.getValue().getDisplayTime());
-            }
+        	this.runAnnimation(ImagePersonnage.getImageCombatDistantCritiqueFromPersonnage(this.perso));
         }
     }
     
-    public class threadAnnimationEsquivePerso1 extends annimationThread {
+    public class threadAnnimationEsquivePerso extends annimationThread {
+    	
+    	public threadAnnimationEsquivePerso(Personnage perso) {
+    		super(perso);
+    	}
+    	
         @Override
         public void run() {
-          Map<Integer, ImageManager> images = ImagePersonnage.getImageCombatEsquiveFromPersonnage(combat.getPerso1());
-            for (Map.Entry<Integer, ImageManager> e : images.entrySet()){
-                panelPerso1.setBufferedImage(e.getValue().getImage(), 150, 150);
-                this.attendre(e.getValue().getDisplayTime());
-            }
-        }
-    }
-    
-    public class threadAnnimationAttaquePerso2 extends annimationThread {
-        @Override
-        public void run() {
-          Map<Integer, ImageManager> images = ImagePersonnage.getImageCombatAttaqueFromPersonnage(combat.getPerso2());
-            for (Map.Entry<Integer, ImageManager> e : images.entrySet()){
-                panelPerso2.setBufferedImage(e.getValue().getImage(), 150, 150);
-                this.attendre(e.getValue().getDisplayTime());
-            }
-        }
-    }
-    
-    public class threadAnnimationCritiquePerso2 extends annimationThread {
-        @Override
-        public void run() {
-          Map<Integer, ImageManager> images = ImagePersonnage.getImageCombatAttaqueCritiqueFromPersonnage(combat.getPerso2());
-            for (Map.Entry<Integer, ImageManager> e : images.entrySet()){
-                panelPerso2.setBufferedImage(e.getValue().getImage(), 150, 150);
-                this.attendre(e.getValue().getDisplayTime());
-            }
-        }
-    }
-    
-    public class threadAnnimationDistancePerso2 extends annimationThread {
-        @Override
-        public void run() {
-          Map<Integer, ImageManager> images = ImagePersonnage.getImageCombatDistantFromPersonnage(combat.getPerso2());
-            for (Map.Entry<Integer, ImageManager> e : images.entrySet()){
-                panelPerso2.setBufferedImage(e.getValue().getImage(), 150, 150);
-                this.attendre(e.getValue().getDisplayTime());
-            }
-        }
-    }
-    
-    public class threadAnnimationDistanceCritiquePerso2 extends annimationThread {
-        @Override
-        public void run() {
-          Map<Integer, ImageManager> images = ImagePersonnage.getImageCombatDistantCritiqueFromPersonnage(combat.getPerso2());
-            for (Map.Entry<Integer, ImageManager> e : images.entrySet()){
-                panelPerso2.setBufferedImage(e.getValue().getImage(), 150, 150);
-                this.attendre(e.getValue().getDisplayTime());
-            }
-        }
-    }
-    
-    public class threadAnnimationEsquivePerso2 extends annimationThread {
-        @Override
-        public void run() {
-          Map<Integer, ImageManager> images = ImagePersonnage.getImageCombatEsquiveFromPersonnage(combat.getPerso2());
-            for (Map.Entry<Integer, ImageManager> e : images.entrySet()){
-                panelPerso2.setBufferedImage(e.getValue().getImage(), 150, 150);
-                this.attendre(e.getValue().getDisplayTime());
-            }
+        	this.continuer = false;
+        	this.runAnnimation(ImagePersonnage.getImageCombatEsquiveFromPersonnage(this.perso));
         }
     }
     

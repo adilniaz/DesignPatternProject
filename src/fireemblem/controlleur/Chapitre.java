@@ -9,6 +9,7 @@ import fireemblem.Position;
 import fireemblem.personnage.Personnage;
 import fireemblem.plateauJeu.Case;
 import fireemblem.plateauJeu.PlateauJeu;
+import fireemblem.plateauJeu.PlateauJeu.Etat;
 import fireemblem.swing.Fenetre;
 import fireemblem.swing.Vues;
 
@@ -23,6 +24,7 @@ public class Chapitre extends Controlleur {
     private List<ZoneAbstract> zonesAtkSelectionner;
     private CharacterAbstract persoEnCours;
     private Position oldPosition;
+    private Tour tour;
     
     public final String AFFICHE_ACTION_PERSO = "afficheActionPerso";
     public final String AFFICHE_ARMES_PERSO = "afficheArmePerso";
@@ -33,6 +35,7 @@ public class Chapitre extends Controlleur {
     public final String DEPLACE_PERSO = "deplacePerso";
     public final String EFFACE_ATTAQUE_DISPONIBLE = "effaceAttaqueDisponible";
     public final String EFFACE_DEPLACEMENT_DISPONIBLE = "effaceDeplacementDisponible";
+    public final String CHANGE_TOUR = "changeTour";
     
     public enum menu {
         unite, statut, suspen, fin;
@@ -46,11 +49,19 @@ public class Chapitre extends Controlleur {
         libre, deplacement, action, arme;
     }
     
+    public enum Tour {
+    	perso, ennemie, annexes;
+    }
+    
     public Chapitre (String nom, PlateauJeu plateauDeJeu, String objectif) {
         this.nom = nom;
         this.plateauDeJeu = plateauDeJeu;
         this.mode = Mode.libre;
         this.objectif = objectif;
+    }
+    
+    public Fenetre getFenetre () {
+    	return this.fenetre;
     }
     
     public void setFenetre (Fenetre fenetre) {
@@ -71,6 +82,42 @@ public class Chapitre extends Controlleur {
     
     public void run () {
         this.pcsControlleurVue.firePropertyChange(AFFICHE_MAP, null, null);
+        this.tour = Tour.perso;
+    }
+    
+    public void continuer () {
+    	System.out.println("continuer : " + this.tour);
+    	switch (this.tour) {
+			case perso:
+				boolean hasPersoNormal = false;
+				for (CharacterAbstract perso : this.plateauDeJeu.getPersonnages()) {
+					if (this.plateauDeJeu.getEtatByCharacter(perso) == Etat.normal) {
+						hasPersoNormal = true;
+						break;
+					}
+				}
+				if (!hasPersoNormal) {
+					this.tour = Tour.ennemie;
+					this.pcsControlleurVue.firePropertyChange(CHANGE_TOUR, this.tour, null);
+				}
+				break;
+			case ennemie:
+				for (CharacterAbstract perso : this.plateauDeJeu.getEnnemies()) {
+					Personnage p = (Personnage) perso;
+					p.getStrategie().run(this);
+				}
+				this.tour = Tour.annexes;
+				this.pcsControlleurVue.firePropertyChange(CHANGE_TOUR, this.tour, null);
+				break;
+			case annexes:
+				for (CharacterAbstract perso : this.plateauDeJeu.getAnnexes()) {
+					Personnage p = (Personnage) perso;
+					p.getStrategie().run(this);
+				}
+				this.tour = Tour.perso;
+				this.pcsControlleurVue.firePropertyChange(CHANGE_TOUR, this.tour, null);
+				break;
+		}
     }
     
     public void action (Position pos) {
@@ -203,6 +250,10 @@ public class Chapitre extends Controlleur {
             case suspen:
                break;
             case fin:
+            	for (CharacterAbstract perso : this.plateauDeJeu.getPersonnages()) {
+            		this.plateauDeJeu.changeEtatCharacter(perso, Etat.attendre);
+            		this.continuer();
+            	}
                break;
         }
     }
@@ -221,8 +272,8 @@ public class Chapitre extends Controlleur {
             case convoi:
                 break;
             case attendre:
-            	((Personnage) this.persoEnCours).setaJouer(true);
-                this.finAction();
+            	this.plateauDeJeu.changeEtatCharacter(this.persoEnCours, Etat.attendre);
+                this.continuer();
             	break;
         }
     }
@@ -247,38 +298,10 @@ public class Chapitre extends Controlleur {
                 Combat combat = new Combat(p2, p);
                 Vues.createVue(combat, this.fenetre);
                 combat.combat();
-                p2.setaJouer(true);
-                this.finAction();
+                this.plateauDeJeu.changeEtatCharacter(p2, Etat.attendre);
+                this.continuer();
                 break;
             }
-        }
-    }
-    
-    public void finAction () {
-    	boolean fin = true;
-    	for (CharacterAbstract perso : this.plateauDeJeu.getPersonnages()) {
-        	Personnage p = (Personnage) perso;
-        	if (!p.isaJouer()) {
-        		fin = false;
-        	}
-        }
-    	if (fin) {
-    		this.tourEnnemie();
-    		this.tourAnnexe();
-    	}
-    }
-    
-    public void tourEnnemie () {
-    	for (CharacterAbstract perso : this.plateauDeJeu.getEnnemies()) {
-    		Personnage p = (Personnage) perso;
-    		p.getStrategie().run(this);
-        }
-    }
-    
-    public void tourAnnexe () {
-    	for (CharacterAbstract perso : this.plateauDeJeu.getAnnexes()) {
-    		Personnage p = (Personnage) perso;
-    		p.getStrategie().run(this);
         }
     }
     

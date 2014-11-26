@@ -52,9 +52,15 @@ public abstract class PanelCentre extends JPanel {
     
     public abstract int getHauteur ();
     
+    public abstract int getNivMax ();
+    
     public abstract Parcelle getParcelle ();
     
+    public abstract void ajouterParcelle (Parcelle parcelle, int i, int j);
+    
     public abstract Parcelle getParcelle (int i, int j);
+    
+    public abstract ViewComponent getViewBackground (int i, int j);
     
     public abstract ViewComponent getViewComponent (int niv, int i, int j);
     

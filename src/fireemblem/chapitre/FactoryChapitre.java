@@ -14,7 +14,8 @@ import fireemblem.personnage.FactoryPersonnageFireEmblem;
 import fireemblem.personnage.TypePersonnageFireEmblem;
 import fireemblem.personnage.Personnage;
 import fireemblem.plateauJeu.FactoryTerrain;
-import fireemblem.plateauJeu.PlateauJeu;;
+import fireemblem.plateauJeu.PlateauJeu;
+import fireemblem.strategie.StrategieImmobile;
 
 public class FactoryChapitre {
     
@@ -75,12 +76,13 @@ public class FactoryChapitre {
                 ((Personnage)nergal).ajouterObjet(factoryObjet.createObjet("Ereshkigal", TypeObjet.ereshkigal));
                 CharacterAbstract combattant = factoryPersonnage.createCharacter("Combattant", orga, TypePersonnageFireEmblem.combattant);
                 ((Personnage)combattant).setPosition(new Position(15, 10));
+                ((Personnage)combattant).setStrategie(new StrategieImmobile((Personnage)combattant));
                 ((Personnage)combattant).ajouterObjet(factoryObjet.createObjet("hache-fer", TypeObjet.hache_fer));
 
-                ((PlateauJeu)plateauDeJeu).ajouterPersonnage(lyn);
+                //((PlateauJeu)plateauDeJeu).ajouterPersonnage(lyn);
                 ((PlateauJeu)plateauDeJeu).ajouterPersonnage(eliwood);
-                ((PlateauJeu)plateauDeJeu).ajouterPersonnage(hector);
-                ((PlateauJeu)plateauDeJeu).ajouterEnnemie(nergal);
+                //((PlateauJeu)plateauDeJeu).ajouterPersonnage(hector);
+                //((PlateauJeu)plateauDeJeu).ajouterEnnemie(nergal);
                 ((PlateauJeu)plateauDeJeu).ajouterEnnemie(combattant);
                 return new Chapitre("blazing sword", (PlateauJeu)plateauDeJeu, "battre le boss");
             case sword_of_seal :

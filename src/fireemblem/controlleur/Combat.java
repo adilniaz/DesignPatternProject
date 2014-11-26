@@ -1,8 +1,14 @@
 package fireemblem.controlleur;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import fireemblem.objet.Arme;
 import fireemblem.objet.TypeArme;
 import fireemblem.personnage.Personnage;
+import fireemblem.swing.VueSwing_combat;
 
 public class Combat extends Controlleur {
     
@@ -11,19 +17,19 @@ public class Combat extends Controlleur {
     
     public final String SIMULER_COMBAT = "simulerCombat";
     public final String COMBAT = "combat";
-    public final String ANNIMATION_ATTAQUE_PERSO1 = "annimation_attaque_perso1";
-    public final String ANNIMATION_CRITIQUE_PERSO1 = "annimation_critique_perso1";
-    public final String ANNIMATION_DISTANCE_PERSO1 = "annimation_distance_perso1";
-    public final String ANNIMATION_DISTANCE_CRITIQUE_PERSO1 = "annimation_distance_critique_perso1";
-    public final String ANNIMATION_ESQUIVE_PERSO1 = "annimation_esquive_perso1";
-    public final String ANNIMATION_ATTAQUE_PERSO2 = "annimation_attaque_perso2";
-    public final String ANNIMATION_CRITIQUE_PERSO2 = "annimation_critique_perso2";
-    public final String ANNIMATION_DISTANCE_PERSO2 = "annimation_distance_perso2";
-    public final String ANNIMATION_DISTANCE_CRITIQUE_PERSO2 = "annimation_distance_critique_perso2";
-    public final String ANNIMATION_ESQUIVE_PERSO2 = "annimation_esquive_perso2";
+    public final String ANNIMATION_ATTAQUE_PERSO = "annimation_attaque_perso";
+    public final String ANNIMATION_CRITIQUE_PERSO = "annimation_critique_perso";
+    public final String ANNIMATION_DISTANCE_PERSO = "annimation_distance_perso";
+    public final String ANNIMATION_DISTANCE_CRITIQUE_PERSO = "annimation_distance_critique_perso";
+    public final String ANNIMATION_ESQUIVE_PERSO = "annimation_esquive_perso";
     public final String MODIFY_PV_PERSO1 = "modify_pv_perso1";
     public final String MODIFY_PV_PERSO2 = "modify_pv_perso2";
     public final String FIN_COMBAT = "finCombat";
+    
+    private int statPerso1[];
+    private int statPerso2[];
+    
+    private List<Integer> pile;
     
     public Combat (Personnage perso1, Personnage perso2) {
         this.perso1 = perso1;
@@ -170,82 +176,93 @@ public class Combat extends Controlleur {
         
         int statPerso1[] = {forcePerso1, precPerso1, critiquePerso1};
         int statPerso2[] = {forcePerso2, precPerso2, critiquePerso2};
+        this.statPerso1 = statPerso1;
+        this.statPerso2 = statPerso2;
         
+        /*
+         * 1 - affichage de fenetre de debut de combat
+         * 2 - on notifie qui attaque (dans animation stop au moment de image attaque)
+         * 3 - si coup réussi, on retire pv sinon esquive (dans swing on fini attaque)
+         * 4 - on refait pour chaque attaque
+         * */
         this.pcsControlleurVue.firePropertyChange(COMBAT, statPerso1, statPerso2);
         
-        int prec = 0;
+        this.pile = new ArrayList<>();
+        pile.add(1);
+        pile.add(2);
+        if (nbAttaquePerso1 > 1) {
+        	pile.add(1);
+        } else if (nbAttaquePerso2 > 1) {
+        	pile.add(2);
+        }
+        this.continuer();
+        while (!pile.isEmpty()) {
+        	this.attendre(100);
+        }
+    }
+    
+    public synchronized void attendre (int time) {
+        try {
+            this.wait(time);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(VueSwing_combat.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void continuer () {
+    	if (pile.isEmpty()) {
+    		this.pcsControlleurVue.firePropertyChange(FIN_COMBAT, null, null);
+    	} else {
+	    	if (this.pile.get(0) == 1) {
+	    		this.attaquePerso1(statPerso1);
+	    	} else {
+	    		this.attaquePerso2(statPerso2);
+	    	}
+	    	this.pile.remove(0);
+    	}
+    }
+    
+    private void attaquePerso1 (int stats[]) {
+    	int prec = 0;
         int critique = 0;
         
-        this.pcsControlleurVue.firePropertyChange(ANNIMATION_ATTAQUE_PERSO1, null, null);
+        this.pcsControlleurVue.firePropertyChange(ANNIMATION_ATTAQUE_PERSO, this.perso1, null);
         
         prec = (int) (Math.random() * 100 + 1);
         critique = (int) (Math.random() * 100 + 1);
         
-        if (prec < precPerso1) {
+        if (prec < stats[1]) {
             int pvP2 = this.perso2.getPv();
-            if (critique < critiquePerso1) {
-                this.perso2.setPv(this.perso2.getPv() - (forcePerso1 * 3));
+            if (critique < stats[2]) {
+                this.perso2.setPv(this.perso2.getPv() - (stats[0] * 3));
             } else {
-                this.perso2.setPv(this.perso2.getPv() - forcePerso1);
+                this.perso2.setPv(this.perso2.getPv() - stats[0]);
             }
             this.pcsControlleurVue.firePropertyChange(MODIFY_PV_PERSO2, pvP2 - this.perso2.getPv(), null);
         } else {
-            this.pcsControlleurVue.firePropertyChange(ANNIMATION_ESQUIVE_PERSO2, null, null);
-        }
-        
-        if (this.perso2.getPv() > 0) {
-            prec = (int) (Math.random() * 100 + 1);
-            critique = (int) (Math.random() * 100 + 1);
-            this.pcsControlleurVue.firePropertyChange(ANNIMATION_ATTAQUE_PERSO2, null, null);
-            if (prec < precPerso2) {
-                int pvP1 = this.perso1.getPv();
-                if (critique < critiquePerso2) {
-                    this.perso1.setPv(this.perso1.getPv() - (forcePerso2 * 3));
-                } else {
-                    this.perso1.setPv(this.perso1.getPv() - forcePerso2);
-                }
-                this.pcsControlleurVue.firePropertyChange(MODIFY_PV_PERSO1, pvP1 - this.perso1.getPv(), null);
-            } else {
-                this.pcsControlleurVue.firePropertyChange(ANNIMATION_ESQUIVE_PERSO1, null, null);
-            }
-        }
-        
-        if (this.perso1.getPv() > 0 && nbAttaquePerso1 > 1) {
-            prec = (int) (Math.random() * 100 + 1);
-            critique = (int) (Math.random() * 100 + 1);
-            this.pcsControlleurVue.firePropertyChange(ANNIMATION_ATTAQUE_PERSO1, null, null);
-            if (prec < precPerso1) {
-                int pvP2 = this.perso2.getPv();
-                if (critique < critiquePerso1) {
-                    this.perso2.setPv(this.perso2.getPv() - (forcePerso1 * 3));
-                } else {
-                    this.perso2.setPv(this.perso2.getPv() - forcePerso1);
-                }
-                this.pcsControlleurVue.firePropertyChange(MODIFY_PV_PERSO2, pvP2 - this.perso2.getPv(), null);
-            } else {
-                this.pcsControlleurVue.firePropertyChange(ANNIMATION_ESQUIVE_PERSO2, null, null);
-            }
-        }
-        
-        if (this.perso2.getPv() > 0 && nbAttaquePerso2 > 1) {
-            prec = (int) (Math.random() * 100 + 1);
-            critique = (int) (Math.random() * 100 + 1);
-            this.pcsControlleurVue.firePropertyChange(ANNIMATION_ATTAQUE_PERSO2, null, null);
-            if (prec < precPerso2) {
-                int pvP1 = this.perso1.getPv();
-                if (critique < critiquePerso2) {
-                    this.perso1.setPv(this.perso1.getPv() - (forcePerso2 * 3));
-                } else {
-                    this.perso1.setPv(this.perso1.getPv() - forcePerso2);
-                }
-                this.pcsControlleurVue.firePropertyChange(MODIFY_PV_PERSO1, pvP1 - this.perso1.getPv(), null);
-            } else {
-                this.pcsControlleurVue.firePropertyChange(ANNIMATION_ESQUIVE_PERSO1, null, null);
-            }
+            this.pcsControlleurVue.firePropertyChange(ANNIMATION_ESQUIVE_PERSO, this.perso2, null);
         }
     }
     
-    private void attaquePerso1 () {
+    private void attaquePerso2 (int stats[]) {
+    	int prec = 0;
+        int critique = 0;
         
-    }    
+        this.pcsControlleurVue.firePropertyChange(ANNIMATION_ATTAQUE_PERSO, this.perso2, null);
+        
+        prec = (int) (Math.random() * 100 + 1);
+        critique = (int) (Math.random() * 100 + 1);
+        
+        if (prec < stats[1]) {
+            int pv = this.perso1.getPv();
+            if (critique < stats[2]) {
+                this.perso1.setPv(this.perso1.getPv() - (stats[0] * 3));
+            } else {
+                this.perso1.setPv(this.perso1.getPv() - stats[0]);
+            }
+            this.pcsControlleurVue.firePropertyChange(MODIFY_PV_PERSO1, pv - this.perso1.getPv(), null);
+        } else {
+            this.pcsControlleurVue.firePropertyChange(ANNIMATION_ESQUIVE_PERSO, this.perso1, null);
+        }
+    }
 }

@@ -1,7 +1,9 @@
 package fireemblem.plateauJeu;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import fireemblem.personnage.Personnage;
 import abstracts_interfaces.CharacterAbstract;
@@ -18,6 +20,13 @@ public class PlateauJeu extends GamePlatformAbstract {
     private final List<CharacterAbstract> annexes;
     private final int width;
     private final int height;
+    private final Map<CharacterAbstract, Etat> etatPersonnage;
+    private final Map<CharacterAbstract, Etat> etatEnnemies;
+    private final Map<CharacterAbstract, Etat> etatAnnexes;
+    
+    public enum Etat {
+    	normal, attendre;
+    }
     
     public PlateauJeu () {
         this.zones = new ArrayList<>();
@@ -25,6 +34,9 @@ public class PlateauJeu extends GamePlatformAbstract {
         this.personnages = new ArrayList<>();
         this.ennemies = new ArrayList<>();
         this.annexes = new ArrayList<>();
+        this.etatPersonnage = new HashMap<CharacterAbstract, PlateauJeu.Etat>();
+        this.etatEnnemies = new HashMap<CharacterAbstract, PlateauJeu.Etat>();
+        this.etatAnnexes = new HashMap<CharacterAbstract, PlateauJeu.Etat>();
         this.width = 20;
         this.height = 20;
     }
@@ -47,6 +59,7 @@ public class PlateauJeu extends GamePlatformAbstract {
     
     public void ajouterPersonnage (CharacterAbstract p) {
         this.personnages.add(p);
+        this.etatPersonnage.put(p, Etat.normal);
     }
     
     public List<CharacterAbstract> getPersonnages () {
@@ -55,6 +68,7 @@ public class PlateauJeu extends GamePlatformAbstract {
     
     public void ajouterEnnemie (CharacterAbstract p) {
         this.ennemies.add(p);
+        this.etatEnnemies.put(p, Etat.normal);
     }
     
     public List<CharacterAbstract> getEnnemies () {
@@ -63,10 +77,32 @@ public class PlateauJeu extends GamePlatformAbstract {
     
     public void ajouterAnnexe (CharacterAbstract p) {
         this.annexes.add(p);
+        this.etatAnnexes.put(p, Etat.normal);
     }
 
 	public List<CharacterAbstract> getAnnexes() {
 		return annexes;
+	}
+	
+	public Etat getEtatByCharacter (CharacterAbstract p) {
+		if (this.etatPersonnage.containsKey(p)) {
+			return this.etatPersonnage.get(p);
+		} else if (this.etatEnnemies.containsKey(p)) {
+			return this.etatEnnemies.get(p);
+		} else if (this.etatAnnexes.containsKey(p)) {
+			return this.etatAnnexes.get(p);
+		}
+		return null;
+	}
+	
+	public void changeEtatCharacter (CharacterAbstract p, Etat e) {
+		if (this.etatPersonnage.containsKey(p)) {
+			this.etatPersonnage.put(p, e);
+		} else if (this.etatEnnemies.containsKey(p)) {
+			this.etatEnnemies.put(p, e);
+		} else if (this.etatAnnexes.containsKey(p)) {
+			this.etatAnnexes.put(p, e);
+		}
 	}
 
 	@Override

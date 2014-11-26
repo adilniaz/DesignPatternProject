@@ -69,8 +69,20 @@ public class PanelCentreParcelle extends PanelCentre {
     }
     
     @Override
+    public int getNivMax () {
+        return 3;
+    }
+    
+    @Override
     public Parcelle getParcelle () {
         return this.parcelles[0][0];
+    }
+    
+    @Override
+    public void ajouterParcelle (Parcelle parcelle, int i, int j) {
+    	this.remove(this.parcelles[i][j]);
+    	this.parcelles[i][j] = parcelle;
+    	this.add(this.parcelles[i][j]);
     }
     
     @Override
@@ -79,8 +91,13 @@ public class PanelCentreParcelle extends PanelCentre {
     }
 
     @Override
+    public ViewComponent getViewBackground(int i, int j) {
+        return new ViewComponent(this.parcelles[i][j].getBackgroundComponent());
+    }
+
+    @Override
     public ViewComponent getViewComponent(int niv, int i, int j) {
-        return null;
+        return new ViewComponent(this.parcelles[i][j].getContent(niv));
     }
     
     @Override

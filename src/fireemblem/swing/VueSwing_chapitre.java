@@ -9,6 +9,8 @@ import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -22,6 +24,7 @@ import abstracts_interfaces.CharacterAbstract;
 import abstracts_interfaces.factories.gameplatforms.ZoneAbstract;
 import fireemblem.Position;
 import fireemblem.controlleur.Chapitre;
+import fireemblem.controlleur.Chapitre.Tour;
 import fireemblem.controlleur.Chapitre.menu;
 import fireemblem.keyevent.KeyAction;
 import fireemblem.keyevent.KeyDispatcher;
@@ -47,11 +50,17 @@ public class VueSwing_chapitre {
     private List<ZoneAbstract> zonesSelectionner;
     private Personnage persoEnCours;
     
+    private Camera camera;
+    private Position centerPosition;
+    
     public VueSwing_chapitre (Chapitre chapitre, Fenetre fenetre) {
         this.chapitre = chapitre;
         this.fenetre = fenetre;
         this.keyAction = new KeyAction();
         this.popupFactory = PopupFactory.getSharedInstance();
+        this.camera = new Camera();
+        this.centerPosition = new Position(10, 10);
+        
         this.keyAction.ajouterEcouteur(new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent evt) {
@@ -79,6 +88,8 @@ public class VueSwing_chapitre {
                     afficheMenu((menu[]) evt.getOldValue());
                 } else if (evt.getPropertyName().equals(VueSwing_chapitre.this.chapitre.AFFICHE_ACTION_PERSO)) {
                     afficheActionPerso((Chapitre.actionPerso[]) evt.getOldValue());
+                } else if (evt.getPropertyName().equals(VueSwing_chapitre.this.chapitre.CHANGE_TOUR)) {
+                	afficherTour((Tour) evt.getOldValue());
                 } else if (evt.getPropertyName().equals(VueSwing_chapitre.this.chapitre.DEPLACE_PERSO)) {
                     DeplacePerso((Personnage) evt.getOldValue(), (Position) evt.getNewValue());
                 } else if (evt.getPropertyName().equals(VueSwing_chapitre.this.chapitre.EFFACE_ATTAQUE_DISPONIBLE)) {
@@ -91,7 +102,7 @@ public class VueSwing_chapitre {
     }
     
     public void afficheMap () {
-        Panel panel = new Panel();
+        //Panel panel = new Panel();
         this.panelCentre = new PanelCentreParcelle(20, 20, 1250, 650);
         Map<ZoneAbstract, JComponent> componentZone = new HashMap<>();
         for (ZoneAbstract zone : this.chapitre.getPlateauDeJeu().getZones()) {
@@ -110,8 +121,10 @@ public class VueSwing_chapitre {
             this.panelCentre.ajouterViewContent(new ViewComponent(new PanelDrawing(Color.RED, PanelDrawing.drawingType.circle, 60, 30)), p.getPosition().getPositionX(), p.getPosition().getPositionY(), 1);
             this.panelCentre.ajouterViewContent(new ViewComponent(new PanelImage(ImagePersonnage.getImageIconMapFromPersonnage(perso), 60, 30)), p.getPosition().getPositionX(), p.getPosition().getPositionY(), 2);
         }
-        panel.changerCentre(this.panelCentre, 20, 20, 1250, 650);
+        //panel.changerCentre(this.panelCentre, 20, 20, 1250, 650);
+        Panel panel = this.camera.getCameraView(this.centerPosition, this.panelCentre);
         this.keyAction.init(this.chapitre.getPlateauDeJeu(), componentZone);
+        this.keyAction.setCursorPosition(this.centerPosition);
         fenetre.addKeyBoardManager(new KeyDispatcher(this.keyAction));
         this.fenetre.ajouterPanel(panel);
     }
@@ -139,7 +152,24 @@ public class VueSwing_chapitre {
     }
     
     private void changeCursorPosition (Position oldPosition, Position newPosition) {
-        JLabel label = new JLabel(this.chapitre.getObjectif());
+        if (newPosition.getPositionX() == this.centerPosition.getPositionX() + this.camera.getHeight()) {
+        	this.centerPosition.setPositionX(this.centerPosition.getPositionX()+1);
+        	Panel panel = this.camera.getCameraView(this.centerPosition, this.panelCentre);
+        	this.fenetre.ajouterPanel(panel);
+        } else if (newPosition.getPositionY() == this.centerPosition.getPositionY() + this.camera.getWidth()) {
+        	this.centerPosition.setPositionY(this.centerPosition.getPositionY()+1);
+        	Panel panel = this.camera.getCameraView(this.centerPosition, this.panelCentre);
+        	this.fenetre.ajouterPanel(panel);
+        } else if (newPosition.getPositionX() == this.centerPosition.getPositionX() - this.camera.getHeight()) {
+        	this.centerPosition.setPositionX(this.centerPosition.getPositionX()-1);
+        	Panel panel = this.camera.getCameraView(this.centerPosition, this.panelCentre);
+        	this.fenetre.ajouterPanel(panel);
+        } else if (newPosition.getPositionY() == this.centerPosition.getPositionY() - this.camera.getWidth()) {
+        	this.centerPosition.setPositionY(this.centerPosition.getPositionY()-1);
+        	Panel panel = this.camera.getCameraView(this.centerPosition, this.panelCentre);
+        	this.fenetre.ajouterPanel(panel);
+        }
+    	JLabel label = new JLabel(this.chapitre.getObjectif());
         this.fenetreObjectif = this.popupFactory.getPopup(this.fenetre, label, 1200, 80);
         this.fenetreObjectif.show();
 
@@ -185,6 +215,10 @@ public class VueSwing_chapitre {
                 break;
             }
         }
+    }
+    
+    private void afficherTour (Tour tour) {
+    	new AfficheTour(tour).start();
     }
     
     private void afficheFenetrePerso (Personnage perso) {
@@ -257,6 +291,45 @@ public class VueSwing_chapitre {
         for (ZoneAbstract zone : zones) {
             Case c = (Case) zone;
             this.panelCentre.ajouterViewContent(null, c.getPosition().getPositionX(), c.getPosition().getPositionY(), 0);
+        }
+    }
+    
+    public class AfficheTour extends Thread {
+    	
+    	private Tour tour;
+    	
+    	public AfficheTour (Tour tour) {
+    		this.tour = tour;
+    	}
+    	
+    	public void run () {
+    		Popup popup;
+        	String affichage = "";
+        	switch (tour) {
+        		case perso:
+        			affichage = "Tour perso";
+        			break;
+        		case ennemie:
+        			affichage = "Tour adverse";
+        			break;
+        		case annexes:
+        			affichage = "Tour annexe";
+        			break;
+        	}
+        	JLabel label = new JLabel(affichage);
+        	popup = popupFactory.getPopup(fenetre, label, 100, 100);
+        	popup.show();
+        	this.attendre(2000);
+        	popup.hide();
+        	chapitre.continuer();
+    	}
+    	
+        public synchronized void attendre (int time) {
+            try {
+                this.wait(time);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(VueSwing_combat.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
     

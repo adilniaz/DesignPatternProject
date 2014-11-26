@@ -36,6 +36,13 @@ public class Parcelle extends JLayeredPane {
         this.add(panel, 0, 0);
     }
     
+    public Component getBackgroundComponent () {
+    	System.out.println("components lenght : " + this.getComponents().length);
+    	Component component = this.getComponent(0);
+    	System.out.println("components lenght : " + this.getComponents().length);
+    	return component;
+    }
+    
     public void ajouterContent (JPanel panel) {
         this.ajouterContent(panel, 0);
     }
@@ -59,6 +66,10 @@ public class Parcelle extends JLayeredPane {
             panel.setOpaque(false);
             this.add(panel, niv+1, 0);
         }
+    }
+    
+    public Component getContent (int niv) {
+    	return this.content[niv];
     }
     
     public void redimenssionnerContent (int width, int height) {

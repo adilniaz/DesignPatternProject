@@ -74,6 +74,13 @@ public class KeyAction implements KeyListener  {
             this.pcsControlleurVue.firePropertyChange("cursorPosition", oldPosition, newPosition);
         }
     }
+    
+    public void setCursorPosition (Position pos) {
+    	ZoneAbstract zone = this.getZoneByPosition(pos);
+    	this.componentZone.get(this.currentZone).setBorder(this.oldBorder);
+        this.currentZone = zone;
+        this.componentZone.get(this.currentZone).setBorder(this.newBorder);
+    }
 
     @Override
     public void keyPressed(KeyEvent ke) {
