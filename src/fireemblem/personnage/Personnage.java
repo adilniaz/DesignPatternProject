@@ -57,7 +57,17 @@ public class Personnage extends CharacterAbstract {
     }
 
     public void setPv(int pv) {
-        this.pv = pv;
+    	if (pv < 0) {
+    		this.pv = 0;
+    	} else if (this.pv > this.pvMax) {
+    		this.pv = this.pvMax;
+    	} else {
+    		this.pv = pv;
+    	}
+    }
+    
+    public boolean estKo () {
+    	return this.pv == 0;
     }
 
     public int getPvMax() {

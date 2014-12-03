@@ -16,6 +16,7 @@ import fireemblem.personnage.Personnage;
 import fireemblem.plateauJeu.FactoryTerrain;
 import fireemblem.plateauJeu.PlateauJeu;
 import fireemblem.strategie.StrategieImmobile;
+import fireemblem.strategie.StrategiePlusProche;
 
 public class FactoryChapitre {
     
@@ -78,12 +79,18 @@ public class FactoryChapitre {
                 ((Personnage)combattant).setPosition(new Position(15, 10));
                 ((Personnage)combattant).setStrategie(new StrategieImmobile((Personnage)combattant));
                 ((Personnage)combattant).ajouterObjet(factoryObjet.createObjet("hache-fer", TypeObjet.hache_fer));
+                
+                CharacterAbstract combattant2 = factoryPersonnage.createCharacter("Combattant", orga, TypePersonnageFireEmblem.combattant);
+                ((Personnage)combattant2).setPosition(new Position(10, 6));
+                ((Personnage)combattant2).setStrategie(new StrategiePlusProche((Personnage)combattant2));
+                ((Personnage)combattant2).ajouterObjet(factoryObjet.createObjet("hache-fer", TypeObjet.hache_fer));
 
                 //((PlateauJeu)plateauDeJeu).ajouterPersonnage(lyn);
                 ((PlateauJeu)plateauDeJeu).ajouterPersonnage(eliwood);
                 //((PlateauJeu)plateauDeJeu).ajouterPersonnage(hector);
                 //((PlateauJeu)plateauDeJeu).ajouterEnnemie(nergal);
                 ((PlateauJeu)plateauDeJeu).ajouterEnnemie(combattant);
+                ((PlateauJeu)plateauDeJeu).ajouterEnnemie(combattant2);
                 return new Chapitre("blazing sword", (PlateauJeu)plateauDeJeu, "battre le boss");
             case sword_of_seal :
             	GamePlatformAbstract plateauDeJeu1 = environnementJeu.createGamePlatform();

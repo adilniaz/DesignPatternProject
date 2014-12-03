@@ -10,7 +10,11 @@ import javax.swing.JPanel;
 
 public class PanelImage extends JPanel {
 
-    private BufferedImage image;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -113397072051672480L;
+	private BufferedImage image;
     private ImageIcon image2;
     private int width;
     private int height;

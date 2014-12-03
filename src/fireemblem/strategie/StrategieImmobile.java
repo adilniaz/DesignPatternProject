@@ -25,28 +25,28 @@ public class StrategieImmobile extends Strategie {
             if (perso != null) {
             	Combat combat = new Combat(personnage, perso);
             	Vues.createVue(combat, chapitre.getFenetre());
-                combat.combat();
+                combat.run();
             }
 			Position p2 = new Position(personnage.getPosition().getPositionX()-1, personnage.getPosition().getPositionY());
 			perso = this.getPersonnage(p2, chapitre);
             if (perso != null) {
             	Combat combat = new Combat(personnage, perso);
             	Vues.createVue(combat, chapitre.getFenetre());
-                combat.combat();
+                combat.run();
             }
 			Position p3 = new Position(personnage.getPosition().getPositionX(), personnage.getPosition().getPositionY()+1);
 			perso = this.getPersonnage(p3, chapitre);
             if (perso != null) {
             	Combat combat = new Combat(personnage, perso);
             	Vues.createVue(combat, chapitre.getFenetre());
-                combat.combat();
+                combat.run();
             }
 			Position p4 = new Position(personnage.getPosition().getPositionX(), personnage.getPosition().getPositionY()-1);
 			perso = this.getPersonnage(p4, chapitre);
             if (perso != null) {
             	Combat combat = new Combat(personnage, perso);
             	Vues.createVue(combat, chapitre.getFenetre());
-                combat.combat();
+                combat.run();
             }
 		}
 	}

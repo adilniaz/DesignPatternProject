@@ -57,6 +57,8 @@ public class VueSwing_combat {
                     annimationEsquivePerso((Personnage)evt.getOldValue());
                 } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.FIN_COMBAT)) {
                     finCombat();
+                } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.FIN_SIMULER_COMBAT)) {
+                	finSimulationCombat();
                 } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.MODIFY_PV_PERSO1)) {
                     modifyPvPerso1((int)evt.getOldValue());
                 } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.MODIFY_PV_PERSO2)) {
@@ -143,6 +145,10 @@ public class VueSwing_combat {
         this.fenetreSimulationCombat.setLocation(1000, 300);
         this.fenetreSimulationCombat.setVisible(true);*/
         
+    }
+    
+    private void finSimulationCombat () {
+    	this.fenetreSimulationCombat.hide();
     }
     
     private void combat (int statPerso1[], int statPerso2[]) {
@@ -259,23 +265,55 @@ public class VueSwing_combat {
     }
     
     private void annimationAttaquePerso (Personnage perso) {
-        new threadAnnimationAttaquePerso(perso).start();
+        //new threadAnnimationAttaquePerso(perso).start();
+        this.runAnnimation(ImagePersonnage.getImageCombatAttaqueFromPersonnage(perso), perso, true);
     }
     
     private void annimationCritiquePerso (Personnage perso) {
-        new threadAnnimationCritiquePerso(perso).start();
+        //new threadAnnimationCritiquePerso(perso).start();
+    	this.runAnnimation(ImagePersonnage.getImageCombatAttaqueCritiqueFromPersonnage(perso), perso, true);
     }
     
     private void annimationDistancePerso (Personnage perso) {
-        new threadAnnimationDistancePerso(perso).start();
+        //new threadAnnimationDistancePerso(perso).start();
+    	this.runAnnimation(ImagePersonnage.getImageCombatDistantFromPersonnage(perso), perso, true);
     }
     
     private void annimationDistanceCritiquePerso (Personnage perso) {
-        new threadAnnimationDistanceCritiquePerso(perso).start();
+        //new threadAnnimationDistanceCritiquePerso(perso).start();
+    	this.runAnnimation(ImagePersonnage.getImageCombatDistantCritiqueFromPersonnage(perso), perso, true);
     }
     
     private void annimationEsquivePerso (Personnage perso) {
-        new threadAnnimationEsquivePerso(perso).start();
+        //new threadAnnimationEsquivePerso(perso).start();
+    	this.runAnnimation(ImagePersonnage.getImageCombatEsquiveFromPersonnage(perso), perso, false);
+    }
+    
+    protected void runAnnimation (Map<Integer, ImageManager> images, Personnage perso, boolean continuer) {
+		PanelImage panelImage;
+    	if (combat.getPerso1().equals(perso)) {
+    		panelImage = panelPerso1;
+        } else {
+        	panelImage = panelPerso2;
+        }
+    	for (Map.Entry<Integer, ImageManager> e : images.entrySet()){
+    		panelImage.setBufferedImage(e.getValue().getImage(), 150, 150);
+            if (e.getValue().getDisplayTime() == -1) {
+            	break;
+            } else {
+            	this.attendre(e.getValue().getDisplayTime());
+            }
+        }
+    	if (continuer)
+    	combat.doContinue();
+	}
+    
+    public synchronized void attendre (int time) {
+        try {
+            this.wait(time);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(VueSwing_combat.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public abstract class annimationThread extends Thread {
@@ -304,7 +342,7 @@ public class VueSwing_combat {
                 }
             }
         	if (this.continuer)
-        	combat.continuer();
+        	combat.doContinue();
     	}
     	
         public synchronized void attendre (int time) {

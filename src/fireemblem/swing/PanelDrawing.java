@@ -8,14 +8,19 @@ import javax.swing.JPanel;
 
 public class PanelDrawing extends JPanel {
     
-    public enum drawingType {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 7447582236384548172L;
+
+	public enum drawingType {
         circle
     }
     
     private final Color color;
     private final drawingType type;
-    private final int width;
-    private final int height;
+    private int width;
+    private int height;
     
     public PanelDrawing (Color color, drawingType type, int width, int height) {
         this.color = color;
@@ -23,6 +28,13 @@ public class PanelDrawing extends JPanel {
         this.width = width;
         this.height = height;
     }
+    
+    /*@Override
+    public void setSize(int width, int height) {
+    	super.setSize(width, height);
+    	this.width = width;
+        this.height = height;
+    }*/
 
     @Override
     public void paintComponent(final Graphics g) {

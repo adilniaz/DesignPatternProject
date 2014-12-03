@@ -10,7 +10,11 @@ import javax.swing.JPanel;
 
 public class Parcelle extends JLayeredPane {
     
-    private JPanel[] content;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -5577753377713805162L;
+	private JPanel[] content;
     
     private Parcelle () {
         super();
@@ -27,8 +31,23 @@ public class Parcelle extends JLayeredPane {
     }
     
     private void initSize (int width, int height) {
+    	//System.out.println("parcelle = width : " + width + " ; height : "  +height);
         this.setBounds(0, 0, width, height);
         this.setPreferredSize(new Dimension(width, height));
+    }
+    
+    public void resize (int width, int height) {
+    	this.initSize(width, height);
+    	this.getComponent(0).setSize(width, height);
+    	this.getComponent(0).repaint();
+    	this.getComponent(0).validate();
+    	for (JPanel panel : content) {
+    		if (panel != null) {
+    			panel.setSize(width, height);
+    			panel.repaint();
+    			panel.validate();
+    		}
+    	}
     }
     
     public void ajouterBackground (Component panel) {
@@ -37,9 +56,9 @@ public class Parcelle extends JLayeredPane {
     }
     
     public Component getBackgroundComponent () {
-    	System.out.println("components lenght : " + this.getComponents().length);
+    	//System.out.println("components lenght : " + this.getComponents().length);
     	Component component = this.getComponent(0);
-    	System.out.println("components lenght : " + this.getComponents().length);
+    	//System.out.println("components lenght : " + this.getComponents().length);
     	return component;
     }
     

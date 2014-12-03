@@ -25,11 +25,14 @@ public class Combat extends Controlleur {
     public final String MODIFY_PV_PERSO1 = "modify_pv_perso1";
     public final String MODIFY_PV_PERSO2 = "modify_pv_perso2";
     public final String FIN_COMBAT = "finCombat";
+    public final String FIN_SIMULER_COMBAT = "finSimulerCombat";
     
     private int statPerso1[];
     private int statPerso2[];
     
     private List<Integer> pile;
+    
+    private boolean continuer;
     
     public Combat (Personnage perso1, Personnage perso2) {
         this.perso1 = perso1;
@@ -71,6 +74,10 @@ public class Combat extends Controlleur {
         
         this.pcsControlleurVue.firePropertyChange(SIMULER_COMBAT, statPerso1, statPerso2);
         
+    }
+    
+    public void finSimulation () {
+    	this.pcsControlleurVue.firePropertyChange(FIN_SIMULER_COMBAT, null, null);
     }
     
     public int calculeForce (Personnage perso1, Personnage perso2) {
@@ -145,16 +152,19 @@ public class Combat extends Controlleur {
                 switch (arme2.getTypeArme()) {
                     case hache :
                         return true;
+					default:
+						return false;
                 }
+			default:
+				return false;
         }
-        return false;
     }
     
     public boolean weaponIsWeak (Arme arme1, Arme arme2) {
         return this.weaponIsEffective(arme2, arme1);
     }
     
-    public void combat () {
+    public void run () {
         
         int forcePerso1 = this.calculeForce(this.perso1, this.perso2) - this.calculeDefense(this.perso2, this.perso1);
         if (forcePerso1 < 0) {
@@ -195,10 +205,15 @@ public class Combat extends Controlleur {
         } else if (nbAttaquePerso2 > 1) {
         	pile.add(2);
         }
-        this.continuer();
+        this.continuer = true;
         while (!pile.isEmpty()) {
+        	if (this.continuer) {
+	        	this.continuer = false;
+	        	this.continuer();
+        	}
         	this.attendre(100);
         }
+        this.pcsControlleurVue.firePropertyChange(FIN_COMBAT, null, null);
     }
     
     public synchronized void attendre (int time) {
@@ -209,15 +224,19 @@ public class Combat extends Controlleur {
         }
     }
     
-    public void continuer () {
-    	if (pile.isEmpty()) {
-    		this.pcsControlleurVue.firePropertyChange(FIN_COMBAT, null, null);
-    	} else {
-	    	if (this.pile.get(0) == 1) {
-	    		this.attaquePerso1(statPerso1);
-	    	} else {
-	    		this.attaquePerso2(statPerso2);
-	    	}
+    public void doContinue () {
+    	this.continuer = true;
+    }
+    
+    protected void continuer () {
+    	if (!pile.isEmpty()) {
+    		if (!this.perso1.estKo() && !this.perso2.estKo()) {
+	    		if (this.pile.get(0) == 1) {
+		    		this.attaquePerso1(statPerso1);
+		    	} else {
+		    		this.attaquePerso2(statPerso2);
+		    	}
+    		}
 	    	this.pile.remove(0);
     	}
     }

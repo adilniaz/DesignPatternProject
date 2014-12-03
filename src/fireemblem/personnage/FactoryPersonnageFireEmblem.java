@@ -44,6 +44,7 @@ public class FactoryPersonnageFireEmblem extends CreateCharactersFactoryAbstract
                 case combattant :
                     Personnage combattant = new Personnage(nom, organisation);
                     combattant.setComportementPersonnage(new ComportementCombattant());
+                    combattant.setMoveBehaviour(new DeplacementLord());
                     /*combattant.setComportementDeplacement(new DeplacementCombattant());
                     combattant.setComportementCombat(new CombatAPiedAvecArc());*/
                     combattant.setNiv(1);

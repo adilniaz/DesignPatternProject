@@ -25,6 +25,8 @@ public class Chapitre extends Controlleur {
     private CharacterAbstract persoEnCours;
     private Position oldPosition;
     private Tour tour;
+    private boolean continuer;
+    private Combat combat;
     
     public final String AFFICHE_ACTION_PERSO = "afficheActionPerso";
     public final String AFFICHE_ARMES_PERSO = "afficheArmePerso";
@@ -32,10 +34,15 @@ public class Chapitre extends Controlleur {
     public final String AFFICHE_DEPLACEMENT_DISPONIBLE = "afficheDeplacementDisponible";
     public final String AFFICHE_MAP = "afficheMap";
     public final String AFFICHE_MENU = "afficheMenu";
+    public final String CHANGE_TOUR = "changeTour";
     public final String DEPLACE_PERSO = "deplacePerso";
     public final String EFFACE_ATTAQUE_DISPONIBLE = "effaceAttaqueDisponible";
     public final String EFFACE_DEPLACEMENT_DISPONIBLE = "effaceDeplacementDisponible";
-    public final String CHANGE_TOUR = "changeTour";
+    public final String ENLEVE_PERSO = "enlevePerso";
+    public final String GAME_OVER = "gameOver";
+    public final String STATUS = "status";
+    public final String UNITES = "unites";
+    public final String VICTOIRE = "victoire";
     
     public enum menu {
         unite, statut, suspen, fin;
@@ -83,6 +90,27 @@ public class Chapitre extends Controlleur {
     public void run () {
         this.pcsControlleurVue.firePropertyChange(AFFICHE_MAP, null, null);
         this.tour = Tour.perso;
+        this.continuer = true;
+        while (!this.fin) {
+        	if (this.continuer) {
+        		this.continuer = false;
+        		this.continuer();
+        	}
+        	this.attendre(100);
+        }
+        this.finPartie();
+    }
+    
+    private void finPartie () {
+    	if (this.plateauDeJeu.getEnnemies().isEmpty()) {
+    		this.pcsControlleurVue.firePropertyChange(VICTOIRE, null, null);
+    	} else {
+    		this.pcsControlleurVue.firePropertyChange(GAME_OVER, null, null);
+    	}
+    }
+    
+    public void doContinue () {
+    	this.continuer = true;
     }
     
     public void continuer () {
@@ -98,16 +126,30 @@ public class Chapitre extends Controlleur {
 				}
 				if (!hasPersoNormal) {
 					this.tour = Tour.ennemie;
+					for (CharacterAbstract perso : this.plateauDeJeu.getPersonnages()) {
+						this.plateauDeJeu.changeEtatCharacter(perso, Etat.normal);
+					}
 					this.pcsControlleurVue.firePropertyChange(CHANGE_TOUR, this.tour, null);
 				}
 				break;
 			case ennemie:
-				for (CharacterAbstract perso : this.plateauDeJeu.getEnnemies()) {
-					Personnage p = (Personnage) perso;
+				System.out.println("ennemies : " + this.plateauDeJeu.getEnnemies().size());
+				for (int i = 0 ; i < this.plateauDeJeu.getEnnemies().size() ; i++) {
+					Personnage p = (Personnage) this.plateauDeJeu.getEnnemies().get(i);
+					System.out.println("ennemie : " + p.getName());
 					p.getStrategie().run(this);
+					if (p.estKo()) {
+						pcsControlleurVue.firePropertyChange(ENLEVE_PERSO, p, null);
+						this.plateauDeJeu.getEnnemies().remove(p);
+						i--;
+					}
 				}
-				this.tour = Tour.annexes;
-				this.pcsControlleurVue.firePropertyChange(CHANGE_TOUR, this.tour, null);
+				if (this.plateauDeJeu.getEnnemies().isEmpty()) {
+					this.fin = true;
+				} else {
+					this.tour = Tour.annexes;
+					this.pcsControlleurVue.firePropertyChange(CHANGE_TOUR, this.tour, null);
+				}
 				break;
 			case annexes:
 				for (CharacterAbstract perso : this.plateauDeJeu.getAnnexes()) {
@@ -116,6 +158,7 @@ public class Chapitre extends Controlleur {
 				}
 				this.tour = Tour.perso;
 				this.pcsControlleurVue.firePropertyChange(CHANGE_TOUR, this.tour, null);
+				this.mode = Mode.libre;
 				break;
 		}
     }
@@ -154,9 +197,7 @@ public class Chapitre extends Controlleur {
                 }
                 if (!aPerso2) {
                     Personnage p = (Personnage) this.persoEnCours;
-                    this.oldPosition = new Position(p.getPosition());
-                    p.setPosition(pos);
-                    this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, this.persoEnCours, this.oldPosition);
+                    this.deplacePerso(p, pos);
                     List<actionPerso> list = new ArrayList<>();
                     list.add(actionPerso.attaquer);
                     list.add(actionPerso.baton);
@@ -174,7 +215,17 @@ public class Chapitre extends Controlleur {
                     this.mode = Mode.action;
                 }
                 break;
+            case action :
+            	break;
+            case arme:
+            	break;
         }
+    }
+    
+    public void deplacePerso (Personnage perso, Position p) {
+    	this.oldPosition = new Position(perso.getPosition());
+    	perso.setPosition(p);
+        this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, perso, this.oldPosition);
     }
     
     public List<ZoneAbstract> getPorteAttaque (List<ZoneAbstract> zones, List<ZoneAbstract> allZones) {
@@ -224,6 +275,8 @@ public class Chapitre extends Controlleur {
     
     public void annulation () {
         switch (this.mode) {
+        	case libre:
+        		break;
             case deplacement:
                 this.pcsControlleurVue.firePropertyChange(EFFACE_DEPLACEMENT_DISPONIBLE, this.zonesSelectionner, null);
                 this.pcsControlleurVue.firePropertyChange(EFFACE_ATTAQUE_DISPONIBLE, this.zonesAtkSelectionner, null);
@@ -238,22 +291,26 @@ public class Chapitre extends Controlleur {
                 this.pcsControlleurVue.firePropertyChange(AFFICHE_ATTAQUE_DISPONIBLE, this.zonesAtkSelectionner, null);
                 this.mode = Mode.deplacement;
                 break;
+            case arme:
+            	break;
         }
     }
     
     public void menu (menu m) {
         switch (m) {
             case unite:
+            	this.pcsControlleurVue.firePropertyChange(UNITES, null, null);
                break;
             case statut:
+            	this.pcsControlleurVue.firePropertyChange(STATUS, null, null);
                break;
             case suspen:
                break;
             case fin:
             	for (CharacterAbstract perso : this.plateauDeJeu.getPersonnages()) {
             		this.plateauDeJeu.changeEtatCharacter(perso, Etat.attendre);
-            		this.continuer();
             	}
+            	this.continuer = true;
                break;
         }
     }
@@ -273,7 +330,7 @@ public class Chapitre extends Controlleur {
                 break;
             case attendre:
             	this.plateauDeJeu.changeEtatCharacter(this.persoEnCours, Etat.attendre);
-                this.continuer();
+            	this.continuer = true;
             	break;
         }
     }
@@ -283,9 +340,9 @@ public class Chapitre extends Controlleur {
             Personnage p = (Personnage) perso;
             Personnage p2 = (Personnage) this.persoEnCours;
             if (p.getPosition().equals(new Position(p2.getPosition().getPositionX()-1, p2.getPosition().getPositionY()))) {
-                Combat combat = new Combat(p2, p);
+                this.combat = new Combat(p2, p);
                 Vues.createVue(combat, this.fenetre);
-                combat.simulerCombat();
+                this.combat.simulerCombat();
             }
         }
     }
@@ -295,14 +352,35 @@ public class Chapitre extends Controlleur {
             Personnage p = (Personnage) perso;
             Personnage p2 = (Personnage) this.persoEnCours;
             if (p.getPosition().equals(new Position(p2.getPosition().getPositionX()-1, p2.getPosition().getPositionY()))) {
-                Combat combat = new Combat(p2, p);
-                Vues.createVue(combat, this.fenetre);
-                combat.combat();
+            	this.combat.finSimulation();
+            	/*Combat combat = new Combat(p2, p);
+                Vues.createVue(combat, this.fenetre);*/
+                new RunControlleur(combat).start();
                 this.plateauDeJeu.changeEtatCharacter(p2, Etat.attendre);
-                this.continuer();
+                this.mode = Mode.libre;
                 break;
             }
         }
     }
+	
+	public class RunControlleur extends Thread {
+		
+		private Controlleur controleur;
+		
+		public RunControlleur(Controlleur controleur) {
+			this.controleur = controleur;
+		}
+		
+		@Override
+		public void run () {
+			this.controleur.run();
+			Personnage p2 = (Personnage) persoEnCours;
+			if (p2.estKo()) {
+				pcsControlleurVue.firePropertyChange(ENLEVE_PERSO, p2, null);
+			}
+			continuer = true;
+		}
+		
+	}
     
 }
