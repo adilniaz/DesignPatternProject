@@ -2,13 +2,10 @@ package fireemblem.controlleur;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import fireemblem.objet.Arme;
 import fireemblem.objet.TypeArme;
 import fireemblem.personnage.Personnage;
-import fireemblem.swing.VueSwing_combat;
 
 public class Combat extends Controlleur {
     
@@ -189,12 +186,6 @@ public class Combat extends Controlleur {
         this.statPerso1 = statPerso1;
         this.statPerso2 = statPerso2;
         
-        /*
-         * 1 - affichage de fenetre de debut de combat
-         * 2 - on notifie qui attaque (dans animation stop au moment de image attaque)
-         * 3 - si coup réussi, on retire pv sinon esquive (dans swing on fini attaque)
-         * 4 - on refait pour chaque attaque
-         * */
         this.pcsControlleurVue.firePropertyChange(COMBAT, statPerso1, statPerso2);
         
         this.pile = new ArrayList<>();
@@ -214,14 +205,6 @@ public class Combat extends Controlleur {
         	this.attendre(100);
         }
         this.pcsControlleurVue.firePropertyChange(FIN_COMBAT, null, null);
-    }
-    
-    public synchronized void attendre (int time) {
-        try {
-            this.wait(time);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(VueSwing_combat.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
     
     public void doContinue () {

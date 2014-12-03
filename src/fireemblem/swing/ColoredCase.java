@@ -21,13 +21,6 @@ public class ColoredCase extends JPanel {
         this.height = height;
         this.color = color;
     }
-    
-    /*@Override
-    public void setSize(int width, int height) {
-    	super.setSize(width, height);
-    	this.width = width;
-        this.height = height;
-    }*/
 
     @Override
     public void paintComponent(final Graphics g) {

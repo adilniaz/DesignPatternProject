@@ -353,8 +353,6 @@ public class Chapitre extends Controlleur {
             Personnage p2 = (Personnage) this.persoEnCours;
             if (p.getPosition().equals(new Position(p2.getPosition().getPositionX()-1, p2.getPosition().getPositionY()))) {
             	this.combat.finSimulation();
-            	/*Combat combat = new Combat(p2, p);
-                Vues.createVue(combat, this.fenetre);*/
                 new RunControlleur(combat).start();
                 this.plateauDeJeu.changeEtatCharacter(p2, Etat.attendre);
                 this.mode = Mode.libre;

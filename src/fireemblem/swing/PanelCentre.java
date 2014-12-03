@@ -10,7 +10,9 @@ import javax.swing.JPanel;
 
 public abstract class PanelCentre extends JPanel {
     
-    public PanelCentre () {
+	private static final long serialVersionUID = 6507818571305439376L;
+
+	public PanelCentre () {
         super();
     }
     

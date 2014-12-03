@@ -1,19 +1,13 @@
 package fireemblem.media.personnage;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
 import abstracts_interfaces.CharacterAbstract;
 import fireemblem.personnage.ComportementCombattant;
-import fireemblem.personnage.ComportementDarkDruide;
-import fireemblem.personnage.ComportementLord;
 import fireemblem.personnage.ComportementPersonnage;
 import fireemblem.personnage.Personnage;
 import fireemblem.swing.Image;
@@ -36,10 +30,6 @@ public class ImagePersonnage extends Image {
             return "combattant_ennemie";
         }
         return null;
-    }
-    
-    public static BufferedImage getImageFromPersonnage (CharacterAbstract perso) {
-        return _ImagePersonnage.getImage(perso);
     }
     
     public static BufferedImage getImageMenuFromPersonnage (CharacterAbstract perso) {
@@ -68,35 +58,6 @@ public class ImagePersonnage extends Image {
     
     public static Map<Integer, ImageManager> getImageCombatEsquiveFromPersonnage (CharacterAbstract perso) {
         return _ImagePersonnage.getImageCombatEsquive(perso);
-    }
-    
-    public BufferedImage getImage (CharacterAbstract perso) {
-        Personnage p = (Personnage) perso;
-        File file;
-        try {
-            if (p.getComportementPersonnage() instanceof ComportementLord) {
-                if (p.getName().equals("Eliwood")) {
-                    file = new File("C:\\Users\\mike\\prive\\cours\\ESGI\\5AL\\design_pattern\\projet\\images\\eliwood.png");
-                    return getImage(file.toURI().toURL());
-                } else if (p.getName().equals("Hector")) {
-                    file = new File("C:\\Users\\mike\\prive\\cours\\ESGI\\5AL\\design_pattern\\projet\\images\\hector.png");
-                    return getImage(file.toURI().toURL());
-                } else if (p.getName().equals("Lyn")) {
-                    file = new File("C:\\Users\\mike\\prive\\cours\\ESGI\\5AL\\design_pattern\\projet\\images\\lyn.png");
-                    return getImage(file.toURI().toURL());
-                }
-                
-            } else if (p.getComportementPersonnage() instanceof ComportementDarkDruide) {
-                file = new File("C:\\Users\\mike\\prive\\cours\\ESGI\\5AL\\design_pattern\\projet\\images\\nergal.png");
-                return getImage(file.toURI().toURL());
-            } else {
-                file = new File("C:\\Users\\mike\\prive\\cours\\ESGI\\5AL\\design_pattern\\projet\\images\\roy.png");
-                return getImage(file.toURI().toURL());
-            }
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
     }
     
     public BufferedImage getImageMenu (CharacterAbstract perso) {
@@ -174,48 +135,12 @@ public class ImagePersonnage extends Image {
         return images;
     }
     
-    public static ImageIcon getImageIconFromPersonnage (CharacterAbstract perso) {
-        return _ImagePersonnage.getImageIcon(perso);
-    }
-    
     public static ImageIcon getImageIconMapFromPersonnage (CharacterAbstract perso) {
         return _ImagePersonnage.getImageIconMap(perso);
     }
     
     public static ImageIcon getImageIconMapFocusFromPersonnage (CharacterAbstract perso) {
         return _ImagePersonnage.getImageIconMapFocus(perso);
-    }
-    
-    public ImageIcon getImageIcon (CharacterAbstract perso) {
-        Personnage p = (Personnage) perso;
-        File file;
-        try {
-            if (p.getComportementPersonnage() instanceof ComportementLord) {
-                if (p.getName().equals("Eliwood")) {
-                    file = new File("C:\\Users\\mike\\prive\\cours\\ESGI\\5AL\\design_pattern\\projet\\images\\eliwood\\eliwood_map2.gif");
-                    return getImageIcon(file.toURI().toURL());
-                } else if (p.getName().equals("Hector")) {
-                    file = new File("C:\\Users\\mike\\prive\\cours\\ESGI\\5AL\\design_pattern\\projet\\images\\hector.png");
-                    return getImageIcon(file.toURI().toURL());
-                } else if (p.getName().equals("Lyn")) {
-                    file = new File("C:\\Users\\mike\\prive\\cours\\ESGI\\5AL\\design_pattern\\projet\\images\\lyn.png");
-                    return getImageIcon(file.toURI().toURL());
-                }
-                
-            } else if (p.getComportementPersonnage() instanceof ComportementDarkDruide) {
-                file = new File("C:\\Users\\mike\\prive\\cours\\ESGI\\5AL\\design_pattern\\projet\\images\\nergal.png");
-                return getImageIcon(file.toURI().toURL());
-            } else if (p.getComportementPersonnage() instanceof ComportementCombattant) {
-                file = new File("C:\\Users\\mike\\prive\\cours\\ESGI\\5AL\\design_pattern\\projet\\images\\combattant\\combattant_map_ennemie.gif");
-                return getImageIcon(file.toURI().toURL());
-            } else {
-                file = new File("C:\\Users\\mike\\prive\\cours\\ESGI\\5AL\\design_pattern\\projet\\images\\roy.png");
-                return getImageIcon(file.toURI().toURL());
-            }
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
     }
     
     public ImageIcon getImageIconMap (CharacterAbstract perso) {

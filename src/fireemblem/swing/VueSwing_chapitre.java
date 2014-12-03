@@ -47,7 +47,7 @@ public class VueSwing_chapitre {
     private Popup fenetreMenu;
     private Popup fenetreActionPerso;
     private final PopupFactory popupFactory;
-    //private PanelCentre panelCentre;
+    
     private List<ZoneAbstract> zonesSelectionner;
     private Personnage persoEnCours;
     ViewComponent components[][][];
@@ -57,8 +57,6 @@ public class VueSwing_chapitre {
     Panel panel;
     int width = 125;
     int height = 65;
-    
-    //private fireemblem.swing.Map map;
     
     public VueSwing_chapitre (Chapitre chapitre, Fenetre fenetre) {
         this.chapitre = chapitre;
@@ -119,59 +117,29 @@ public class VueSwing_chapitre {
         });
     }
     
-    /*public void afficheMap () {
-        //Panel panel = new Panel();
-        //this.panelCentre = new PanelCentreParcelle(20, 20, 2500, 1300);
-    	this.map = new fireemblem.swing.Map(this.chapitre.getPlateauDeJeu());
-    	this.map.load();
-    	Map<ZoneAbstract, JComponent> componentZone = new HashMap<>();
-    	for (ZoneAbstract zone : this.chapitre.getPlateauDeJeu().getZones()) {
-            Case c = (Case) zone;
-            PanelImage panelImage = new PanelImage(ImageMap.getImageFromZone(zone));
-            componentZone.put(zone, panelImage);
-        }
-    	this.keyAction.init(this.chapitre.getPlateauDeJeu(), componentZone);
-        this.keyAction.setCursorPosition(this.centerPosition);
-        fenetre.addKeyBoardManager(new KeyDispatcher(this.keyAction));
-    	this.fenetre.ajouterPanel(this.map.display());
-    }*/
-    
     public void afficheMap () {
-        //Panel panel = new Panel();
-        //this.panelCentre = new PanelCentreParcelle(20, 20, 2500, 1300);
-    	/*this.map = new fireemblem.swing.Map(this.chapitre.getPlateauDeJeu());
-    	this.map.load();
-    	this.fenetre.ajouterPanel(this.map.display());*/
         Map<ZoneAbstract, JComponent> componentZone = new HashMap<>();
         components = new ViewComponent[20][20][3];
         for (ZoneAbstract zone : this.chapitre.getPlateauDeJeu().getZones()) {
             Case c = (Case) zone;
             PanelImage panelImage = new PanelImage(ImageMap.getImageFromZone(zone), width, height);
-            //this.panelCentre.ajouterViewBackground(new ViewComponent(panelImage), c.getPosition().getPositionX(), c.getPosition().getPositionY());
             componentZone.put(zone, panelImage);
             components[c.getPosition().getPositionX()][c.getPosition().getPositionY()][0] = new ViewComponent(panelImage);
         }
         for (CharacterAbstract perso : this.chapitre.getPlateauDeJeu().getPersonnages()) {
             Personnage p = (Personnage) perso;
-            //this.panelCentre.ajouterViewContent(new ViewComponent(new PanelDrawing(Color.BLUE, PanelDrawing.drawingType.circle, width, height)), p.getPosition().getPositionX(), p.getPosition().getPositionY(), 1);
-            //this.panelCentre.ajouterViewContent(new ViewComponent(new PanelImage(ImagePersonnage.getImageIconMapFromPersonnage(perso), width, height)), p.getPosition().getPositionX(), p.getPosition().getPositionY(), 2);
             components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][1] = new ViewComponent(new PanelDrawing(Color.BLUE, PanelDrawing.drawingType.circle, width, height));
             components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2] = new ViewComponent(new PanelImage(ImagePersonnage.getImageIconMapFromPersonnage(perso), width, height));
         }
         for (CharacterAbstract perso : this.chapitre.getPlateauDeJeu().getEnnemies()) {
             Personnage p = (Personnage) perso;
-            //this.panelCentre.ajouterViewContent(new ViewComponent(new PanelDrawing(Color.RED, PanelDrawing.drawingType.circle, width, height)), p.getPosition().getPositionX(), p.getPosition().getPositionY(), 1);
-            //this.panelCentre.ajouterViewContent(new ViewComponent(new PanelImage(ImagePersonnage.getImageIconMapFromPersonnage(perso), width, height)), p.getPosition().getPositionX(), p.getPosition().getPositionY(), 2);
             components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][1] = new ViewComponent(new PanelDrawing(Color.RED, PanelDrawing.drawingType.circle, width, height));
             components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2] = new ViewComponent(new PanelImage(ImagePersonnage.getImageIconMapFromPersonnage(perso), width, height));
         }
-        //panel.changerCentre(this.panelCentre, 20, 20, 1250, 650);
-        //Panel panel = this.camera.getCameraView(this.centerPosition, this.panelCentre);
         panel = this.camera.getCameraView(this.centerPosition, components);
         this.keyAction.init(this.chapitre.getPlateauDeJeu(), componentZone);
         this.keyAction.setCursorPosition(this.centerPosition);
         fenetre.addKeyBoardManager(new KeyDispatcher(this.keyAction));
-        //panel.getPanelCentre().getParcelle(0, 0).getBackgroundComponent();
         this.fenetre.ajouterPanel(panel);
     }
     
@@ -203,22 +171,17 @@ public class VueSwing_chapitre {
     }
     
     private void changeCursorPosition (Position oldPosition, Position newPosition) {
-    	System.out.println("changeCursorPosition");
     	if (newPosition.getPositionX() == this.centerPosition.getPositionX() + (this.camera.getLigne()/2)) {
         	this.centerPosition.setPositionX(this.centerPosition.getPositionX()+1);
-        	//Panel panel = this.camera.getCameraView(this.centerPosition, this.panelCentre);
         	this.refresh();
         } else if (newPosition.getPositionY() == this.centerPosition.getPositionY() + (this.camera.getColone()/2)) {
         	this.centerPosition.setPositionY(this.centerPosition.getPositionY()+1);
-        	//Panel panel = this.camera.getCameraView(this.centerPosition, this.panelCentre);
         	this.refresh();
         } else if (newPosition.getPositionX() == this.centerPosition.getPositionX() - (this.camera.getLigne()/2)) {
         	this.centerPosition.setPositionX(this.centerPosition.getPositionX()-1);
-        	//Panel panel = this.camera.getCameraView(this.centerPosition, this.panelCentre);
         	this.refresh();
         } else if (newPosition.getPositionY() == this.centerPosition.getPositionY() - (this.camera.getColone()/2)) {
         	this.centerPosition.setPositionY(this.centerPosition.getPositionY()-1);
-        	//Panel panel = this.camera.getCameraView(this.centerPosition, this.panelCentre);
         	this.refresh();
         }
     	JLabel label = new JLabel(this.chapitre.getObjectif());
@@ -249,13 +212,11 @@ public class VueSwing_chapitre {
             if (p.getPosition().equals(newPosition)) {
                 this.afficheFenetrePerso(p);
                 this.components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2] = new ViewComponent(new PanelImage(ImagePersonnage.getImageIconMapFocusFromPersonnage(perso), width, height));
-                //this.panelCentre.ajouterViewContent(new ViewComponent(new PanelImage(ImagePersonnage.getImageIconMapFocusFromPersonnage(perso), 60, 30)), p.getPosition().getPositionX(), p.getPosition().getPositionY(), 2);
                 this.refresh();
                 break;
             } else if (p.getPosition().equals(oldPosition)) {
                 this.fenetrePerso.hide();
                 this.components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2] = new ViewComponent(new PanelImage(ImagePersonnage.getImageIconMapFromPersonnage(perso), width, height));
-                //this.panelCentre.ajouterViewContent(new ViewComponent(new PanelImage(ImagePersonnage.getImageIconMapFromPersonnage(perso), 60, 30)), p.getPosition().getPositionX(), p.getPosition().getPositionY(), 2);
                 this.refresh();
                 break;
             }
@@ -342,10 +303,6 @@ public class VueSwing_chapitre {
     	this.components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][1] = new ViewComponent(new PanelDrawing(color, PanelDrawing.drawingType.circle, width, height));
     	this.components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2] = new ViewComponent(new PanelImage(ImagePersonnage.getImageIconMapFromPersonnage(perso), width, height));
         this.refresh();
-        //this.panelCentre.ajouterViewContent(null, olPosition.getPositionX(), olPosition.getPositionY(), 1);
-        //this.panelCentre.ajouterViewContent(null, olPosition.getPositionX(), olPosition.getPositionY(), 2);
-        //this.panelCentre.ajouterViewContent(new ViewComponent(new PanelDrawing(Color.BLUE, PanelDrawing.drawingType.circle, 60, 30)), p.getPosition().getPositionX(), p.getPosition().getPositionY(), 1);
-        //this.panelCentre.ajouterViewContent(new ViewComponent(new PanelImage(ImagePersonnage.getImageIconMapFromPersonnage(perso), 60, 30)), p.getPosition().getPositionX(), p.getPosition().getPositionY(), 2);
     }
     
     private void enlevePerso (Personnage perso) {
@@ -366,7 +323,6 @@ public class VueSwing_chapitre {
         for (ZoneAbstract zone : zones) {
             Case c = (Case) zone;
             this.components[c.getPosition().getPositionX()][c.getPosition().getPositionY()][1] = new ViewComponent(new ColoredCase(width, height, new Color(0, 0, 255, 50)));
-            //this.panelCentre.ajouterViewContent(new ViewComponent(new ColoredCase(60, 30, new Color(0, 0, 255, 50))), c.getPosition().getPositionX(), c.getPosition().getPositionY(), 0);
         }
         this.refresh();
     }
@@ -375,7 +331,6 @@ public class VueSwing_chapitre {
         for (ZoneAbstract zone : zones) {
             Case c = (Case) zone;
             this.components[c.getPosition().getPositionX()][c.getPosition().getPositionY()][1] = null;
-            //this.panelCentre.ajouterViewContent(null, c.getPosition().getPositionX(), c.getPosition().getPositionY(), 0);
         }
         this.refresh();
     }
@@ -399,7 +354,6 @@ public class VueSwing_chapitre {
         for (ZoneAbstract zone : zones) {
             Case c = (Case) zone;
             this.components[c.getPosition().getPositionX()][c.getPosition().getPositionY()][1] = new ViewComponent(new ColoredCase(width, height, new Color(255, 0, 0, 50)));
-            //this.panelCentre.ajouterViewContent(new ViewComponent(new ColoredCase(60, 30, new Color(255, 0, 0, 50))), c.getPosition().getPositionX(), c.getPosition().getPositionY(), 0);
         }
         this.refresh();
     }
@@ -408,7 +362,6 @@ public class VueSwing_chapitre {
         for (ZoneAbstract zone : zones) {
             Case c = (Case) zone;
             this.components[c.getPosition().getPositionX()][c.getPosition().getPositionY()][1] = null;
-            //this.panelCentre.ajouterViewContent(null, c.getPosition().getPositionX(), c.getPosition().getPositionY(), 0);
         }
         this.refresh();
     }

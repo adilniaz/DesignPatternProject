@@ -11,7 +11,8 @@ import javax.swing.JFrame;
 
 public class Fenetre extends JFrame {
     
-    private KeyEventDispatcher dispatcher;
+	private static final long serialVersionUID = -4278938288178576793L;
+	private KeyEventDispatcher dispatcher;
     
     public Fenetre () {
         this("fenetre");

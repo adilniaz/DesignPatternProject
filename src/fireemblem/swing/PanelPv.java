@@ -8,7 +8,8 @@ import javax.swing.JPanel;
 
 public class PanelPv extends JPanel {
     
-    private int pv;
+    private static final long serialVersionUID = -4160521903730589758L;
+	private int pv;
     private final int pvMax;
     private final int width;
     private final int height;
@@ -58,8 +59,6 @@ public class PanelPv extends JPanel {
             int rectYPosition = this.height /3;
             int rectHeight = this.height /3;
             g.setColor(Color.black);
-            /*int separatorWidth = (this.width / 10) / 40;
-            int rectWidth = (this.width - (this.width / 10)) / 40;*/
             int separatorWidth = 1;
             int rectWidth = 5;
             int newPosition = 0;

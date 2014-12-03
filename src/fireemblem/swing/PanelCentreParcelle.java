@@ -7,7 +7,8 @@ import javax.swing.JPanel;
 
 public class PanelCentreParcelle extends PanelCentre {
     
-    private Parcelle[][] parcelles;
+	private static final long serialVersionUID = -489336237253438099L;
+	private Parcelle[][] parcelles;
     
     public PanelCentreParcelle () {
         super();

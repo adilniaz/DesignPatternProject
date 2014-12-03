@@ -10,7 +10,8 @@ import javax.swing.JPanel;
 
 public class Panel extends JPanel {
     
-    private JPanel nord;
+	private static final long serialVersionUID = -186972397316975499L;
+	private JPanel nord;
     private JPanel est;
     private PanelCentre panelCentre;
     private JPanel centre;

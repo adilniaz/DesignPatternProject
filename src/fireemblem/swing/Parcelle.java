@@ -10,10 +10,7 @@ import javax.swing.JPanel;
 
 public class Parcelle extends JLayeredPane {
     
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = -5577753377713805162L;
+    private static final long serialVersionUID = -5577753377713805162L;
 	private JPanel[] content;
     
     private Parcelle () {
@@ -31,7 +28,6 @@ public class Parcelle extends JLayeredPane {
     }
     
     private void initSize (int width, int height) {
-    	//System.out.println("parcelle = width : " + width + " ; height : "  +height);
         this.setBounds(0, 0, width, height);
         this.setPreferredSize(new Dimension(width, height));
     }
@@ -56,10 +52,7 @@ public class Parcelle extends JLayeredPane {
     }
     
     public Component getBackgroundComponent () {
-    	//System.out.println("components lenght : " + this.getComponents().length);
-    	Component component = this.getComponent(0);
-    	//System.out.println("components lenght : " + this.getComponents().length);
-    	return component;
+    	return this.getComponent(0);
     }
     
     public void ajouterContent (JPanel panel) {

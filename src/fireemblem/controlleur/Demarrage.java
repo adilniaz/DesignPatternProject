@@ -34,7 +34,6 @@ public class Demarrage extends Controlleur {
         Fenetre fenetre = new Fenetre("fire emblem");
         Vues.createVue(this.chapitres.get(choix), fenetre);
         this.chapitres.get(choix).setFenetre(fenetre);
-        //this.chapitres.get(choix).run();
         new RunControlleur(this.chapitres.get(choix)).start();
     }
 

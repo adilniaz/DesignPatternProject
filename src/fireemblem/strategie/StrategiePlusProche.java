@@ -21,7 +21,6 @@ public class StrategiePlusProche extends Strategie {
 
 	@Override
 	public void run(Chapitre chapitre) {
-		System.out.println("StrategiePlusProche");
 		Personnage perso = this.getPlusProchePerso(chapitre);
 		List<ZoneAbstract> zones = this.personnage.getMove().getCaseAvailable(chapitre.getPlateauDeJeu(), this.personnage);
         List<ZoneAbstract> zonesAtk = chapitre.getPorteAttaque(zones, chapitre.getPlateauDeJeu().getZones());

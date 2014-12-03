@@ -8,9 +8,6 @@ import javax.swing.JPanel;
 
 public class PanelDrawing extends JPanel {
     
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 7447582236384548172L;
 
 	public enum drawingType {
@@ -28,13 +25,6 @@ public class PanelDrawing extends JPanel {
         this.width = width;
         this.height = height;
     }
-    
-    /*@Override
-    public void setSize(int width, int height) {
-    	super.setSize(width, height);
-    	this.width = width;
-        this.height = height;
-    }*/
 
     @Override
     public void paintComponent(final Graphics g) {

@@ -140,11 +140,6 @@ public class VueSwing_combat {
         this.fenetreSimulationCombat = this.popupFactory.getPopup(this.fenetre, boxCombat, 1000, 300);
         this.fenetreSimulationCombat.show();
         
-        /*this.fenetreSimulationCombat.setContentPane(boxCombat);
-        this.fenetreSimulationCombat.setSize(150, 200);
-        this.fenetreSimulationCombat.setLocation(1000, 300);
-        this.fenetreSimulationCombat.setVisible(true);*/
-        
     }
     
     private void finSimulationCombat () {
@@ -265,28 +260,23 @@ public class VueSwing_combat {
     }
     
     private void annimationAttaquePerso (Personnage perso) {
-        //new threadAnnimationAttaquePerso(perso).start();
         this.runAnnimation(ImagePersonnage.getImageCombatAttaqueFromPersonnage(perso), perso, true);
     }
     
     private void annimationCritiquePerso (Personnage perso) {
-        //new threadAnnimationCritiquePerso(perso).start();
-    	this.runAnnimation(ImagePersonnage.getImageCombatAttaqueCritiqueFromPersonnage(perso), perso, true);
+        this.runAnnimation(ImagePersonnage.getImageCombatAttaqueCritiqueFromPersonnage(perso), perso, true);
     }
     
     private void annimationDistancePerso (Personnage perso) {
-        //new threadAnnimationDistancePerso(perso).start();
-    	this.runAnnimation(ImagePersonnage.getImageCombatDistantFromPersonnage(perso), perso, true);
+        this.runAnnimation(ImagePersonnage.getImageCombatDistantFromPersonnage(perso), perso, true);
     }
     
     private void annimationDistanceCritiquePerso (Personnage perso) {
-        //new threadAnnimationDistanceCritiquePerso(perso).start();
-    	this.runAnnimation(ImagePersonnage.getImageCombatDistantCritiqueFromPersonnage(perso), perso, true);
+        this.runAnnimation(ImagePersonnage.getImageCombatDistantCritiqueFromPersonnage(perso), perso, true);
     }
     
     private void annimationEsquivePerso (Personnage perso) {
-        //new threadAnnimationEsquivePerso(perso).start();
-    	this.runAnnimation(ImagePersonnage.getImageCombatEsquiveFromPersonnage(perso), perso, false);
+        this.runAnnimation(ImagePersonnage.getImageCombatEsquiveFromPersonnage(perso), perso, false);
     }
     
     protected void runAnnimation (Map<Integer, ImageManager> images, Personnage perso, boolean continuer) {
@@ -313,105 +303,6 @@ public class VueSwing_combat {
             this.wait(time);
         } catch (InterruptedException ex) {
             Logger.getLogger(VueSwing_combat.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    public abstract class annimationThread extends Thread {
-    	
-    	protected Personnage perso;
-    	protected boolean continuer;
-    	
-    	public annimationThread (Personnage perso) {
-    		this.perso = perso;
-    		this.continuer = true;
-    	}
-    	
-    	protected void runAnnimation (Map<Integer, ImageManager> images) {
-    		PanelImage panelImage;
-        	if (combat.getPerso1().equals(this.perso)) {
-        		panelImage = panelPerso1;
-            } else {
-            	panelImage = panelPerso2;
-            }
-        	for (Map.Entry<Integer, ImageManager> e : images.entrySet()){
-        		panelImage.setBufferedImage(e.getValue().getImage(), 150, 150);
-                if (e.getValue().getDisplayTime() == -1) {
-                	break;
-                } else {
-                	this.attendre(e.getValue().getDisplayTime());
-                }
-            }
-        	if (this.continuer)
-        	combat.doContinue();
-    	}
-    	
-        public synchronized void attendre (int time) {
-            try {
-                this.wait(time);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(VueSwing_combat.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
-    
-    public class threadAnnimationAttaquePerso extends annimationThread {
-    	
-    	public threadAnnimationAttaquePerso(Personnage perso) {
-    		super(perso);
-    	}
-    	
-        @Override
-        public void run() {
-            this.runAnnimation(ImagePersonnage.getImageCombatAttaqueFromPersonnage(this.perso));
-        }
-    }
-    
-    public class threadAnnimationCritiquePerso extends annimationThread {
-    	
-    	public threadAnnimationCritiquePerso(Personnage perso) {
-    		super(perso);
-    	}
-    	
-        @Override
-        public void run() {
-        	this.runAnnimation(ImagePersonnage.getImageCombatAttaqueCritiqueFromPersonnage(this.perso));
-        }
-    }
-    
-    public class threadAnnimationDistancePerso extends annimationThread {
-    	
-    	public threadAnnimationDistancePerso(Personnage perso) {
-    		super(perso);
-    	}
-    	
-        @Override
-        public void run() {
-        	this.runAnnimation(ImagePersonnage.getImageCombatDistantFromPersonnage(this.perso));
-        }
-    }
-    
-    public class threadAnnimationDistanceCritiquePerso extends annimationThread {
-    	
-    	public threadAnnimationDistanceCritiquePerso(Personnage perso) {
-    		super(perso);
-    	}
-    	
-        @Override
-        public void run() {
-        	this.runAnnimation(ImagePersonnage.getImageCombatDistantCritiqueFromPersonnage(this.perso));
-        }
-    }
-    
-    public class threadAnnimationEsquivePerso extends annimationThread {
-    	
-    	public threadAnnimationEsquivePerso(Personnage perso) {
-    		super(perso);
-    	}
-    	
-        @Override
-        public void run() {
-        	this.continuer = false;
-        	this.runAnnimation(ImagePersonnage.getImageCombatEsquiveFromPersonnage(this.perso));
         }
     }
     
