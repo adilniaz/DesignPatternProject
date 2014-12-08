@@ -3,6 +3,9 @@ package fireemblem.personnage;
 public class ComportementDarkDruide extends ComportementPersonnage {
     
     public ComportementDarkDruide () {
+    	
+    	this.name = "Dark druide";
+    	
         this.pvBase = 1;
         this.puissanceBase = 1;
         this.capaciteBase = 1;

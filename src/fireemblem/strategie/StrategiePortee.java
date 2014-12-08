@@ -45,10 +45,12 @@ public class StrategiePortee extends Strategie {
 	        		 for (AccessAbstract acce : chapitre.getPlateauDeJeu().getAcces()) {
 	        			 if (acce.getZoneA().equals(c)) {
 	        				 if (zones.contains(acce.getZoneB())) {
+	        					 chapitre.setPersoAttaquer(perso);
 		        				 chapitre.deplacePerso(personnage, ((Case)acce.getZoneB()).getPosition());
-		        				 Combat combat = new Combat(personnage, perso);
+		        				 Combat combat = new Combat(personnage, perso, chapitre);
 		                		 Vues.createVue(combat, chapitre.getFenetre());
 		                         combat.run();
+		                         chapitre.verifMort();
 		                         return true;
 	        				 }
 	        			 }

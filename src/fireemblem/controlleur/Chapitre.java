@@ -1,11 +1,14 @@
 package fireemblem.controlleur;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
 import abstracts_interfaces.CharacterAbstract;
 import abstracts_interfaces.factories.gameplatforms.ZoneAbstract;
 import fireemblem.Position;
+import fireemblem.connexionBD.Connexion;
+import fireemblem.connexionBD.ConnexionBD;
 import fireemblem.personnage.Personnage;
 import fireemblem.plateauJeu.Case;
 import fireemblem.plateauJeu.PlateauJeu;
@@ -23,6 +26,7 @@ public class Chapitre extends Controlleur {
     private List<ZoneAbstract> zonesSelectionner;
     private List<ZoneAbstract> zonesAtkSelectionner;
     private CharacterAbstract persoEnCours;
+    private CharacterAbstract persoAttaquer;
     private Position oldPosition;
     private Tour tour;
     private boolean continuer;
@@ -41,6 +45,7 @@ public class Chapitre extends Controlleur {
     public final String ENLEVE_PERSO = "enlevePerso";
     public final String GAME_OVER = "gameOver";
     public final String STATUS = "status";
+    public final String SUSPENDRE = "suspendre";
     public final String UNITES = "unites";
     public final String VICTOIRE = "victoire";
     
@@ -85,6 +90,10 @@ public class Chapitre extends Controlleur {
 
     public PlateauJeu getPlateauDeJeu() {
         return plateauDeJeu;
+    }
+    
+    public void setPersoAttaquer (CharacterAbstract characterAbstract) {
+    	this.persoAttaquer = characterAbstract;
     }
     
     public void run () {
@@ -305,6 +314,12 @@ public class Chapitre extends Controlleur {
             	this.pcsControlleurVue.firePropertyChange(STATUS, null, null);
                break;
             case suspen:
+            	this.pcsControlleurVue.firePropertyChange(SUSPENDRE, null, null);
+            	ConnexionBD connexionBD = new ConnexionBD();
+            	Connection connection = connexionBD.getConnexionHSQL("fireemblem", "sa", "");
+            	Connexion connexion = new Connexion(connection);
+            	connexion.savePartie(this);
+            	connexionBD.fermerConnexionHSQL();
                break;
             case fin:
             	for (CharacterAbstract perso : this.plateauDeJeu.getPersonnages()) {
@@ -330,6 +345,7 @@ public class Chapitre extends Controlleur {
                 break;
             case attendre:
             	this.plateauDeJeu.changeEtatCharacter(this.persoEnCours, Etat.attendre);
+            	this.mode = Mode.libre;
             	this.continuer = true;
             	break;
         }
@@ -340,7 +356,19 @@ public class Chapitre extends Controlleur {
             Personnage p = (Personnage) perso;
             Personnage p2 = (Personnage) this.persoEnCours;
             if (p.getPosition().equals(new Position(p2.getPosition().getPositionX()-1, p2.getPosition().getPositionY()))) {
-                this.combat = new Combat(p2, p);
+                this.combat = new Combat(p2, p, this);
+                Vues.createVue(combat, this.fenetre);
+                this.combat.simulerCombat();
+            } else if (p.getPosition().equals(new Position(p2.getPosition().getPositionX()+1, p2.getPosition().getPositionY()))) {
+                this.combat = new Combat(p2, p, this);
+                Vues.createVue(combat, this.fenetre);
+                this.combat.simulerCombat();
+            } else if (p.getPosition().equals(new Position(p2.getPosition().getPositionX(), p2.getPosition().getPositionY()-1))) {
+                this.combat = new Combat(p2, p, this);
+                Vues.createVue(combat, this.fenetre);
+                this.combat.simulerCombat();
+            } else if (p.getPosition().equals(new Position(p2.getPosition().getPositionX(), p2.getPosition().getPositionY()+1))) {
+                this.combat = new Combat(p2, p, this);
                 Vues.createVue(combat, this.fenetre);
                 this.combat.simulerCombat();
             }
@@ -352,6 +380,28 @@ public class Chapitre extends Controlleur {
             Personnage p = (Personnage) perso;
             Personnage p2 = (Personnage) this.persoEnCours;
             if (p.getPosition().equals(new Position(p2.getPosition().getPositionX()-1, p2.getPosition().getPositionY()))) {
+            	this.persoAttaquer = p;
+            	this.combat.finSimulation();
+                new RunControlleur(combat).start();
+                this.plateauDeJeu.changeEtatCharacter(p2, Etat.attendre);
+                this.mode = Mode.libre;
+                break;
+            } else if (p.getPosition().equals(new Position(p2.getPosition().getPositionX()+1, p2.getPosition().getPositionY()))) {
+            	this.persoAttaquer = p;
+            	this.combat.finSimulation();
+                new RunControlleur(combat).start();
+                this.plateauDeJeu.changeEtatCharacter(p2, Etat.attendre);
+                this.mode = Mode.libre;
+                break;
+            } else if (p.getPosition().equals(new Position(p2.getPosition().getPositionX(), p2.getPosition().getPositionY()+1))) {
+            	this.persoAttaquer = p;
+            	this.combat.finSimulation();
+                new RunControlleur(combat).start();
+                this.plateauDeJeu.changeEtatCharacter(p2, Etat.attendre);
+                this.mode = Mode.libre;
+                break;
+            } else if (p.getPosition().equals(new Position(p2.getPosition().getPositionX(), p2.getPosition().getPositionY()-1))) {
+            	this.persoAttaquer = p;
             	this.combat.finSimulation();
                 new RunControlleur(combat).start();
                 this.plateauDeJeu.changeEtatCharacter(p2, Etat.attendre);
@@ -359,6 +409,29 @@ public class Chapitre extends Controlleur {
                 break;
             }
         }
+    }
+    
+    public void verifMort () {
+    	if (((Personnage)this.persoAttaquer).estKo()) {
+			pcsControlleurVue.firePropertyChange(ENLEVE_PERSO, this.persoAttaquer, null);
+			if (this.plateauDeJeu.getAnnexes().contains(this.persoAttaquer)) {
+				this.plateauDeJeu.getAnnexes().remove(this.persoAttaquer);
+			} else if (this.plateauDeJeu.getEnnemies().contains(this.persoAttaquer)) {
+				this.plateauDeJeu.getEnnemies().remove(this.persoAttaquer);
+			} else if (this.plateauDeJeu.getPersonnages().contains(this.persoAttaquer)) {
+				this.plateauDeJeu.getPersonnages().remove(this.persoAttaquer);
+			}
+		}
+    	if (((Personnage)this.persoEnCours).estKo()) {
+			pcsControlleurVue.firePropertyChange(ENLEVE_PERSO, this.persoEnCours, null);
+			if (this.plateauDeJeu.getAnnexes().contains(this.persoEnCours)) {
+				this.plateauDeJeu.getAnnexes().remove(this.persoEnCours);
+			} else if (this.plateauDeJeu.getEnnemies().contains(this.persoEnCours)) {
+				this.plateauDeJeu.getEnnemies().remove(this.persoEnCours);
+			} else if (this.plateauDeJeu.getPersonnages().contains(this.persoEnCours)) {
+				this.plateauDeJeu.getPersonnages().remove(this.persoEnCours);
+			}
+		}
     }
 	
 	public class RunControlleur extends Thread {
@@ -372,10 +445,7 @@ public class Chapitre extends Controlleur {
 		@Override
 		public void run () {
 			this.controleur.run();
-			Personnage p2 = (Personnage) persoEnCours;
-			if (p2.estKo()) {
-				pcsControlleurVue.firePropertyChange(ENLEVE_PERSO, p2, null);
-			}
+			verifMort();
 			continuer = true;
 		}
 		

@@ -3,6 +3,9 @@ package fireemblem.personnage;
 public class ComportementLord extends ComportementPersonnage {
     
     public ComportementLord () {
+    	
+    	this.name = "Lord";
+    	
         this.pvBase = 0;
         this.puissanceBase = 0;
         this.capaciteBase = 0;
@@ -18,5 +21,10 @@ public class ComportementLord extends ComportementPersonnage {
         this.chanceMax = 30;
         this.defMax = 20;
         this.resistanceMax = 20;
+        
+        this.promoted = false;
+        this.power = 3;
+        this.classBonusA = 0;
+        this.classBonusB = 0;
     }
 }

@@ -98,6 +98,7 @@ public class FactoryPersonnageFireEmblem extends CreateCharactersFactoryAbstract
                 case lord_eliwood :
                     Personnage eliwood = new Personnage(nom, organisation);
                     eliwood.setComportementPersonnage(new ComportementLord());
+                    eliwood.getComportementPersonnage().setPromotedClass(new ComportementLordEquus());
                     eliwood.setMoveBehaviour(new DeplacementLord());
                     //eliwood.setComportementCombat(new CombatAPiedAvecArc());
                     eliwood.setNiv(1);
@@ -117,6 +118,7 @@ public class FactoryPersonnageFireEmblem extends CreateCharactersFactoryAbstract
                     eliwood.setPourcentageChance(45);
                     eliwood.setPourcentageDefense(30);
                     eliwood.setPourcentageResistance(35);
+                    eliwood.setExperience(90);
                     return eliwood;
                 case lord_ephraim :
                 	Personnage ephraim = new Personnage(nom, organisation);

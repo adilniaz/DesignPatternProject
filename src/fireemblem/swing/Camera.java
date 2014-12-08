@@ -40,6 +40,22 @@ public class Camera {
 		return this.height / this.ligne;
 	}
 	
+	public void refresh (Panel panel, Position position, int niveau, Position centre, 
+			ViewComponent components[][][], ViewComponent viewComponent) {
+		int xRayon = this.colone / 2;
+		int yRayon = this.ligne / 2;
+		int minX = centre.getPositionX() - xRayon;
+		int minY = centre.getPositionY() - yRayon;
+		components[position.getPositionX()][position.getPositionY()][niveau] = viewComponent;
+		for (int i = 0 ; i < this.colone ; i++) {
+			for (int j = 0 ; j < this.ligne ; j++) {
+				if (position.equals(new Position(minX+i, minY+j))) {
+					panel.getPanelCentre().ajouterViewContent(viewComponent, i, j, niveau);
+				}
+			}
+		}
+	}
+	
 	public Panel getCameraView (Position centre, ViewComponent components[][][]) {
 		Panel panel = new Panel();
 		int xRayon = this.colone / 2;

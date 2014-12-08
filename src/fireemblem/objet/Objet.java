@@ -3,6 +3,7 @@ package fireemblem.objet;
 public class Objet {
     
     private String name;
+    private TypeObjet typeObjet;
     private int utilisation;
     private int prix;
     
@@ -14,6 +15,10 @@ public class Objet {
 
     public String getName() {
         return name;
+    }
+
+    public TypeObjet getType() {
+        return typeObjet;
     }
 
     public int getUtilisation() {

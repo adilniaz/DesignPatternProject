@@ -11,6 +11,7 @@ public class Combat extends Controlleur {
     
     private final Personnage perso1;
     private final Personnage perso2;
+    private final Chapitre chapitre;
     
     public final String SIMULER_COMBAT = "simulerCombat";
     public final String COMBAT = "combat";
@@ -19,6 +20,9 @@ public class Combat extends Controlleur {
     public final String ANNIMATION_DISTANCE_PERSO = "annimation_distance_perso";
     public final String ANNIMATION_DISTANCE_CRITIQUE_PERSO = "annimation_distance_critique_perso";
     public final String ANNIMATION_ESQUIVE_PERSO = "annimation_esquive_perso";
+    public final String MODIFY_CLASS_PERSO = "modify_class_perso";
+    public final String MODIFY_EXP_PERSO = "modify_exp_perso";
+    public final String MODIFY_NIV_PERSO = "modify_niv_perso";
     public final String MODIFY_PV_PERSO1 = "modify_pv_perso1";
     public final String MODIFY_PV_PERSO2 = "modify_pv_perso2";
     public final String FIN_COMBAT = "finCombat";
@@ -31,9 +35,10 @@ public class Combat extends Controlleur {
     
     private boolean continuer;
     
-    public Combat (Personnage perso1, Personnage perso2) {
+    public Combat (Personnage perso1, Personnage perso2, Chapitre chapitre) {
         this.perso1 = perso1;
         this.perso2 = perso2;
+        this.chapitre = chapitre;
     }
 
     public Personnage getPerso1() {
@@ -204,6 +209,11 @@ public class Combat extends Controlleur {
         	}
         	this.attendre(100);
         }
+        if (this.chapitre.getPlateauDeJeu().getPersonnages().contains(this.perso1)) {
+        	this.gagneExp(this.perso1, this.perso2, true);
+        } else if (this.chapitre.getPlateauDeJeu().getPersonnages().contains(this.perso2)) {
+        	this.gagneExp(this.perso2, this.perso1, true);
+        }
         this.pcsControlleurVue.firePropertyChange(FIN_COMBAT, null, null);
     }
     
@@ -215,56 +225,84 @@ public class Combat extends Controlleur {
     	if (!pile.isEmpty()) {
     		if (!this.perso1.estKo() && !this.perso2.estKo()) {
 	    		if (this.pile.get(0) == 1) {
-		    		this.attaquePerso1(statPerso1);
+		    		this.attaquePerso(statPerso1, this.perso1, this.perso2);
 		    	} else {
-		    		this.attaquePerso2(statPerso2);
+		    		this.attaquePerso(statPerso2, this.perso2, this.perso1);
 		    	}
+    		} else {
+    			this.doContinue();
     		}
 	    	this.pile.remove(0);
     	}
     }
     
-    private void attaquePerso1 (int stats[]) {
+    private int attaquePerso (int stats[], Personnage attaquant, Personnage attaquer) {
     	int prec = 0;
         int critique = 0;
+        int damage = 0;
         
-        this.pcsControlleurVue.firePropertyChange(ANNIMATION_ATTAQUE_PERSO, this.perso1, null);
+        this.pcsControlleurVue.firePropertyChange(ANNIMATION_ATTAQUE_PERSO, attaquant, null);
         
         prec = (int) (Math.random() * 100 + 1);
         critique = (int) (Math.random() * 100 + 1);
         
         if (prec < stats[1]) {
-            int pvP2 = this.perso2.getPv();
+            int pv = attaquer.getPv();
             if (critique < stats[2]) {
-                this.perso2.setPv(this.perso2.getPv() - (stats[0] * 3));
+            	attaquer.setPv(attaquer.getPv() - (stats[0] * 3));
             } else {
-                this.perso2.setPv(this.perso2.getPv() - stats[0]);
+            	attaquer.setPv(attaquer.getPv() - stats[0]);
             }
-            this.pcsControlleurVue.firePropertyChange(MODIFY_PV_PERSO2, pvP2 - this.perso2.getPv(), null);
+            damage = pv - attaquer.getPv();
+            if (attaquant.equals(this.perso1)) {
+            	this.pcsControlleurVue.firePropertyChange(MODIFY_PV_PERSO2, damage, null);
+            } else {
+            	this.pcsControlleurVue.firePropertyChange(MODIFY_PV_PERSO1, damage, null);
+            }
         } else {
-            this.pcsControlleurVue.firePropertyChange(ANNIMATION_ESQUIVE_PERSO, this.perso2, null);
+            this.pcsControlleurVue.firePropertyChange(ANNIMATION_ESQUIVE_PERSO, attaquer, null);
+        }
+        return damage;
+    }
+    
+    private void gagneExp (Personnage attaquant, Personnage attaquer, boolean damage) {
+    	int experience = this.experience(attaquant, attaquer, damage);
+    	Personnage tmpPerso = new Personnage(attaquant);
+        attaquant.ajouterExperience(experience);
+        if (!tmpPerso.getComportementPersonnage().equals(attaquant.getComportementPersonnage())) {
+        	this.pcsControlleurVue.firePropertyChange(MODIFY_EXP_PERSO, experience, tmpPerso);
+        	this.pcsControlleurVue.firePropertyChange(MODIFY_CLASS_PERSO, tmpPerso, attaquant);
+        } else if (tmpPerso.getNiv() != attaquant.getNiv()) {
+        	this.pcsControlleurVue.firePropertyChange(MODIFY_EXP_PERSO, experience, tmpPerso);
+        	this.pcsControlleurVue.firePropertyChange(MODIFY_NIV_PERSO, tmpPerso, attaquant);
+        } else {
+        	this.pcsControlleurVue.firePropertyChange(MODIFY_EXP_PERSO, experience, tmpPerso);
         }
     }
     
-    private void attaquePerso2 (int stats[]) {
-    	int prec = 0;
-        int critique = 0;
-        
-        this.pcsControlleurVue.firePropertyChange(ANNIMATION_ATTAQUE_PERSO, this.perso2, null);
-        
-        prec = (int) (Math.random() * 100 + 1);
-        critique = (int) (Math.random() * 100 + 1);
-        
-        if (prec < stats[1]) {
-            int pv = this.perso1.getPv();
-            if (critique < stats[2]) {
-                this.perso1.setPv(this.perso1.getPv() - (stats[0] * 3));
-            } else {
-                this.perso1.setPv(this.perso1.getPv() - stats[0]);
-            }
-            this.pcsControlleurVue.firePropertyChange(MODIFY_PV_PERSO1, pv - this.perso1.getPv(), null);
-        } else {
-            this.pcsControlleurVue.firePropertyChange(ANNIMATION_ESQUIVE_PERSO, this.perso1, null);
-        }
+    private int experience (Personnage perso, Personnage ennemy, boolean damage) {
+    	if (damage) {
+    		if (ennemy.estKo()) {
+    			return (this.experienceFromDoingDamage(perso, ennemy) + 
+    			(this.experienceFromDefeating(perso, ennemy) + 20 + 0 + 0)) * 1;
+    		} else {
+    			return this.experienceFromDoingDamage(perso, ennemy);
+    		}
+    	} else {
+    		return 1;
+    	}
+    }
+    
+    private int experienceFromDoingDamage (Personnage perso, Personnage ennemy) {
+    	return (31 + ((ennemy.getNiv() + (ennemy.getComportementPersonnage().getClassBonusA())) - 
+				(perso.getNiv() + (perso.getComportementPersonnage().getClassBonusA())))) / 
+				perso.getComportementPersonnage().getPower();
+    }
+    
+    private int experienceFromDefeating (Personnage perso, Personnage ennemy) {
+    	return ((ennemy.getNiv() * ennemy.getComportementPersonnage().getPower()) + 
+    			ennemy.getComportementPersonnage().getClassBonusB()) - (((perso.getNiv() * 
+    			perso.getComportementPersonnage().getPower()) + 
+    			perso.getComportementPersonnage().getClassBonusB()) / 1);
     }
 }

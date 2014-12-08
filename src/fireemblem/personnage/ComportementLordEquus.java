@@ -1,10 +1,10 @@
 package fireemblem.personnage;
 
-public class ComportementCombattant extends ComportementPersonnage {
+public class ComportementLordEquus extends ComportementPersonnage {
     
-    public ComportementCombattant () {
+    public ComportementLordEquus () {
     	
-    	this.name = "Combattant";
+    	this.name = "Lord Equus";
     	
         this.pvBase = 0;
         this.puissanceBase = 0;
@@ -22,9 +22,9 @@ public class ComportementCombattant extends ComportementPersonnage {
         this.defMax = 20;
         this.resistanceMax = 20;
         
-        this.promoted = false;
+        this.promoted = true;
         this.power = 3;
-        this.classBonusA = 0;
-        this.classBonusB = 0;
+        this.classBonusA = 20;
+        this.classBonusB = 60;
     }
 }

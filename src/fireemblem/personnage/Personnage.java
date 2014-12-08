@@ -20,6 +20,7 @@ public class Personnage extends CharacterAbstract {
     private int resistance;
     private int constitution;
     private int aide;
+    private int experience;
     
     protected int pourcentagePv;
     protected int pourcentagePuissance;
@@ -40,8 +41,37 @@ public class Personnage extends CharacterAbstract {
     
     public Personnage (String nom, Organisation organisation) {
         super(organisation, nom);
+        this.experience = 0;
         this.objets = new Objet[5];
         this.aJouer = false;
+    }
+    
+    public Personnage (Personnage perso) {
+    	super(perso.getSubject(), perso.getName());
+    	this.niv = perso.niv;
+    	this.pv = perso.pv;
+    	this.pvMax = perso.pvMax;
+    	this.puissance = perso.puissance;
+    	this.capacite = perso.capacite;
+    	this.vitesse = perso.vitesse;
+    	this.chance = perso.chance;
+    	this.def = perso.def;
+    	this.resistance = perso.resistance;
+    	this.constitution = perso.constitution;
+    	this.aide = perso.aide;
+    	this.experience = perso.experience;
+    	this.pourcentagePv = perso.pourcentagePv;
+    	this.pourcentagePuissance = perso.pourcentagePuissance;
+    	this.pourcentageCapacite = perso.pourcentageCapacite;
+    	this.pourcentageVitesse = perso.pourcentageVitesse;
+    	this.pourcentageChance = perso.pourcentageChance;
+    	this.pourcentageDefense = perso.pourcentageDefense;
+    	this.pourcentageResistance = perso.pourcentageResistance;
+    	this.position = perso.position;
+    	this.comportementPersonnage = perso.comportementPersonnage;
+    	this.strategie = perso.strategie;
+    	this.objets = perso.objets;
+    	this.aJouer = perso.aJouer;
     }
 
     public int getNiv() {
@@ -140,6 +170,76 @@ public class Personnage extends CharacterAbstract {
 
     public void setAide(int aide) {
         this.aide = aide;
+    }
+
+    public int getExperience() {
+        return experience;
+    }
+
+    public void setExperience(int experience) {
+    	this.experience = experience;
+    }
+    
+    public void ajouterExperience (int experience) {
+    	if (this.niv < 20 || (!this.comportementPersonnage.isPromoted() && this.niv == 20)) {
+	    	if (this.experience + experience >= 100) {
+	    		this.experience = this.experience + experience - 100;
+	    		this.niveauSuivant();
+	    	} else {
+	    		this.experience = this.experience + experience;
+	    	}
+    	}
+    }
+    
+    public void niveauSuivant () {
+    	if (this.niv < 20) {
+    		this.niv++;
+    		if (this.pvMax < this.comportementPersonnage.getPvMax()) {
+    			int alea = (int) (Math.random() *100 +1);
+    			if (alea < this.pourcentagePv) {
+    				this.pvMax++;
+    			}
+    		}
+    		if (this.puissance < this.comportementPersonnage.getPuissanceMax()) {
+    			int alea = (int) (Math.random() *100 +1);
+    			if (alea < this.pourcentagePuissance) {
+    				this.puissance++;
+    			}
+    		}
+    		if (this.capacite < this.comportementPersonnage.getCapaciteMax()) {
+    			int alea = (int) (Math.random() *100 +1);
+    			if (alea < this.pourcentageCapacite) {
+    				this.capacite++;
+    			}
+    		}
+    		if (this.vitesse < this.comportementPersonnage.getVitesseMax()) {
+    			int alea = (int) (Math.random() *100 +1);
+    			if (alea < this.pourcentageVitesse) {
+    				this.vitesse++;
+    			}
+    		}
+    		if (this.chance < this.comportementPersonnage.getChanceMax()) {
+    			int alea = (int) (Math.random() *100 +1);
+    			if (alea < this.pourcentageChance) {
+    				this.chance++;
+    			}
+    		}
+    		if (this.def < this.comportementPersonnage.getDefMax()) {
+    			int alea = (int) (Math.random() *100 +1);
+    			if (alea < this.pourcentageDefense) {
+    				this.def++;
+    			}
+    		}
+    		if (this.resistance < this.comportementPersonnage.getResistanceMax()) {
+    			int alea = (int) (Math.random() *100 +1);
+    			if (alea < this.pourcentageResistance) {
+    				this.resistance++;
+    			}
+    		}
+    	} else if (this.niv == 20 && this.comportementPersonnage.hasPromotedClass()) {
+    		this.comportementPersonnage = this.comportementPersonnage.getPromotedClass();
+    		this.niv = 1;
+    	}
     }
 
     public int getPourcentagePv() {

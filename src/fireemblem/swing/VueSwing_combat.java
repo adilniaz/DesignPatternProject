@@ -63,6 +63,12 @@ public class VueSwing_combat {
                     modifyPvPerso1((int)evt.getOldValue());
                 } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.MODIFY_PV_PERSO2)) {
                     modifyPvPerso2((int)evt.getOldValue());
+                } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.MODIFY_EXP_PERSO)) {
+                    modifyExpPerso((int)evt.getOldValue(), (Personnage)evt.getNewValue());
+                } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.MODIFY_NIV_PERSO)) {
+                	modifyNivPerso((Personnage)evt.getOldValue(), (Personnage)evt.getNewValue());
+                } else if (evt.getPropertyName().equals(VueSwing_combat.this.combat.MODIFY_CLASS_PERSO)) {
+                	modifyClassPerso((Personnage)evt.getOldValue(), (Personnage)evt.getNewValue());
                 }
             }
         });
@@ -257,6 +263,144 @@ public class VueSwing_combat {
     private void modifyPvPerso2 (int pv) {
         this.panelPvTextPerso2.setText(Integer.toString(this.combat.getPerso2().getPv()));
         this.panelPvPerso2.enlevePv(pv);
+    }
+    
+    private void modifyExpPerso (int exp, Personnage perso) {
+        PanelExp panelExp = new PanelExp(perso.getExperience(), 300, 30);
+        Popup popup = popupFactory.getPopup(fenetre, panelExp, 600, 600);
+    	popup.show();
+    	panelExp.addExp(exp);
+    	this.attendre(2000);
+    	popup.hide();
+    }
+    
+    private void modifyNivPerso (Personnage oldPerso, Personnage perso) {
+        Popup popupTexte = popupFactory.getPopup(fenetre, new JLabel("Changement de niveau"), 600, 400);
+        popupTexte.show();
+    	this.attendre(2000);
+    	popupTexte.hide();
+    	
+    	Color backgroungColor = new Color(0, 0, 255, 200);
+    	JPanel panel = new JPanel();
+    	Box boxStatPerso = Box.createVerticalBox();
+    	JPanel panelInfoPerso = new JPanel();
+    	panelInfoPerso.add(new JLabel(perso.getComportementPersonnage().getName() + "   Niv   " + perso.getNiv()));
+    	panelInfoPerso.setBackground(backgroungColor);
+    	boxStatPerso.add(panelInfoPerso);
+    	JPanel panelStatPerso = new JPanel (new GridLayout(4, 2));
+    	if (oldPerso.getPvMax() == perso.getPvMax()) {
+    		panelStatPerso.add(new JLabel("PV   " + perso.getPvMax()));
+    	} else {
+    		panelStatPerso.add(new JLabel("PV   " + perso.getPvMax() + "  (+"+(perso.getPvMax()-oldPerso.getPvMax())+")"));
+    	}
+    	if (oldPerso.getChance() == perso.getChance()) {
+    		panelStatPerso.add(new JLabel("Ch   " + perso.getChance()));
+    	} else {
+    		panelStatPerso.add(new JLabel("Ch   " + perso.getChance() + "  (+"+(perso.getChance()-oldPerso.getChance())+")"));
+    	}
+    	if (oldPerso.getPuissance() == perso.getPuissance()) {
+    		panelStatPerso.add(new JLabel("Frc   " + perso.getPuissance()));
+    	} else {
+    		panelStatPerso.add(new JLabel("Frc   " + perso.getPuissance() + "  (+"+(perso.getPuissance()-oldPerso.getPuissance())+")"));
+    	}
+    	if (oldPerso.getDef() == perso.getDef()) {
+    		panelStatPerso.add(new JLabel("Def   " + perso.getDef()));
+    	} else {
+    		panelStatPerso.add(new JLabel("Def   " + perso.getDef() + "  (+"+(perso.getDef()-oldPerso.getDef())+")"));
+    	}
+    	if (oldPerso.getCapacite() == perso.getCapacite()) {
+    		panelStatPerso.add(new JLabel("Tec   " + perso.getCapacite()));
+    	} else {
+    		panelStatPerso.add(new JLabel("Tec   " + perso.getCapacite() + "  (+"+(perso.getCapacite()-oldPerso.getCapacite())+")"));
+    	}
+    	if (oldPerso.getResistance() == perso.getResistance()) {
+    		panelStatPerso.add(new JLabel("Res   " + perso.getResistance()));
+    	} else {
+    		panelStatPerso.add(new JLabel("Res   " + perso.getResistance() + "  (+"+(perso.getResistance()-oldPerso.getResistance())+")"));
+    	}
+    	if (oldPerso.getVitesse() == perso.getVitesse()) {
+    		panelStatPerso.add(new JLabel("Vit   " + perso.getVitesse()));
+    	} else {
+    		panelStatPerso.add(new JLabel("Vit   " + perso.getVitesse() + "  (+"+(perso.getVitesse()-oldPerso.getVitesse())+")"));
+    	}
+    	if (oldPerso.getConstitution() == perso.getConstitution()) {
+    		panelStatPerso.add(new JLabel("Cons   " + perso.getConstitution()));
+    	} else {
+    		panelStatPerso.add(new JLabel("Cons   " + perso.getConstitution() + "  (+"+(perso.getConstitution()-oldPerso.getConstitution())+")"));
+    	}
+    	panelStatPerso.setBackground(backgroungColor);
+    	boxStatPerso.add(panelStatPerso);
+    	panel.add(boxStatPerso);
+    	PanelImage panelImage = new PanelImage(ImagePersonnage.getImageMenuFromPersonnage(perso), 100, 100);
+    	panel.add(panelImage);
+        Popup popup = popupFactory.getPopup(fenetre, panel, 600, 400);
+    	popup.show();
+    	this.attendre(5000);
+    	popup.hide();
+    	
+    }
+    
+    private void modifyClassPerso (Personnage oldPerso, Personnage perso) {
+        Popup popupTexte = popupFactory.getPopup(fenetre, new JLabel("Changement de classe"), 600, 400);
+        popupTexte.show();
+    	this.attendre(2000);
+    	popupTexte.hide();
+    	
+    	JPanel panel = new JPanel();
+    	Box boxStatPerso = Box.createVerticalBox();
+    	JPanel panelInfoPerso = new JPanel();
+    	panelInfoPerso.add(new JLabel(perso.getComportementPersonnage().getName() + "   Niv   " + perso.getNiv()));
+    	boxStatPerso.add(panelInfoPerso);
+    	JPanel panelStatPerso = new JPanel (new GridLayout(4, 2));
+    	if (oldPerso.getPvMax() == perso.getPvMax()) {
+    		panelStatPerso.add(new JLabel("PV   " + perso.getPvMax()));
+    	} else {
+    		panelStatPerso.add(new JLabel("PV   " + perso.getPvMax() + "  (+"+(perso.getPvMax()-oldPerso.getPvMax())+")"));
+    	}
+    	if (oldPerso.getPuissance() == perso.getPuissance()) {
+    		panelStatPerso.add(new JLabel("Frc   " + perso.getPuissance()));
+    	} else {
+    		panelStatPerso.add(new JLabel("Frc   " + perso.getPuissance() + "  (+"+(perso.getPuissance()-oldPerso.getPuissance())+")"));
+    	}
+    	if (oldPerso.getCapacite() == perso.getCapacite()) {
+    		panelStatPerso.add(new JLabel("Tec   " + perso.getCapacite()));
+    	} else {
+    		panelStatPerso.add(new JLabel("Tec   " + perso.getCapacite() + "  (+"+(perso.getCapacite()-oldPerso.getCapacite())+")"));
+    	}
+    	if (oldPerso.getVitesse() == perso.getVitesse()) {
+    		panelStatPerso.add(new JLabel("Vit   " + perso.getVitesse()));
+    	} else {
+    		panelStatPerso.add(new JLabel("Vit   " + perso.getVitesse() + "  (+"+(perso.getVitesse()-oldPerso.getVitesse())+")"));
+    	}
+    	if (oldPerso.getChance() == perso.getChance()) {
+    		panelStatPerso.add(new JLabel("Ch   " + perso.getChance()));
+    	} else {
+    		panelStatPerso.add(new JLabel("Ch   " + perso.getChance() + "  (+"+(perso.getChance()-oldPerso.getChance())+")"));
+    	}
+    	if (oldPerso.getDef() == perso.getDef()) {
+    		panelStatPerso.add(new JLabel("Def   " + perso.getDef()));
+    	} else {
+    		panelStatPerso.add(new JLabel("Def   " + perso.getDef() + "  (+"+(perso.getDef()-oldPerso.getDef())+")"));
+    	}
+    	if (oldPerso.getResistance() == perso.getResistance()) {
+    		panelStatPerso.add(new JLabel("PV   " + perso.getResistance()));
+    	} else {
+    		panelStatPerso.add(new JLabel("PV   " + perso.getResistance() + "  (+"+(perso.getResistance()-oldPerso.getResistance())+")"));
+    	}
+    	if (oldPerso.getConstitution() == perso.getConstitution()) {
+    		panelStatPerso.add(new JLabel("PV   " + perso.getConstitution()));
+    	} else {
+    		panelStatPerso.add(new JLabel("PV   " + perso.getConstitution() + "  (+"+(perso.getConstitution()-oldPerso.getConstitution())+")"));
+    	}
+    	boxStatPerso.add(panelStatPerso);
+    	panel.add(boxStatPerso);
+    	PanelImage panelImage = new PanelImage(ImagePersonnage.getImageMenuFromPersonnage(perso), 100, 100);
+    	panel.add(panelImage);
+        Popup popup = popupFactory.getPopup(fenetre, panel, 600, 400);
+    	popup.show();
+    	this.attendre(10000);
+    	popup.hide();
+    	
     }
     
     private void annimationAttaquePerso (Personnage perso) {

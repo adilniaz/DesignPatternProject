@@ -1,6 +1,8 @@
 package fireemblem.personnage;
 
 public class ComportementPersonnage {
+	
+	protected String name;
     
     protected int pvBase;
     protected int puissanceBase;
@@ -17,6 +19,17 @@ public class ComportementPersonnage {
     protected int chanceMax;
     protected int defMax;
     protected int resistanceMax;
+    
+    protected boolean promoted;
+    protected int power;
+    protected int classBonusA;
+    protected int classBonusB;
+    
+    private ComportementPersonnage promtedClass;
+    
+    public String getName () {
+    	return this.name;
+    }
 
     public int getPvBase() {
         return pvBase;
@@ -72,6 +85,34 @@ public class ComportementPersonnage {
 
     public int getResistanceMax() {
         return resistanceMax;
+    }
+    
+    public boolean isPromoted () {
+    	return this.promoted;
+    }
+    
+    public int getPower () {
+    	return this.power;
+    }
+    
+    public int getClassBonusA () {
+    	return this.classBonusA;
+    }
+    
+    public int getClassBonusB () {
+    	return this.classBonusB;
+    }
+    
+    public void setPromotedClass (ComportementPersonnage comportementPersonnage) {
+    	this.promtedClass = comportementPersonnage;
+    }
+    
+    public ComportementPersonnage getPromotedClass () {
+    	return this.promtedClass;
+    }
+    
+    public boolean hasPromotedClass () {
+    	return this.promtedClass != null;
     }
     
 }

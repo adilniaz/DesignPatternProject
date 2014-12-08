@@ -10,6 +10,8 @@ public enum TypeObjet {
 	hache_fer, 
 	/* lance */
 	lance_fer,
+	/* arc */
+	arc_fer,
 	/* magie noir */
 	ereshkigal,
 	/* autre */

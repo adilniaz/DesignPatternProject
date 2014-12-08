@@ -18,8 +18,8 @@ public class PlateauJeu extends GamePlatformAbstract {
     private final List<CharacterAbstract> personnages;
     private final List<CharacterAbstract> ennemies;
     private final List<CharacterAbstract> annexes;
-    private final int width;
-    private final int height;
+    private int width;
+    private int height;
     private final Map<CharacterAbstract, Etat> etatPersonnage;
     private final Map<CharacterAbstract, Etat> etatEnnemies;
     private final Map<CharacterAbstract, Etat> etatAnnexes;
@@ -39,6 +39,22 @@ public class PlateauJeu extends GamePlatformAbstract {
         this.etatAnnexes = new HashMap<CharacterAbstract, PlateauJeu.Etat>();
         this.width = 20;
         this.height = 20;
+    }
+    
+    public void setWidth (int width) {
+    	this.width = width;
+    }
+    
+    public int getWidth () {
+    	return this.width;
+    }
+    
+    public void setHeight (int height) {
+    	this.height = width;
+    }
+    
+    public int getHeight () {
+    	return this.height;
     }
     
     public void ajouterZone (ZoneAbstract zone) {

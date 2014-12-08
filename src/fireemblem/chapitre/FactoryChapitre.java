@@ -17,11 +17,12 @@ import fireemblem.plateauJeu.FactoryTerrain;
 import fireemblem.plateauJeu.PlateauJeu;
 import fireemblem.strategie.StrategieImmobile;
 import fireemblem.strategie.StrategiePlusProche;
+import fireemblem.strategie.StrategiePortee;
 
 public class FactoryChapitre {
     
     public Chapitre createChapitre (Chapitres chapitres) {
-    	GameEnvironnementFactoryAbstract factoryEnvironnementDeJeu = new FactoryTerrain();
+    	GameEnvironnementFactoryAbstract factoryEnvironnementDeJeu = new FactoryTerrain(chapitres);
         GameEnvironnementAbstract environnementJeu = factoryEnvironnementDeJeu.createGameEnvironnement();
         Organisation orga = new Organisation();
         CreateCharactersFactoryAbstract factoryPersonnage = new FactoryPersonnageFireEmblem();
@@ -30,12 +31,15 @@ public class FactoryChapitre {
         switch (chapitres) {
             case blazing_sword :
                 GamePlatformAbstract plateauDeJeu = environnementJeu.createGamePlatform();
-                CharacterAbstract lyn = factoryPersonnage.createCharacter("Lyn", orga, TypePersonnageFireEmblem.lord_lyn);
+                /*CharacterAbstract lyn = factoryPersonnage.createCharacter("Lyn", orga, TypePersonnageFireEmblem.lord_lyn);
                 ((Personnage)lyn).setPosition(new Position(19, 9));
                 ((Personnage)lyn).ajouterObjet(factoryObjet.createObjet("epee-fer", TypeObjet.epee_fer));
                 CharacterAbstract eliwood = factoryPersonnage.createCharacter("Eliwood", orga, TypePersonnageFireEmblem.lord_eliwood);
                 ((Personnage)eliwood).setPosition(new Position(19, 10));
                 ((Personnage)eliwood).ajouterObjet(factoryObjet.createObjet("epee-fer", TypeObjet.epee_fer));
+                CharacterAbstract eliwood2 = factoryPersonnage.createCharacter("Eliwood", orga, TypePersonnageFireEmblem.lord_eliwood);
+                ((Personnage)eliwood2).setPosition(new Position(19, 11));
+                ((Personnage)eliwood2).ajouterObjet(factoryObjet.createObjet("epee-fer", TypeObjet.epee_fer));
                 CharacterAbstract hector = factoryPersonnage.createCharacter("Hector", orga, TypePersonnageFireEmblem.lord_hector);
                 ((Personnage)hector).setPosition(new Position(19, 11));
                 ((Personnage)hector).ajouterObjet(factoryObjet.createObjet("hache-fer", TypeObjet.hache_fer));
@@ -84,13 +88,20 @@ public class FactoryChapitre {
                 ((Personnage)combattant2).setPosition(new Position(10, 6));
                 ((Personnage)combattant2).setStrategie(new StrategiePlusProche((Personnage)combattant2));
                 ((Personnage)combattant2).ajouterObjet(factoryObjet.createObjet("hache-fer", TypeObjet.hache_fer));
+                
+                CharacterAbstract combattant3 = factoryPersonnage.createCharacter("Combattant", orga, TypePersonnageFireEmblem.combattant);
+                ((Personnage)combattant3).setPosition(new Position(10, 14));
+                ((Personnage)combattant3).setStrategie(new StrategiePortee((Personnage)combattant3));
+                ((Personnage)combattant3).ajouterObjet(factoryObjet.createObjet("hache-fer", TypeObjet.hache_fer));
 
                 //((PlateauJeu)plateauDeJeu).ajouterPersonnage(lyn);
                 ((PlateauJeu)plateauDeJeu).ajouterPersonnage(eliwood);
+                ((PlateauJeu)plateauDeJeu).ajouterPersonnage(eliwood2);
                 //((PlateauJeu)plateauDeJeu).ajouterPersonnage(hector);
                 //((PlateauJeu)plateauDeJeu).ajouterEnnemie(nergal);
                 ((PlateauJeu)plateauDeJeu).ajouterEnnemie(combattant);
                 ((PlateauJeu)plateauDeJeu).ajouterEnnemie(combattant2);
+                ((PlateauJeu)plateauDeJeu).ajouterEnnemie(combattant3);*/
                 return new Chapitre("blazing sword", (PlateauJeu)plateauDeJeu, "battre le boss");
             case sword_of_seal :
             	GamePlatformAbstract plateauDeJeu1 = environnementJeu.createGamePlatform();

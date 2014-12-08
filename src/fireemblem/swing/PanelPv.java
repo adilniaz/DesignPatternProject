@@ -3,6 +3,8 @@ package fireemblem.swing;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JPanel;
 
@@ -25,6 +27,15 @@ public class PanelPv extends JPanel {
         for (int i = 0 ; i < pv ; i++) {
             this.pv--;
             this.repaint();
+            this.attendre(100);
+        }
+    }
+    
+    public synchronized void attendre (int time) {
+        try {
+            this.wait(time);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(VueSwing_combat.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

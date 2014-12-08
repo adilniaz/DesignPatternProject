@@ -31,6 +31,7 @@ public class PanelImage extends JPanel {
 
     public PanelImage(BufferedImage image, int width, int height) {
         this.image = Image.scaleImage(image, width, height);
+        this.setPreferredSize(new Dimension(this.image.getWidth(), this.image.getHeight()));
     }
 
     public PanelImage(BufferedImage image, int width, int height, ImageIcon imageIcon) {

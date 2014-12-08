@@ -54,7 +54,7 @@ public class VueSwing_chapitre {
     
     private Camera camera;
     private Position centerPosition;
-    Panel panel;
+    private Panel panel;
     int width = 125;
     int height = 65;
     
@@ -119,7 +119,7 @@ public class VueSwing_chapitre {
     
     public void afficheMap () {
         Map<ZoneAbstract, JComponent> componentZone = new HashMap<>();
-        components = new ViewComponent[20][20][3];
+        components = new ViewComponent[this.chapitre.getPlateauDeJeu().getWidth()][this.chapitre.getPlateauDeJeu().getHeight()][3];
         for (ZoneAbstract zone : this.chapitre.getPlateauDeJeu().getZones()) {
             Case c = (Case) zone;
             PanelImage panelImage = new PanelImage(ImageMap.getImageFromZone(zone), width, height);
@@ -136,11 +136,11 @@ public class VueSwing_chapitre {
             components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][1] = new ViewComponent(new PanelDrawing(Color.RED, PanelDrawing.drawingType.circle, width, height));
             components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2] = new ViewComponent(new PanelImage(ImagePersonnage.getImageIconMapFromPersonnage(perso), width, height));
         }
-        panel = this.camera.getCameraView(this.centerPosition, components);
+        this.panel = this.camera.getCameraView(this.centerPosition, components);
         this.keyAction.init(this.chapitre.getPlateauDeJeu(), componentZone);
         this.keyAction.setCursorPosition(this.centerPosition);
-        fenetre.addKeyBoardManager(new KeyDispatcher(this.keyAction));
-        this.fenetre.ajouterPanel(panel);
+        this.fenetre.addKeyBoardManager(new KeyDispatcher(this.keyAction));
+        this.fenetre.ajouterPanel(this.panel);
     }
     
     private void afficheMenu (menu menu[]) {
@@ -166,8 +166,8 @@ public class VueSwing_chapitre {
     }
     
     private void refresh () {
-    	Panel panel = this.camera.getCameraView(this.centerPosition, components);
-    	this.fenetre.ajouterPanel(panel);
+    	this.panel = this.camera.getCameraView(this.centerPosition, components);
+    	this.fenetre.ajouterPanel(this.panel);
     }
     
     private void changeCursorPosition (Position oldPosition, Position newPosition) {
@@ -211,13 +211,17 @@ public class VueSwing_chapitre {
             Personnage p = (Personnage) perso;
             if (p.getPosition().equals(newPosition)) {
                 this.afficheFenetrePerso(p);
-                this.components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2] = new ViewComponent(new PanelImage(ImagePersonnage.getImageIconMapFocusFromPersonnage(perso), width, height));
-                this.refresh();
+                this.camera.refresh(this.panel, p.getPosition(), 2, this.centerPosition, this.components, new ViewComponent(new PanelImage(ImagePersonnage.getImageIconMapFocusFromPersonnage(perso), width, height)));
+                /*this.components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2] = new ViewComponent(new PanelImage(ImagePersonnage.getImageIconMapFocusFromPersonnage(perso), width, height));
+                this.panel.getPanelCentre().ajouterViewContent(this.components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2], p.getPosition().getPositionX(), p.getPosition().getPositionY(), 2);
+                *///this.refresh();
                 break;
             } else if (p.getPosition().equals(oldPosition)) {
                 this.fenetrePerso.hide();
-                this.components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2] = new ViewComponent(new PanelImage(ImagePersonnage.getImageIconMapFromPersonnage(perso), width, height));
-                this.refresh();
+                this.camera.refresh(this.panel, p.getPosition(), 2, this.centerPosition, this.components, new ViewComponent(new PanelImage(ImagePersonnage.getImageIconMapFromPersonnage(perso), width, height)));
+                /*this.components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2] = new ViewComponent(new PanelImage(ImagePersonnage.getImageIconMapFromPersonnage(perso), width, height));
+                this.panel.getPanelCentre().ajouterViewContent(this.components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2], p.getPosition().getPositionX(), p.getPosition().getPositionY(), 2);
+                *///this.refresh();
                 break;
             }
         }
@@ -298,17 +302,30 @@ public class VueSwing_chapitre {
         } else if (this.chapitre.getPlateauDeJeu().getAnnexes().contains(p)) {
         	color = Color.GREEN;
         }
-        this.components[olPosition.getPositionX()][olPosition.getPositionY()][1] = null;
+        this.camera.refresh(this.panel, olPosition, 1, this.centerPosition, this.components, null);
+    	this.camera.refresh(this.panel, olPosition, 2, this.centerPosition, this.components, null);
+    	this.camera.refresh(this.panel, p.getPosition(), 1, this.centerPosition, this.components, new ViewComponent(new PanelDrawing(color, PanelDrawing.drawingType.circle, width, height)));
+    	this.camera.refresh(this.panel, p.getPosition(), 2, this.centerPosition, this.components, new ViewComponent(new PanelImage(ImagePersonnage.getImageIconMapFromPersonnage(perso), width, height)));
+        
+    	/*this.components[olPosition.getPositionX()][olPosition.getPositionY()][1] = null;
     	this.components[olPosition.getPositionX()][olPosition.getPositionY()][2] = null;
     	this.components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][1] = new ViewComponent(new PanelDrawing(color, PanelDrawing.drawingType.circle, width, height));
     	this.components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2] = new ViewComponent(new PanelImage(ImagePersonnage.getImageIconMapFromPersonnage(perso), width, height));
-        this.refresh();
+        this.panel.getPanelCentre().ajouterViewContent(null, olPosition.getPositionX(), olPosition.getPositionY(), 1);
+        this.panel.getPanelCentre().ajouterViewContent(null, olPosition.getPositionX(), olPosition.getPositionY(), 2);
+        this.panel.getPanelCentre().ajouterViewContent(this.components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][1], p.getPosition().getPositionX(), p.getPosition().getPositionY(), 1);
+        this.panel.getPanelCentre().ajouterViewContent(this.components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2], p.getPosition().getPositionX(), p.getPosition().getPositionY(), 2);*/
+        //this.refresh();
     }
     
     private void enlevePerso (Personnage perso) {
-        this.components[perso.getPosition().getPositionX()][perso.getPosition().getPositionY()][1] = null;
+    	this.camera.refresh(this.panel, perso.getPosition(), 1, this.centerPosition, this.components, null);
+    	this.camera.refresh(this.panel, perso.getPosition(), 2, this.centerPosition, this.components, null);
+        /*this.components[perso.getPosition().getPositionX()][perso.getPosition().getPositionY()][1] = null;
         this.components[perso.getPosition().getPositionX()][perso.getPosition().getPositionY()][2] = null;
-        this.refresh();
+        this.panel.getPanelCentre().ajouterViewContent(null, perso.getPosition().getPositionX(), perso.getPosition().getPositionY(), 1);
+        this.panel.getPanelCentre().ajouterViewContent(null, perso.getPosition().getPositionX(), perso.getPosition().getPositionY(), 2);*/
+        //this.refresh();
     }
     
     private void action (Position pos) {
@@ -322,17 +339,21 @@ public class VueSwing_chapitre {
     private void afficheDeplacementDisponible (List<ZoneAbstract> zones) {
         for (ZoneAbstract zone : zones) {
             Case c = (Case) zone;
-            this.components[c.getPosition().getPositionX()][c.getPosition().getPositionY()][1] = new ViewComponent(new ColoredCase(width, height, new Color(0, 0, 255, 50)));
+            this.camera.refresh(this.panel, c.getPosition(), 1, this.centerPosition, this.components, new ViewComponent(new ColoredCase(width, height, new Color(0, 0, 255, 50))));
+            /*this.components[c.getPosition().getPositionX()][c.getPosition().getPositionY()][1] = new ViewComponent(new ColoredCase(width, height, new Color(0, 0, 255, 50)));
+            this.panel.getPanelCentre().ajouterViewContent(this.components[c.getPosition().getPositionX()][c.getPosition().getPositionY()][1], c.getPosition().getPositionX(), c.getPosition().getPositionY(), 1);*/
         }
-        this.refresh();
+        //this.refresh();
     }
     
     private void effaceDeplacementDisponible (List<ZoneAbstract> zones) {
         for (ZoneAbstract zone : zones) {
             Case c = (Case) zone;
-            this.components[c.getPosition().getPositionX()][c.getPosition().getPositionY()][1] = null;
+            this.camera.refresh(this.panel, c.getPosition(), 1, this.centerPosition, this.components, null);
+            /*this.components[c.getPosition().getPositionX()][c.getPosition().getPositionY()][1] = null;
+            this.panel.getPanelCentre().ajouterViewContent(null, c.getPosition().getPositionX(), c.getPosition().getPositionY(), 1);*/
         }
-        this.refresh();
+        //this.refresh();
     }
     
     private void afficheArmesPerso (CharacterAbstract personnage) {
@@ -353,17 +374,21 @@ public class VueSwing_chapitre {
     private void afficheAttaqueDisponible (List<ZoneAbstract> zones) {
         for (ZoneAbstract zone : zones) {
             Case c = (Case) zone;
-            this.components[c.getPosition().getPositionX()][c.getPosition().getPositionY()][1] = new ViewComponent(new ColoredCase(width, height, new Color(255, 0, 0, 50)));
+            this.camera.refresh(this.panel, c.getPosition(), 1, this.centerPosition, this.components, new ViewComponent(new ColoredCase(width, height, new Color(255, 0, 0, 50))));
+            /*this.components[c.getPosition().getPositionX()][c.getPosition().getPositionY()][1] = new ViewComponent(new ColoredCase(width, height, new Color(255, 0, 0, 50)));
+            this.panel.getPanelCentre().ajouterViewContent(this.components[c.getPosition().getPositionX()][c.getPosition().getPositionY()][1], c.getPosition().getPositionX(), c.getPosition().getPositionY(), 1);*/
         }
-        this.refresh();
+        //this.refresh();
     }
     
     private void effaceAttaqueDisponible (List<ZoneAbstract> zones) {
         for (ZoneAbstract zone : zones) {
             Case c = (Case) zone;
-            this.components[c.getPosition().getPositionX()][c.getPosition().getPositionY()][1] = null;
+            this.camera.refresh(this.panel, c.getPosition(), 1, this.centerPosition, this.components, null);
+            /*this.components[c.getPosition().getPositionX()][c.getPosition().getPositionY()][1] = null;
+            this.panel.getPanelCentre().ajouterViewContent(null, c.getPosition().getPositionX(), c.getPosition().getPositionY(), 1);*/
         }
-        this.refresh();
+        //this.refresh();
     }
     
     private void unites () {
