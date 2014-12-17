@@ -3,12 +3,15 @@ package fireemblem.controlleur;
 import java.util.ArrayList;
 import java.util.List;
 
+import fireemblem.connexionBD.Connexion;
+import fireemblem.connexionBD.ConnexionBD;
 import fireemblem.swing.Fenetre;
 import fireemblem.swing.Vues;
 
 public class Demarrage extends Controlleur {
     
     private final List<Chapitre> chapitres;
+    private Fenetre fenetre;
     
     public Demarrage () {
         this.chapitres = new ArrayList<>();
@@ -31,10 +34,20 @@ public class Demarrage extends Controlleur {
     }
     
     public void chapitre (int choix) {
-        Fenetre fenetre = new Fenetre("fire emblem");
-        Vues.createVue(this.chapitres.get(choix), fenetre);
-        this.chapitres.get(choix).setFenetre(fenetre);
+        this.fenetre = new Fenetre("fire emblem");
+        Vues.createVue(this.chapitres.get(choix), this.fenetre);
+        this.chapitres.get(choix).setFenetre(this.fenetre);
         new RunControlleur(this.chapitres.get(choix)).start();
+    }
+    
+    public void continuerChapitre () {
+    	ConnexionBD connexionBD = new ConnexionBD();
+    	Connexion connexion = new Connexion(connexionBD.getConnexionHSQL("fireemblem", "sa", ""));
+    	Chapitre chapitre = connexion.loadPartie();
+    	connexionBD.fermerConnexionHSQL();
+    	this.fenetre = new Fenetre("fire emblem");
+        Vues.createVue(chapitre, this.fenetre);
+    	new RunControlleur(chapitre).start();
     }
 
 	@Override
@@ -55,6 +68,7 @@ public class Demarrage extends Controlleur {
 		public void run () {
 			this.controleur.run();
 			Demarrage.this.run();
+			fenetre.close();
 		}
 		
 	}

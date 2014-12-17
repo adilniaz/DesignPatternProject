@@ -15,7 +15,7 @@ import fireemblem.controlleur.Demarrage;
 public class VueSwing_demarrage {
     
     private final Demarrage demarrage;
-    private final Fenetre fenetre;
+    private Fenetre fenetre;
     
     public VueSwing_demarrage (Demarrage demarrage, Fenetre fenetre) {
         this.demarrage = demarrage;
@@ -34,10 +34,18 @@ public class VueSwing_demarrage {
     }
     
     public void menu() {
+    	if (this.fenetre == null) {
+    		this.fenetre = new Fenetre("fire emblem");
+    	} else {
+    		this.fenetre.setVisible(true);
+    	}
         JPanel panel = new JPanel();
         JButton button = new JButton("chapitres");
         button.addActionListener(new boutonChapitres());
+        JButton buttonLoad = new JButton("load");
+        buttonLoad.addActionListener(new boutonLoad());
         panel.add(button);
+        panel.add(buttonLoad);
         this.fenetre.ajouterPanel(panel);
     }
     
@@ -57,6 +65,14 @@ public class VueSwing_demarrage {
         @Override
         public void actionPerformed (ActionEvent event) {
             demarrage.chapitres();
+        }
+    }
+    
+    private class boutonLoad implements ActionListener {
+        @Override
+        public void actionPerformed (ActionEvent event) {
+            demarrage.continuerChapitre();
+            fenetre.dispose();
         }
     }
     

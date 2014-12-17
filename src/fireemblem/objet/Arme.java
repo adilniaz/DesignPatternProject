@@ -14,8 +14,8 @@ public class Arme extends Objet {
     private final int critique;
     private final TypeArme typeArme;
     
-    public Arme (String nom, int utilisation, int prix, Rang rang, int porte, int poids, int puissance, int precision, int critique, TypeArme typeArme) {
-        super(nom, utilisation, prix);
+    public Arme (String nom, int utilisation, int prix, Rang rang, int porte, int poids, int puissance, int precision, int critique, TypeArme typeArme, TypeObjet typeObjet) {
+        super(nom, utilisation, prix, typeObjet);
         this.rang = rang;
         this.porte = porte;
         this.poids = poids;

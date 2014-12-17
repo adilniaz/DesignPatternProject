@@ -31,6 +31,7 @@ public class Chapitre extends Controlleur {
     private Tour tour;
     private boolean continuer;
     private Combat combat;
+    private int nbTour;
     
     public final String AFFICHE_ACTION_PERSO = "afficheActionPerso";
     public final String AFFICHE_ARMES_PERSO = "afficheArmePerso";
@@ -44,6 +45,7 @@ public class Chapitre extends Controlleur {
     public final String EFFACE_DEPLACEMENT_DISPONIBLE = "effaceDeplacementDisponible";
     public final String ENLEVE_PERSO = "enlevePerso";
     public final String GAME_OVER = "gameOver";
+    public final String PARTIE_SUSPENDU = "partieSuspendu";
     public final String STATUS = "status";
     public final String SUSPENDRE = "suspendre";
     public final String UNITES = "unites";
@@ -70,6 +72,7 @@ public class Chapitre extends Controlleur {
         this.plateauDeJeu = plateauDeJeu;
         this.mode = Mode.libre;
         this.objectif = objectif;
+        this.nbTour = 1;
     }
     
     public Fenetre getFenetre () {
@@ -96,6 +99,14 @@ public class Chapitre extends Controlleur {
     	this.persoAttaquer = characterAbstract;
     }
     
+    public int getTour () {
+    	return this.nbTour;
+    }
+    
+    public void setTour (int tour) {
+    	this.nbTour = tour;
+    }
+    
     public void run () {
         this.pcsControlleurVue.firePropertyChange(AFFICHE_MAP, null, null);
         this.tour = Tour.perso;
@@ -113,7 +124,7 @@ public class Chapitre extends Controlleur {
     private void finPartie () {
     	if (this.plateauDeJeu.getEnnemies().isEmpty()) {
     		this.pcsControlleurVue.firePropertyChange(VICTOIRE, null, null);
-    	} else {
+    	} else if (this.plateauDeJeu.getPersonnages().isEmpty()) {
     		this.pcsControlleurVue.firePropertyChange(GAME_OVER, null, null);
     	}
     }
@@ -168,6 +179,7 @@ public class Chapitre extends Controlleur {
 				this.tour = Tour.perso;
 				this.pcsControlleurVue.firePropertyChange(CHANGE_TOUR, this.tour, null);
 				this.mode = Mode.libre;
+				this.nbTour++;
 				break;
 		}
     }
@@ -320,6 +332,8 @@ public class Chapitre extends Controlleur {
             	Connexion connexion = new Connexion(connection);
             	connexion.savePartie(this);
             	connexionBD.fermerConnexionHSQL();
+            	this.pcsControlleurVue.firePropertyChange(PARTIE_SUSPENDU, null, null);
+            	this.fin = true;
                break;
             case fin:
             	for (CharacterAbstract perso : this.plateauDeJeu.getPersonnages()) {

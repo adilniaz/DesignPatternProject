@@ -1,6 +1,14 @@
 package fireemblem.connexionBD;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CreationBase extends Methode {
 	
@@ -9,7 +17,7 @@ public class CreationBase extends Methode {
 	}
 	
 	public void createBase () {
-		if (this.estConnecter() && !this.tableExist()) {
+		if (this.estConnecter() && (!this.tableExist() || (this.getDateTableMiseAJour().before(this.getDateDerniereMiseAJour())))) {
 			System.out.println("creation de la base");
 			this.dropAllTable();
 			this.creationTablePartie();
@@ -23,10 +31,12 @@ public class CreationBase extends Methode {
 			this.creationTableObjetEnnemiePartieSauvegarder();
 			this.creationTableStatAnnexePartieSauvegarder();
 			this.creationTableObjetAnnexePartieSauvegarder();
+			this.creationTableMiseAJour();
 		}
 	}
 	
 	private void dropAllTable () {
+		this.exexuteUpdate("DROP TABLE IF EXISTS mise_a_jour CASCADE");
 		this.exexuteUpdate("DROP TABLE IF EXISTS objet_annexe_partie_sauvegarder CASCADE");
 		this.exexuteUpdate("DROP TABLE IF EXISTS stat_annexe_partie_sauvegarder CASCADE");
 		this.exexuteUpdate("DROP TABLE IF EXISTS objet_ennemie_partie_sauvegarder CASCADE");
@@ -42,6 +52,46 @@ public class CreationBase extends Methode {
     
     private boolean tableExist () {
         return this.executeQuery("SELECT * FROM partie") != null;
+    }
+    
+    private Date getDateTableMiseAJour () {
+    	Date date = null;
+    	PreparedStatement prepare = this.prepareStatement("SELECT date_mise_a_jour FROM mise_a_jour");
+        ResultSet result = this.executePreparedStatement(prepare);
+        if (this.aResult(result)) {
+            String string = this.getStringResultByString(result, "date_mise_a_jour");
+            try {
+                date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSSSSS").parse(string);
+            } catch (ParseException ex) {
+                Logger.getLogger(CreationBase.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        this.closeResultSet(result);
+        if (date == null) {
+            Calendar dateMiseAJour = Calendar.getInstance();
+            dateMiseAJour.set(2010, Calendar.JANUARY, 01, 00, 00);
+            date = dateMiseAJour.getTime();
+        }
+        return date;
+    }
+    
+    private Date getDateDerniereMiseAJour () {
+        Calendar dateMiseAJour = Calendar.getInstance();
+        dateMiseAJour.set(2014, Calendar.DECEMBER, 9, 21, 50);
+        return dateMiseAJour.getTime();
+    }
+    
+    private void creationTableMiseAJour() {
+        String requete = "CREATE TABLE mise_a_jour ("
+                + "date_mise_a_jour TIMESTAMP"
+                + ")";
+        if (this.exexuteUpdate(requete)) {
+            this.insertionDonneeTableMiseAJour();
+        }
+    }
+    
+    private void insertionDonneeTableMiseAJour () {
+        this.exexuteUpdate("INSERT INTO mise_a_jour (date_mise_a_jour) VALUES (NOW())");
     }
 	
 	private void creationTablePartie () {
@@ -129,7 +179,10 @@ public class CreationBase extends Methode {
 		String requete = "CREATE TABLE partie_sauvergarder ("
                 + "id_partie INT,"
                 + "tour INT,"
-                + "niveau varchar(32)"
+                + "niveau varchar(32),"
+                + "temps_heure INT,"
+                + "temps_min INT,"
+                + "temps_seconde INT"
                 + ")";
         this.exexuteUpdate(requete);
 	}
@@ -152,8 +205,7 @@ public class CreationBase extends Methode {
                 + "aide INT,"
                 + "experience INT,"
                 + "position_x INT,"
-                + "position_y INT,"
-                + "mort BOOLEAN"
+                + "position_y INT"
                 + ")";
         this.exexuteUpdate(requete);
     }
