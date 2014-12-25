@@ -20,6 +20,7 @@ public class ImagePersonnage extends Image {
     private static final String COMBAT = "combat/";
     private static final String MAP = "map/";
     private static final String MENU = "menu/";
+    private static final String DEFAULT_IMAGE = "default";
     
     static {
         _ImagePersonnage = new ImagePersonnage();
@@ -67,7 +68,7 @@ public class ImagePersonnage extends Image {
         } else if (this.aImage(this.getNameFromComportement(p.getComportementPersonnage()), MENU)) {
             return this.getImage(this.getUrlImage(this.getNameFromComportement(p.getComportementPersonnage()), MENU));
         }
-        return null;
+        return this.getImage(DEFAULT_IMAGE, MENU);
     }
     
     public BufferedImage getImageCombat (CharacterAbstract perso) {
@@ -77,7 +78,7 @@ public class ImagePersonnage extends Image {
         } else if (this.aImage(this.getNameFromComportement(p.getComportementPersonnage())+"1", COMBAT)) {
             return this.getImage(this.getUrlImage(this.getNameFromComportement(p.getComportementPersonnage())+"1", COMBAT));
         }
-        return null;
+        return this.getImage(DEFAULT_IMAGE, COMBAT);
     }
     
     public Map<Integer, ImageManager> getImageCombat (CharacterAbstract perso, String type) {
@@ -150,7 +151,7 @@ public class ImagePersonnage extends Image {
         } else if (this.aImage(this.getNameFromComportement(p.getComportementPersonnage()), MAP)) {
             return this.getImageIcon(this.getUrlImage(this.getNameFromComportement(p.getComportementPersonnage()), MAP));
         }
-        return null;
+        return this.getImageIcon(this.getUrlImage(DEFAULT_IMAGE, MAP));
     }
     
     public ImageIcon getImageIconMapFocus (CharacterAbstract perso) {
@@ -160,7 +161,7 @@ public class ImagePersonnage extends Image {
         } else if (this.aImage(this.getNameFromComportement(p.getComportementPersonnage()), MAP)) {
             return this.getImageIcon(this.getUrlImage(this.getNameFromComportement(p.getComportementPersonnage()), MAP));
         }
-        return null;
+        return this.getImageIcon(this.getUrlImage(DEFAULT_IMAGE, MAP));
     }
     
 }

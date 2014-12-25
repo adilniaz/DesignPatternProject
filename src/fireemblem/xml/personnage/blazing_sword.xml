@@ -15,7 +15,7 @@
 		</personnage>
 	</personnages>
 	<ennemies>
-		<!--<ennemie nom="Nergal" type="dark_druid">
+		<ennemie nom="Nergal" type="dark_druide">
 			<position x="1" y="50" ></position>
 			<stats niv="20" pv="75" force="30" capacite="18" vitesse="15" chance="20" defense="28" resistance="30"></stats>
 			<objets>
@@ -23,7 +23,7 @@
 			</objets>
 			<strategie nom="immobile"></strategie>
 		</ennemie>
-		<ennemie nom="Uhai" type="cav_nomade">
+		<!--<ennemie nom="Uhai" type="cav_nomade">
 			<position x="10" y="10" ></position>
 			<stats niv="20" pv="55" force="22" capacite="26" vitesse="25" chance="0" defense="18" resistance="18"></stats>
 			<objets>

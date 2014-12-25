@@ -65,6 +65,7 @@ public class VueSwing_chapitre {
         this.popupFactory = PopupFactory.getSharedInstance();
         this.camera = new Camera();
         this.centerPosition = new Position(10, 10);
+        this.camera.setCenterPoint(this.centerPosition);
         
         
         this.keyAction.ajouterEcouteur(new PropertyChangeListener() {
@@ -171,7 +172,7 @@ public class VueSwing_chapitre {
     }
     
     private void changeCursorPosition (Position oldPosition, Position newPosition) {
-    	if (newPosition.getPositionX() == this.centerPosition.getPositionX() + (this.camera.getLigne()/2)) {
+    	/*if (newPosition.getPositionX() == this.centerPosition.getPositionX() + (this.camera.getLigne()/2)) {
         	this.centerPosition.setPositionX(this.centerPosition.getPositionX()+1);
         	this.refresh();
         } else if (newPosition.getPositionY() == this.centerPosition.getPositionY() + (this.camera.getColone()/2)) {
@@ -183,7 +184,10 @@ public class VueSwing_chapitre {
         } else if (newPosition.getPositionY() == this.centerPosition.getPositionY() - (this.camera.getColone()/2)) {
         	this.centerPosition.setPositionY(this.centerPosition.getPositionY()-1);
         	this.refresh();
-        }
+        }*/
+    	if (this.camera.move(oldPosition, newPosition, this.components.length, this.components[0].length)) {
+    		this.refresh();
+    	}
     	JLabel label = new JLabel(this.chapitre.getObjectif());
         this.fenetreObjectif = this.popupFactory.getPopup(this.fenetre, label, 1200, 80);
         this.fenetreObjectif.show();
