@@ -29,6 +29,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.Popup;
 import javax.swing.PopupFactory;
@@ -398,21 +399,21 @@ public class VueSwing_chapitre {
     
     private void unites () {
     	Box box = Box.createVerticalBox();
-    	String[] columnNames = {"image", "Nom", "Classe", "Niv", "Exp", "PV", "Max"};
+    	String[] columnNames = {"", "Nom", "Classe", "Niv", "Exp", "PV", "Max"};
     	Object[][] data = new Object[this.chapitre.getPlateauDeJeu().getPersonnages().size()][7];
     	for(int i = 0 ; i < this.chapitre.getPlateauDeJeu().getPersonnages().size() ; i++) {
     		Personnage perso = (Personnage) this.chapitre.getPlateauDeJeu().getPersonnages().get(i);
     		data[i][0] = "";
     		data[i][1] = perso.getName();
-    		data[i][2] = "";
+    		data[i][2] = perso.getComportementPersonnage().getName();
     		data[i][3] = perso.getNiv();
     		data[i][4] = 0;
     		data[i][5] = perso.getPv();
     		data[i][6] = perso.getPvMax();
         }
-    	box.add(new JLabel("Personnage"));
+    	box.add(new JLabel("Personnages"));
     	JTable table = new JTable(data, columnNames);
-    	box.add(table);
+    	box.add(new JScrollPane(table));
     	this.fenetre.ajouterPanel(box);
     }
     
