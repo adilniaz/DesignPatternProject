@@ -1,13 +1,11 @@
 package startingPoint;
 
-import fireemblem.SimulationJeu;
-import ageOfWar.AgeOfWarGUI;
+import implementations.SimulationJeu;
 
 public class App {
-	public static void main(String[] args)
-	{
-	    new AgeOfWarGUI();
-		/*SimulationJeu simulationJeu = new SimulationJeu();
-        simulationJeu.simuler();*/
+	public static void main(String[] args) {
+		
+		SimulationJeu simulationJeu = new SimulationJeu();
+        simulationJeu.simuler();
 	}
 }

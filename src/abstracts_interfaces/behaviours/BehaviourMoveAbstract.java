@@ -1,5 +1,11 @@
 package abstracts_interfaces.behaviours;
 
+import implementations.Position;
+import implementations.personnage.Personnage;
+import implementations.plateauJeu.Case;
+import implementations.plateauJeu.CaseTypes;
+import implementations.plateauJeu.PlateauJeu;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,11 +14,6 @@ import java.util.Map;
 import abstracts_interfaces.CharacterAbstract;
 import abstracts_interfaces.factories.gameplatforms.AccessAbstract;
 import abstracts_interfaces.factories.gameplatforms.ZoneAbstract;
-import fireemblem.Position;
-import fireemblem.personnage.Personnage;
-import fireemblem.plateauJeu.Case;
-import fireemblem.plateauJeu.CaseTypes;
-import fireemblem.plateauJeu.PlateauJeu;
 
 public abstract class BehaviourMoveAbstract {
     

@@ -5,7 +5,6 @@ import abstracts_interfaces.behaviours.BehaviourMoveAbstract;
 import abstracts_interfaces.behaviours.BehaviourTalkAbstract;
 import abstracts_interfaces.decorators.statistics.StatisticsAbstract;
 import abstracts_interfaces.decorators.weapons.WeaponAbstract;
-import implementations.organisations.Organisation;
 
 
 public abstract class CharacterAbstract extends ObserverAbstract{
