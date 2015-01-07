@@ -1,7 +1,5 @@
 package implementations.gameplatform;
 
-import implementations.character.Character;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
