@@ -1,5 +1,6 @@
 package abstracts_interfaces;
 
+import implementations.organizations.Organization;
 import abstracts_interfaces.behaviours.BehaviourCombatAbstract;
 import abstracts_interfaces.behaviours.BehaviourMoveAbstract;
 import abstracts_interfaces.behaviours.BehaviourTalkAbstract;
@@ -14,7 +15,7 @@ public abstract class CharacterAbstract extends ObserverAbstract{
 	protected BehaviourCombatAbstract behaviour;
 	protected BehaviourTalkAbstract speech;
 	protected BehaviourMoveAbstract move;
-	protected Organisation subject;
+	protected Organization subject;
 	protected String operatingState;
 	protected WeaponAbstract weapon;
 	protected StatisticsAbstract stats;
@@ -40,12 +41,12 @@ public abstract class CharacterAbstract extends ObserverAbstract{
 	public abstract String move();
 
 	
-	public CharacterAbstract(Organisation subject, String name){
-		this.name=name;
-		this.behaviour=null;
-		this.speech=null;
-		this.weapon= null;
-		this.subject= subject;
+	public CharacterAbstract(Organization subject, String name){
+		this.name = name;
+		this.behaviour = null;
+		this.speech = null;
+		this.weapon = null;
+		this.subject = subject;
 		this.stats = null;
 		if (this.subject != null) {
 			this.subject.attach(this);
@@ -89,11 +90,11 @@ public abstract class CharacterAbstract extends ObserverAbstract{
 		return "";
 	}
 	
-	public Organisation getSubject() {
+	public Organization getSubject() {
 		return subject;
 	}
 
-	public void setSubject(Organisation subject) {
+	public void setSubject(Organization subject) {
 		this.subject = subject;
 	}
 

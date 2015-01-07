@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<chapitre name="blazing sword" objectif="battre le boss">
+	<personnages>
+		<personnage nom="Eliwood" type="lord_eliwood">
+			<position x="19" y="10" ></position>
+			<objets>
+				<objet nom="epee-fer" type="epee_fer"></objet>
+			</objets>
+		</personnage>
+		<personnage nom="Eliwood" type="lord_eliwood">
+			<position x="19" y="11" ></position>
+			<objets>
+				<objet nom="epee-fer" type="epee_fer"></objet>
+			</objets>
+		</personnage>
+	</personnages>
+	<ennemies>
+		<ennemie nom="Nergal" type="dark_druide">
+			<position x="1" y="10" ></position>
+			<stats niv="20" pv="75" force="30" capacite="18" vitesse="15" chance="20" defense="28" resistance="30"></stats>
+			<objets>
+				<objet nom="ereshkigal" type="ereshkigal"></objet>
+			</objets>
+			<strategie nom="immobile"></strategie>
+		</ennemie>
+		<!--<ennemie nom="Uhai" type="cav_nomade">
+			<position x="10" y="10" ></position>
+			<stats niv="20" pv="55" force="22" capacite="26" vitesse="25" chance="0" defense="18" resistance="18"></stats>
+			<objets>
+				<objet nom="arc fer" type="arc_fer"></objet>
+			</objets>
+			<strategie nom="immobile"></strategie>
+		</ennemie>
+		<ennemie nom="Darin" type="general">
+			<position x="10" y="20" ></position>
+			<stats niv="20" pv="62" force="23" capacite="18" vitesse="15" chance="0" defense="29" resistance="15"></stats>
+			<objets>
+				<objet nom="hache fer" type="hache_fer"></objet>
+			</objets>
+			<strategie nom="immobile"></strategie>
+		</ennemie>
+		<ennemie nom="Lloyd" type="bretteur">
+			<position x="10" y="30" ></position>
+			<stats niv="20" pv="52" force="21" capacite="26" vitesse="27" chance="0" defense="18" resistance="22"></stats>
+			<objets>
+				<objet nom="epee fer" type="epee_fer"></objet>
+			</objets>
+			<strategie nom="immobile"></strategie>
+		</ennemie>
+		<ennemie nom="Lundgren" type="general">
+			<position x="50" y="30" ></position>
+			<stats niv="5" pv="35" force="12" capacite="8" vitesse="5" chance="6" defense="14" resistance="7"></stats>
+			<objets>
+				<objet nom="lance fer" type="lance_fer"></objet>
+			</objets>
+			<strategie nom="immobile"></strategie>
+		</ennemie>
+		<ennemie nom="Erik" type="cavalier">
+			<position x="50" y="70" ></position>
+			<stats niv="14" pv="28" force="8" capacite="9" vitesse="8" chance="6" defense="8" resistance="9"></stats>
+			<objets>
+				<objet nom="lance fer" type="lance_fer"></objet>
+			</objets>
+			<strategie nom="immobile"></strategie>
+		</ennemie>-->
+		<ennemie nom="Combattant" type="combattant">
+			<position x="15" y="10" ></position>
+			<objets>
+				<objet nom="hache-fer" type="hache_fer"></objet>
+			</objets>
+			<strategie nom="immobile"></strategie>
+		</ennemie>
+		<ennemie nom="Combattant" type="combattant">
+			<position x="10" y="6" ></position>
+			<objets>
+				<objet nom="hache-fer" type="hache_fer"></objet>
+			</objets>
+			<strategie nom="plusProche"></strategie>
+		</ennemie>
+		<ennemie nom="Combattant" type="combattant">
+			<position x="10" y="14" ></position>
+			<objets>
+				<objet nom="hache-fer" type="hache_fer"></objet>
+			</objets>
+			<strategie nom="portee"></strategie>
+		</ennemie>
+	</ennemies>
+</chapitre>

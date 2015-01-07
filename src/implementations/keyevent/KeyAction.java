@@ -2,8 +2,8 @@ package implementations.keyevent;
 
 
 import implementations.Position;
-import implementations.plateauJeu.Case;
-import implementations.plateauJeu.PlateauJeu;
+import implementations.gameplatform.Square;
+import implementations.gameplatform.GamePlatform;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
@@ -22,7 +22,7 @@ public class KeyAction implements KeyListener  {
     
     private Border oldBorder;
     private Border newBorder;
-    private PlateauJeu plateauDeJeu;
+    private GamePlatform plateauDeJeu;
     private Map<ZoneAbstract, JComponent> componentZone;
     private ZoneAbstract currentZone;
     protected PropertyChangeSupport pcsControlleurVue;
@@ -31,7 +31,7 @@ public class KeyAction implements KeyListener  {
         this.pcsControlleurVue = new PropertyChangeSupport(this);
     }
     
-    public KeyAction (PlateauJeu plateauDeJeu, Map<ZoneAbstract, JComponent> componentZone) {
+    public KeyAction (GamePlatform plateauDeJeu, Map<ZoneAbstract, JComponent> componentZone) {
         this.plateauDeJeu = plateauDeJeu;
         this.componentZone = componentZone;
         this.currentZone = this.plateauDeJeu.getZones().get(0);
@@ -41,7 +41,7 @@ public class KeyAction implements KeyListener  {
         this.pcsControlleurVue = new PropertyChangeSupport(this);
     }
     
-    public void init (PlateauJeu plateauDeJeu, Map<ZoneAbstract, JComponent> componentZone) {
+    public void init (GamePlatform plateauDeJeu, Map<ZoneAbstract, JComponent> componentZone) {
         this.plateauDeJeu = plateauDeJeu;
         this.componentZone = componentZone;
         this.currentZone = this.plateauDeJeu.getZones().get(0);
@@ -52,7 +52,7 @@ public class KeyAction implements KeyListener  {
     
     public ZoneAbstract getZoneByPosition (Position p) {
         for (ZoneAbstract zone : this.plateauDeJeu.getZones()) {
-            Case tmp = (Case) zone;
+            Square tmp = (Square) zone;
             if (tmp.getPosition().equals(p)) {
                 return tmp;
             }
@@ -65,13 +65,13 @@ public class KeyAction implements KeyListener  {
         
     }
     
-    private void modifyCursor (Case c, ZoneAbstract z) {
+    private void modifyCursor (Square c, ZoneAbstract z) {
         if (z != null) {
             Position oldPosition = c.getPosition();
             this.componentZone.get(this.currentZone).setBorder(this.oldBorder);
             this.currentZone = z;
             this.componentZone.get(this.currentZone).setBorder(this.newBorder);
-            Position newPosition = ((Case) this.currentZone).getPosition();
+            Position newPosition = ((Square) this.currentZone).getPosition();
             this.pcsControlleurVue.firePropertyChange("cursorPosition", oldPosition, newPosition);
         }
     }
@@ -87,31 +87,31 @@ public class KeyAction implements KeyListener  {
     public void keyPressed(KeyEvent ke) {
         System.out.println("Code touche pressée : " + ke.getKeyCode() + " - caractère touche pressée : " + ke.getKeyChar());
         switch (ke.getKeyCode()) {
-            case CodeBouton.BAS :
-                Case c1 = (Case) this.currentZone;
+            case ButtonCode.BAS :
+                Square c1 = (Square) this.currentZone;
                 ZoneAbstract zone1 = this.getZoneByPosition(new Position(c1.getPosition().getPositionX()+1, c1.getPosition().getPositionY()));
                 this.modifyCursor(c1, zone1);
                 break;
-            case CodeBouton.DROITE :
-                Case c2 = (Case) this.currentZone;
+            case ButtonCode.DROITE :
+                Square c2 = (Square) this.currentZone;
                 ZoneAbstract zone2 = this.getZoneByPosition(new Position(c2.getPosition().getPositionX(), c2.getPosition().getPositionY()+1));
                 this.modifyCursor(c2, zone2);
                 break;
-            case CodeBouton.GAUCHE :
-                Case c3 = (Case) this.currentZone;
+            case ButtonCode.GAUCHE :
+                Square c3 = (Square) this.currentZone;
                 ZoneAbstract zone3 = this.getZoneByPosition(new Position(c3.getPosition().getPositionX(), c3.getPosition().getPositionY()-1));
                 this.modifyCursor(c3, zone3);
                 break;
-            case CodeBouton.HAUT :
-                Case c4 = (Case) this.currentZone;
+            case ButtonCode.HAUT :
+                Square c4 = (Square) this.currentZone;
                 ZoneAbstract zone4 = this.getZoneByPosition(new Position(c4.getPosition().getPositionX()-1, c4.getPosition().getPositionY()));
                 this.modifyCursor(c4, zone4);
                 break;
-            case CodeBouton.ACTION :
-                Case c5 = (Case) this.currentZone;
+            case ButtonCode.ACTION :
+                Square c5 = (Square) this.currentZone;
                 this.pcsControlleurVue.firePropertyChange("action", c5.getPosition(), null);
                 break;
-            case CodeBouton.ANNULATION :
+            case ButtonCode.ANNULATION :
                 this.pcsControlleurVue.firePropertyChange("annulation", null, null);
                 break;
         }
