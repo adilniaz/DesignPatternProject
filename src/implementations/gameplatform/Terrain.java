@@ -24,7 +24,7 @@ public class Terrain extends GameEnvironnementAbstract {
     	switch (chapitres) {
     		case blazing_sword:
     			Parser.Parse("src/implementations/xml/map/blazing_sword.xml", new PlatformParser(this, plateauDeJeu));
-    			Parser.Parse("src/implementations/xml/personnage/blazing_sword.xml", new ChapterParser(plateauDeJeu));
+    			Parser.Parse("src/implementations/xml/character/blazing_sword.xml", new ChapterParser(plateauDeJeu));
     			break;
     		default :
     	        for (int i = 0 ; i < 20 ; i++) {
