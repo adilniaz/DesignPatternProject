@@ -37,7 +37,7 @@ public class DBConnection {
         return this.connectionHSQL;
     }
     
-    public void fermerConnexionHSQL () {
+    public void closeHSQLConnection () {
         if (this.connectionHSQL != null) {
             try {
                 Statement statement = connectionHSQL.createStatement();

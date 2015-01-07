@@ -10,23 +10,23 @@ import implementations.views.Window;
 
 public class GameSimulation {
     
-    public void simulate () {
+    public void runSimulation () {
     	
     	DBConnection connection = new DBConnection();
     	DBCreation creationBase = new DBCreation(connection.getConnexionHSQL("fireemblem", "sa", ""));
     	creationBase.createBase();
-    	connection.fermerConnexionHSQL();
+    	connection.closeHSQLConnection();
         
-        Window fenetre = new Window("Fire emblem");
+        Window window = new Window("Fire emblem");
         
-        ChapterFactory factoryChapitre = new ChapterFactory();
+        ChapterFactory chapterFactory = new ChapterFactory();
         
-        Start demarrage = new Start();
-        View.createVue(demarrage, fenetre);
-        demarrage.addChapitre(factoryChapitre.createChapitre(Chapters.blazing_sword));
-        demarrage.addChapitre(factoryChapitre.createChapitre(Chapters.sword_of_seal));
-        demarrage.addChapitre(factoryChapitre.createChapitre(Chapters.path_of_radiance));
-        demarrage.run();
+        Start start = new Start();
+        View.createVue(start, window);
+        start.addChapter(chapterFactory.createChapter(Chapters.blazing_sword));
+        start.addChapter(chapterFactory.createChapter(Chapters.sword_of_seal));
+        start.addChapter(chapterFactory.createChapter(Chapters.path_of_radiance));
+        start.run();
         
     }
     

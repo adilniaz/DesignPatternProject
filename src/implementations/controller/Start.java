@@ -22,7 +22,7 @@ public class Start extends Controller {
         return chapitres;
     }
     
-    public void addChapitre (Chapter chapitre) {
+    public void addChapter (Chapter chapitre) {
         this.chapitres.add(chapitre);
     }
     
@@ -45,7 +45,7 @@ public class Start extends Controller {
     	DBConnection connexionBD = new DBConnection();
     	Connexion connexion = new Connexion(connexionBD.getConnexionHSQL("fireemblem", "sa", ""));
     	Chapter chapitre = connexion.loadPartie();
-    	connexionBD.fermerConnexionHSQL();
+    	connexionBD.closeHSQLConnection();
     	this.fenetre = new Window("fire emblem");
         View.createVue(chapitre, this.fenetre);
     	new RunControlleur(chapitre).start();

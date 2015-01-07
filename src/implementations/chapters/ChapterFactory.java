@@ -18,7 +18,7 @@ import abstracts_interfaces.factories.gameplatforms.GamePlatformAbstract;
 
 public class ChapterFactory {
     
-    public Chapter createChapitre (Chapters chapitres) {
+    public Chapter createChapter (Chapters chapitres) {
     	GameEnvironnementFactoryAbstract factoryEnvironnementDeJeu = new FactoryTerrain(chapitres);
         GameEnvironnementAbstract environnementJeu = factoryEnvironnementDeJeu.createGameEnvironnement();
         Organization orga = new Organization();

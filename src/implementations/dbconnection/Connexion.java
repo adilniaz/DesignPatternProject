@@ -177,7 +177,7 @@ public class Connexion extends Method {
             chapitres = Chapters.getByName(this.getStringResultByString(result, "niveau"));
         }
         ChapterFactory factoryChapitre = new ChapterFactory();
-        chapitre = factoryChapitre.createChapitre(chapitres);
+        chapitre = factoryChapitre.createChapter(chapitres);
         chapitre.setTour(tour);
         this.closeResultSet(result);
         while (!chapitre.getPlateauDeJeu().getPersonnages().isEmpty()) {

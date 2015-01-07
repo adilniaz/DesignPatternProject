@@ -332,7 +332,7 @@ public class Chapter extends Controller {
             	Connection connection = connexionBD.getConnexionHSQL("fireemblem", "sa", "");
             	Connexion connexion = new Connexion(connection);
             	connexion.savePartie(this);
-            	connexionBD.fermerConnexionHSQL();
+            	connexionBD.closeHSQLConnection();
             	this.pcsControlleurVue.firePropertyChange(PARTIE_SUSPENDU, null, null);
             	this.fin = true;
                break;
