@@ -7,10 +7,10 @@
 				<objet nom="epee-fer" type="epee_fer"></objet>
 			</objets>
 		</personnage>
-		<personnage nom="Eliwood" type="lord_eliwood">
+		<personnage nom="hector" type="lord_hector">
 			<position x="19" y="11" ></position>
 			<objets>
-				<objet nom="epee-fer" type="epee_fer"></objet>
+				<objet nom="hache-fer" type="hache_fer"></objet>
 			</objets>
 		</personnage>
 	</personnages>
