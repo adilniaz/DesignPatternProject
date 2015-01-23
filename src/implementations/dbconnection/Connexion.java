@@ -59,7 +59,7 @@ public class Connexion extends Method {
             this.setParameterInt(prepare, perso.getDef(), 8);
             this.setParameterInt(prepare, perso.getResistance(), 9);
             this.setParameterInt(prepare, perso.getConstitution(), 10);
-            this.setParameterInt(prepare, perso.getAide(), 11);
+            this.setParameterInt(prepare, 0, 11);
             this.setParameterInt(prepare, perso.getExperience(), 12);
             this.setParameterInt(prepare, this.partie, 13);
             this.setParameterString(prepare, perso.getName(), 14);
@@ -149,7 +149,7 @@ public class Connexion extends Method {
         this.setParameterInt(prepare, perso.getDef(), 11);
         this.setParameterInt(prepare, perso.getResistance(), 12);
         this.setParameterInt(prepare, perso.getConstitution(), 13);
-        this.setParameterInt(prepare, perso.getAide(), 14);
+        this.setParameterInt(prepare, 0, 14);
         this.executeUpdatePreparedStatement(prepare);
         
         for (int i = 0; i < perso.getObjets().length ; i++) {
@@ -241,15 +241,15 @@ public class Connexion extends Method {
 		Character personnage = (Character)factoryPersonnage.createCharacter(this.getStringResultByString(result, "nom"), null, FireEmblemCharacterType.getTypeByName(this.getStringResultByString(result, "classe")));
 		personnage.setNiv(this.getIntResultByString(result, "niveau"));
 		personnage.setPv(this.getIntResultByString(result, "pv"));
-		personnage.setPvMax(this.getIntResultByString(result, "pv_max"));
-		personnage.setPuissance(this.getIntResultByString(result, "puissance"));
-		personnage.setCapacite(this.getIntResultByString(result, "capacite"));
-		personnage.setVitesse(this.getIntResultByString(result, "vitesse"));
-		personnage.setChance(this.getIntResultByString(result, "chance"));
-		personnage.setDef(this.getIntResultByString(result, "defense"));
-		personnage.setResistance(this.getIntResultByString(result, "resistance"));
-		personnage.setConstitution(this.getIntResultByString(result, "constitution"));
-		personnage.setAide(this.getIntResultByString(result, "aide"));
+		personnage.setPvGagne(this.getIntResultByString(result, "pv_max"));
+		personnage.setPuissanceGagne(this.getIntResultByString(result, "puissance"));
+		personnage.setCapaciteGagne(this.getIntResultByString(result, "capacite"));
+		personnage.setVitesseGagne(this.getIntResultByString(result, "vitesse"));
+		personnage.setChanceGagne(this.getIntResultByString(result, "chance"));
+		personnage.setDefGagne(this.getIntResultByString(result, "defense"));
+		personnage.setResistanceGagne(this.getIntResultByString(result, "resistance"));
+		personnage.setConstitutionGagne(this.getIntResultByString(result, "constitution"));
+		/*personnage.setAide(this.getIntResultByString(result, "aide"));*/
 		if (this.getIntResultByString(result, "experience") != -1) {
 			personnage.setExperience(this.getIntResultByString(result, "experience"));
 		}

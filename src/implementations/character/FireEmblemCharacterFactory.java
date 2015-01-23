@@ -43,18 +43,39 @@ public class FireEmblemCharacterFactory extends CreateCharactersFactoryAbstract 
                 	chevalier.setComportementPersonnage(new KnightBehaviour());
                 	chevalier.setMoveBehaviour(new KnightMovement());
                 	chevalier.setBehaviour(new KnightFightBehaviour());
+                	chevalier.setPourcentagePv(70);
+                	chevalier.setPourcentagePuissance(40);
+                	chevalier.setPourcentageCapacite(60);
+                	chevalier.setPourcentageVitesse(60);
+                	chevalier.setPourcentageChance(55);
+                	chevalier.setPourcentageDefense(20);
+                	chevalier.setPourcentageResistance(30);
                     return chevalier;
                 case combattant :
                     Character combattant = new Character(nom, organisation);
                     combattant.setComportementPersonnage(new WarriorBehaviour());
                     combattant.setMoveBehaviour(new WarriorMovement());
                     combattant.setBehaviour(new FighterFightBehaviour());
+                    combattant.setPourcentagePv(70);
+                    combattant.setPourcentagePuissance(40);
+                    combattant.setPourcentageCapacite(60);
+                    combattant.setPourcentageVitesse(60);
+                    combattant.setPourcentageChance(55);
+                    combattant.setPourcentageDefense(20);
+                    combattant.setPourcentageResistance(30);
                     return combattant;
                 case general :
                     Character general = new Character(nom, organisation);
                     general.setComportementPersonnage(new GeneralBehaviour());
                     general.setMoveBehaviour(new GeneralMovement());
                     general.setBehaviour(new GeneralFightBehaviour());
+                    general.setPourcentagePv(70);
+                    general.setPourcentagePuissance(40);
+                    general.setPourcentageCapacite(60);
+                    general.setPourcentageVitesse(60);
+                    general.setPourcentageChance(55);
+                    general.setPourcentageDefense(20);
+                    general.setPourcentageResistance(30);
                     return general;
                 case lord_eliwood :
                     Character eliwood = new Character(nom, organisation);

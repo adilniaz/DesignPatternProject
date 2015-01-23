@@ -70,6 +70,14 @@ public class ChapterParser implements XMLParser {
 	        	}
 	        }
 			this.perosEnCours.setPosition(new Position(x, y));
+		} else if ("stat".equals(reader.getLocalName())) {
+			int niv = 1;
+			for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
+	        	if ("niv".equals(reader.getAttributeLocalName(i))) {
+	        		niv = Integer.valueOf(reader.getAttributeValue(i));
+	        	}
+	        }
+			this.perosEnCours.changeNiveau(niv);
 		} else if ("objet".equals(reader.getLocalName())) {
 			String nom = null;
 			String type = null;

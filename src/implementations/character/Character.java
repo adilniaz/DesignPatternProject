@@ -12,15 +12,14 @@ public class Character extends CharacterAbstract {
     
     private int niv;
     private int pv;
-    private int pvMax;
-    private int puissance;
-    private int capacite;
-    private int vitesse;
-    private int chance;
-    private int def;
-    private int resistance;
-    private int constitution;
-    private int aide;
+    private int pvGagne;
+    private int puissanceGagne;
+    private int capaciteGagne;
+    private int vitesseGagne;
+    private int chanceGagne;
+    private int defGagne;
+    private int resistanceGagne;
+    private int constitutionGagne;
     private int experience;
     
     protected int pourcentagePv;
@@ -52,15 +51,14 @@ public class Character extends CharacterAbstract {
     	super(perso.getSubject(), perso.getName());
     	this.niv = perso.niv;
     	this.pv = perso.pv;
-    	this.pvMax = perso.pvMax;
-    	this.puissance = perso.puissance;
-    	this.capacite = perso.capacite;
-    	this.vitesse = perso.vitesse;
-    	this.chance = perso.chance;
-    	this.def = perso.def;
-    	this.resistance = perso.resistance;
-    	this.constitution = perso.constitution;
-    	this.aide = perso.aide;
+    	this.pvGagne = perso.pvGagne;
+    	this.puissanceGagne = perso.puissanceGagne;
+    	this.capaciteGagne = perso.capaciteGagne;
+    	this.vitesseGagne = perso.vitesseGagne;
+    	this.chanceGagne = perso.chanceGagne;
+    	this.defGagne = perso.defGagne;
+    	this.resistanceGagne = perso.resistanceGagne;
+    	this.constitutionGagne = perso.constitutionGagne;
     	this.experience = perso.experience;
     	this.pourcentagePv = perso.pourcentagePv;
     	this.pourcentagePuissance = perso.pourcentagePuissance;
@@ -91,11 +89,18 @@ public class Character extends CharacterAbstract {
     public void setPv(int pv) {
     	if (pv < 0) {
     		this.pv = 0;
-    	} else if (this.pv > this.pvMax) {
-    		this.pv = this.pvMax;
+    	} else if (this.pv > this.getPvMax()) {
+    		this.pv = this.getPvMax();
     	} else {
     		this.pv = pv;
     	}
+    }
+    
+    public void changeNiveau (int niv) {
+    	while (this.niv < niv) {
+    		this.niveauSuivant();
+    	}
+    	this.pv = this.getPvMax();
     }
     
     public boolean estKo () {
@@ -103,75 +108,67 @@ public class Character extends CharacterAbstract {
     }
 
     public int getPvMax() {
-        return pvMax;
+        return this.pvGagne + this.comportementPersonnage.getPvBase();
     }
 
-    public void setPvMax(int pvMax) {
-        this.pvMax = pvMax;
+    public void setPvGagne(int pv) {
+        this.pvGagne = pv;
     }
 
     public int getPuissance() {
-        return puissance;
+        return this.comportementPersonnage.getPuissanceBase() + this.puissanceGagne;
     }
 
-    public void setPuissance(int puissance) {
-        this.puissance = puissance;
+    public void setPuissanceGagne(int puissance) {
+        this.puissanceGagne = puissance;
     }
 
     public int getCapacite() {
-        return capacite;
+        return this.comportementPersonnage.getCapaciteBase() + this.capaciteGagne;
     }
 
-    public void setCapacite(int capacite) {
-        this.capacite = capacite;
+    public void setCapaciteGagne(int capacite) {
+        this.capaciteGagne = capacite;
     }
 
     public int getVitesse() {
-        return vitesse;
+        return this.comportementPersonnage.getVitesseBase() + this.vitesseGagne;
     }
 
-    public void setVitesse(int vitesse) {
-        this.vitesse = vitesse;
+    public void setVitesseGagne(int vitesse) {
+        this.vitesseGagne = vitesse;
     }
 
     public int getChance() {
-        return chance;
+        return this.comportementPersonnage.getChanceBase() + this.chanceGagne;
     }
 
-    public void setChance(int chance) {
-        this.chance = chance;
+    public void setChanceGagne(int chance) {
+        this.chanceGagne = chance;
     }
 
     public int getDef() {
-        return def;
+        return this.comportementPersonnage.getDefBase() + this.defGagne;
     }
 
-    public void setDef(int def) {
-        this.def = def;
+    public void setDefGagne(int def) {
+        this.defGagne = def;
     }
 
     public int getResistance() {
-        return resistance;
+        return this.comportementPersonnage.getResistanceBase() + this.resistanceGagne;
     }
 
-    public void setResistance(int resistance) {
-        this.resistance = resistance;
+    public void setResistanceGagne(int resistance) {
+        this.resistanceGagne = resistance;
     }
 
     public int getConstitution() {
-        return constitution;
+        return this.comportementPersonnage.getConstitutionBase() + this.constitutionGagne;
     }
 
-    public void setConstitution(int constitution) {
-        this.constitution = constitution;
-    }
-
-    public int getAide() {
-        return aide;
-    }
-
-    public void setAide(int aide) {
-        this.aide = aide;
+    public void setConstitutionGagne(int constitution) {
+        this.constitutionGagne = constitution;
     }
 
     public int getExperience() {
@@ -196,46 +193,46 @@ public class Character extends CharacterAbstract {
     public void niveauSuivant () {
     	if (this.niv < 20) {
     		this.niv++;
-    		if (this.pvMax < this.comportementPersonnage.getPvMax()) {
+    		if (this.getPvMax() < this.comportementPersonnage.getPvMax()) {
     			int alea = (int) (Math.random() *100 +1);
     			if (alea < this.pourcentagePv) {
-    				this.pvMax++;
+    				this.pvGagne++;
     			}
     		}
-    		if (this.puissance < this.comportementPersonnage.getPuissanceMax()) {
+    		if (this.getPuissance() < this.comportementPersonnage.getPuissanceMax()) {
     			int alea = (int) (Math.random() *100 +1);
     			if (alea < this.pourcentagePuissance) {
-    				this.puissance++;
+    				this.puissanceGagne++;
     			}
     		}
-    		if (this.capacite < this.comportementPersonnage.getCapaciteMax()) {
+    		if (this.getCapacite() < this.comportementPersonnage.getCapaciteMax()) {
     			int alea = (int) (Math.random() *100 +1);
     			if (alea < this.pourcentageCapacite) {
-    				this.capacite++;
+    				this.capaciteGagne++;
     			}
     		}
-    		if (this.vitesse < this.comportementPersonnage.getVitesseMax()) {
+    		if (this.getVitesse() < this.comportementPersonnage.getVitesseMax()) {
     			int alea = (int) (Math.random() *100 +1);
     			if (alea < this.pourcentageVitesse) {
-    				this.vitesse++;
+    				this.vitesseGagne++;
     			}
     		}
-    		if (this.chance < this.comportementPersonnage.getChanceMax()) {
+    		if (this.getChance() < this.comportementPersonnage.getChanceMax()) {
     			int alea = (int) (Math.random() *100 +1);
     			if (alea < this.pourcentageChance) {
-    				this.chance++;
+    				this.chanceGagne++;
     			}
     		}
-    		if (this.def < this.comportementPersonnage.getDefMax()) {
+    		if (this.getDef() < this.comportementPersonnage.getDefMax()) {
     			int alea = (int) (Math.random() *100 +1);
     			if (alea < this.pourcentageDefense) {
-    				this.def++;
+    				this.defGagne++;
     			}
     		}
-    		if (this.resistance < this.comportementPersonnage.getResistanceMax()) {
+    		if (this.getResistance() < this.comportementPersonnage.getResistanceMax()) {
     			int alea = (int) (Math.random() *100 +1);
     			if (alea < this.pourcentageResistance) {
-    				this.resistance++;
+    				this.resistanceGagne++;
     			}
     		}
     	} else if (this.niv == 20 && this.comportementPersonnage.hasPromotedClass()) {
@@ -310,6 +307,7 @@ public class Character extends CharacterAbstract {
 
     public void setComportementPersonnage(CharacterBehaviour comportementPersonnage) {
         this.comportementPersonnage = comportementPersonnage;
+        this.pv = this.getPvMax();
     }
 
     public Strategy getStrategie() {

@@ -62,6 +62,10 @@ public class CharacterBehaviour {
     public int getResistanceBase() {
         return resistanceBase;
     }
+    
+    public int getConstitutionBase () {
+    	return this.constitutionBase;
+    }
 
     public int getPvMax() {
         return pvMax;
@@ -89,6 +93,10 @@ public class CharacterBehaviour {
 
     public int getResistanceMax() {
         return resistanceMax;
+    }
+    
+    public int getConstitutionMax () {
+    	return this.constitutionMax;
     }
     
     public boolean isPromoted () {

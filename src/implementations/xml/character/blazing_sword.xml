@@ -23,6 +23,7 @@
 	<ennemies>
 		<ennemie nom="general" type="general">
 			<position x="1" y="10" ></position>
+			<stat niv="5"></stat>
 			<objets>
 				<objet nom="hache-fer" type="hache_fer"></objet>
 				<objet nom="lance-fer" type="lance_fer"></objet>
@@ -30,6 +31,7 @@
 			<strategie nom="immobile"></strategie>
 		</ennemie>
 		<ennemie nom="chevalier" type="chevalier">
+			<stat niv="15"></stat>
 			<position x="2" y="9" ></position>
 			<objets>
 				<objet nom="lance-fer" type="lance_fer"></objet>
@@ -37,6 +39,7 @@
 			<strategie nom="immobile"></strategie>
 		</ennemie>
 		<ennemie nom="chevalier" type="chevalier">
+			<stat niv="15"></stat>
 			<position x="2" y="11" ></position>
 			<objets>
 				<objet nom="lance-fer" type="lance_fer"></objet>
@@ -44,6 +47,7 @@
 			<strategie nom="immobile"></strategie>
 		</ennemie>
 		<ennemie nom="Combattant" type="combattant">
+			<stat niv="10"></stat>
 			<position x="4" y="3" ></position>
 			<objets>
 				<objet nom="hache-fer" type="hache_fer"></objet>
@@ -51,6 +55,7 @@
 			<strategie nom="portee"></strategie>
 		</ennemie>
 		<ennemie nom="Combattant" type="combattant">
+			<stat niv="10"></stat>
 			<position x="4" y="18" ></position>
 			<objets>
 				<objet nom="hache-fer" type="hache_fer"></objet>
@@ -58,6 +63,7 @@
 			<strategie nom="portee"></strategie>
 		</ennemie>
 		<ennemie nom="chevalier" type="chevalier">
+			<stat niv="10"></stat>
 			<position x="8" y="8" ></position>
 			<objets>
 				<objet nom="lance-fer" type="lance_fer"></objet>
@@ -65,6 +71,7 @@
 			<strategie nom="plusProche"></strategie>
 		</ennemie>
 		<ennemie nom="chevalier" type="chevalier">
+			<stat niv="10"></stat>
 			<position x="8" y="12" ></position>
 			<objets>
 				<objet nom="lance-fer" type="lance_fer"></objet>
@@ -72,6 +79,7 @@
 			<strategie nom="plusProche"></strategie>
 		</ennemie>
 		<ennemie nom="Combattant" type="combattant">
+			<stat niv="5"></stat>
 			<position x="10" y="6" ></position>
 			<objets>
 				<objet nom="hache-fer" type="hache_fer"></objet>
@@ -79,6 +87,7 @@
 			<strategie nom="plusProche"></strategie>
 		</ennemie>
 		<ennemie nom="chevalier" type="chevalier">
+			<stat niv="5"></stat>
 			<position x="10" y="10" ></position>
 			<objets>
 				<objet nom="lance-fer" type="lance_fer"></objet>
@@ -86,6 +95,7 @@
 			<strategie nom="immobile"></strategie>
 		</ennemie>
 		<ennemie nom="Combattant" type="combattant">
+			<stat niv="5"></stat>
 			<position x="10" y="14" ></position>
 			<objets>
 				<objet nom="hache-fer" type="hache_fer"></objet>
