@@ -3,10 +3,10 @@ package implementations.movement;
 import implementations.gameplatform.SquareTypes;
 import abstracts_interfaces.behaviours.BehaviourMoveAbstract;
 
-public class WarriorMovement extends BehaviourMoveAbstract {
+public class LordEquusMovement extends BehaviourMoveAbstract {
 
-    public WarriorMovement() {
-        this.movementRate = 5;
+    public LordEquusMovement() {
+        this.movementRate = 7;
     }
 
     @Override
@@ -20,7 +20,7 @@ public class WarriorMovement extends BehaviourMoveAbstract {
             case fort :
                 return 2;
             case montagne :
-                return 3;
+                return 6;
             default :
                 return 1;
         }

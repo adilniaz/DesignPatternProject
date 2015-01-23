@@ -1,6 +1,7 @@
 package implementations.character;
 
 import implementations.Position;
+import implementations.behaviour.CharacterBehaviour;
 import implementations.object.Weapon;
 import implementations.object.Objet;
 import implementations.organizations.Organization;
@@ -44,6 +45,7 @@ public class Character extends CharacterAbstract {
         this.experience = 0;
         this.objets = new Objet[5];
         this.aJouer = false;
+        this.niv = 1;
     }
     
     public Character (Character perso) {
@@ -237,7 +239,11 @@ public class Character extends CharacterAbstract {
     			}
     		}
     	} else if (this.niv == 20 && this.comportementPersonnage.hasPromotedClass()) {
-    		this.comportementPersonnage = this.comportementPersonnage.getPromotedClass();
+    		FireEmblemCharacterFactory characterFactory = new FireEmblemCharacterFactory();
+    		Character character = (Character)characterFactory.createCharacter(this.getName(), this.subject, this.comportementPersonnage.getPromotedClass());
+    		this.behaviour = character.behaviour;
+    		this.move = character.move;
+    		this.comportementPersonnage = character.comportementPersonnage;
     		this.niv = 1;
     	}
     }

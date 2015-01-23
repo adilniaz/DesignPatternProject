@@ -1,4 +1,6 @@
-package implementations.character;
+package implementations.behaviour;
+
+import implementations.character.FireEmblemCharacterType;
 
 public class CharacterBehaviour {
 	
@@ -11,6 +13,7 @@ public class CharacterBehaviour {
     protected int chanceBase;
     protected int defBase;
     protected int resistanceBase;
+    protected int constitutionBase;
     
     protected int pvMax;
     protected int puissanceMax;
@@ -19,13 +22,14 @@ public class CharacterBehaviour {
     protected int chanceMax;
     protected int defMax;
     protected int resistanceMax;
+    protected int constitutionMax;
     
     protected boolean promoted;
     protected int power;
     protected int classBonusA;
     protected int classBonusB;
     
-    private CharacterBehaviour promtedClass;
+    private FireEmblemCharacterType promtedClass;
     
     public String getName () {
     	return this.name;
@@ -103,11 +107,11 @@ public class CharacterBehaviour {
     	return this.classBonusB;
     }
     
-    public void setPromotedClass (CharacterBehaviour comportementPersonnage) {
-    	this.promtedClass = comportementPersonnage;
+    public void setPromotedClass (FireEmblemCharacterType characterType) {
+    	this.promtedClass = characterType;
     }
     
-    public CharacterBehaviour getPromotedClass () {
+    public FireEmblemCharacterType getPromotedClass () {
     	return this.promtedClass;
     }
     

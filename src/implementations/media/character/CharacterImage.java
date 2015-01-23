@@ -1,7 +1,7 @@
 package implementations.media.character;
 
-import implementations.character.WarriorBehaviour;
-import implementations.character.CharacterBehaviour;
+import implementations.behaviour.CharacterBehaviour;
+import implementations.behaviour.WarriorBehaviour;
 import implementations.character.Character;
 import implementations.views.Image;
 import implementations.views.ImageManager;

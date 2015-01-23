@@ -1,4 +1,5 @@
-package implementations.character;
+package implementations.behaviour;
+
 
 public class WarriorBehaviour extends CharacterBehaviour {
     
@@ -6,13 +7,14 @@ public class WarriorBehaviour extends CharacterBehaviour {
     	
     	this.name = "Combattant";
     	
-        this.pvBase = 0;
-        this.puissanceBase = 0;
-        this.capaciteBase = 0;
-        this.vitesseBase = 0;
+        this.pvBase = 20;
+        this.puissanceBase = 5;
+        this.capaciteBase = 2;
+        this.vitesseBase = 4;
         this.chanceBase = 0;
-        this.defBase = 0;
+        this.defBase = 2;
         this.resistanceBase = 0;
+        this.constitutionBase = 11;
 
         this.pvMax = 60;
         this.puissanceMax = 20;
@@ -21,6 +23,7 @@ public class WarriorBehaviour extends CharacterBehaviour {
         this.chanceMax = 30;
         this.defMax = 20;
         this.resistanceMax = 20;
+        this.constitutionMax = 20;
         
         this.promoted = false;
         this.power = 3;

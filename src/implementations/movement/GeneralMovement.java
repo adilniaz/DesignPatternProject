@@ -3,9 +3,9 @@ package implementations.movement;
 import implementations.gameplatform.SquareTypes;
 import abstracts_interfaces.behaviours.BehaviourMoveAbstract;
 
-public class WarriorMovement extends BehaviourMoveAbstract {
+public class GeneralMovement extends BehaviourMoveAbstract {
 
-    public WarriorMovement() {
+    public GeneralMovement() {
         this.movementRate = 5;
     }
 
@@ -20,7 +20,7 @@ public class WarriorMovement extends BehaviourMoveAbstract {
             case fort :
                 return 2;
             case montagne :
-                return 3;
+                return 100;
             default :
                 return 1;
         }

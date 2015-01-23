@@ -55,13 +55,13 @@ public class Camera {
 		if (newPos.getPositionX() == minX+1 && minX > 0) {
 			this.centerPoint.setPositionX(this.centerPoint.getPositionX() -1);
 			return true;
-		} else if (newPos.getPositionX() == maxX-1 && maxX < width-1) {
+		} else if (newPos.getPositionX() == maxX-1 && maxX < width) {
 			this.centerPoint.setPositionX(this.centerPoint.getPositionX() +1);
 			return true;
 		} else if (newPos.getPositionY() == minY+1 && minY > 0) {
 			this.centerPoint.setPositionY(this.centerPoint.getPositionY() -1);
 			return true;
-		} else if (newPos.getPositionY() == maxY-1 && maxY < height-1) {
+		} else if (newPos.getPositionY() == maxY-1 && maxY < height) {
 			this.centerPoint.setPositionY(this.centerPoint.getPositionY() +1);
 			return true;
 		}

@@ -1,6 +1,30 @@
 package implementations.character;
 
+import implementations.behaviour.GeneralBehaviour;
+import implementations.behaviour.KnightBehaviour;
+import implementations.behaviour.LordHappiaBehaviour;
+import implementations.behaviour.LordLynBehaviour;
+import implementations.behaviour.LordEliwoodBehaviour;
+import implementations.behaviour.LordEquusBehaviour;
+import implementations.behaviour.LordHectorBehaviour;
+import implementations.behaviour.LordSparthaBehaviour;
+import implementations.behaviour.WarriorBehaviour;
+import implementations.combat.FighterFightBehaviour;
+import implementations.combat.GeneralFightBehaviour;
+import implementations.combat.KnightFightBehaviour;
+import implementations.combat.LordEliwoodFightBehaviour;
+import implementations.combat.LordEquusFightBehaviour;
+import implementations.combat.LordHappiaFightBehavior;
+import implementations.combat.LordHectorFightBehaviour;
+import implementations.combat.LordLynFightBehaviour;
+import implementations.combat.LordSparthaFightBehaviour;
+import implementations.movement.GeneralMovement;
+import implementations.movement.KnightMovement;
+import implementations.movement.LordEquusMovement;
+import implementations.movement.LordHappiaMovement;
 import implementations.movement.LordMovement;
+import implementations.movement.LordSparthaMovement;
+import implementations.movement.WarriorMovement;
 import implementations.organizations.Organization;
 import abstracts_interfaces.CharacterAbstract;
 import abstracts_interfaces.factories.characters.CharactersType;
@@ -14,103 +38,30 @@ public class FireEmblemCharacterFactory extends CreateCharactersFactoryAbstract 
             FireEmblemCharacterType typePersonnage = (FireEmblemCharacterType) typeCharacter;
             
             switch (typePersonnage) {
-	            case archer :
-	                Character archer = new Character(nom, organisation);
-	                /*archer.setComportementPersonnage(new ComportementArcher());
-	                archer.setComportementDeplacement(new DeplacementArcher());
-	                archer.setComportementCombat(new CombatAPiedAvecArc());*/
-	                return archer;
-                case archimage :
-                    Character athos = new Character(nom, organisation);
-                    /*athos.setComportementPersonnage(new ComportementArchimange());
-                    athos.setComportementDeplacement(new DeplacementArchimage());
-                    athos.setComportementCombat(new CombatAPiedAvecArc());*/
-                    athos.setNiv(20);
-                    athos.setPv(40);
-                    athos.setPvMax(40);
-                    athos.setPuissance(30);
-                    athos.setCapacite(24);
-                    athos.setVitesse(20);
-                    athos.setChance(25);
-                    athos.setDef(20);
-                    athos.setResistance(28);
-                    athos.setConstitution(9);
-                    return athos;
                 case chevalier :
-                    
-                case chevalier_noir :
-                	Character chevalier_noir = new Character(nom, organisation);
-                	return chevalier_noir;
+                	Character chevalier = new Character(nom, organisation);
+                	chevalier.setComportementPersonnage(new KnightBehaviour());
+                	chevalier.setMoveBehaviour(new KnightMovement());
+                	chevalier.setBehaviour(new KnightFightBehaviour());
+                    return chevalier;
                 case combattant :
                     Character combattant = new Character(nom, organisation);
                     combattant.setComportementPersonnage(new WarriorBehaviour());
-                    combattant.setMoveBehaviour(new LordMovement());
-                    /*combattant.setComportementDeplacement(new DeplacementCombattant());
-                    combattant.setComportementCombat(new CombatAPiedAvecArc());*/
-                    combattant.setNiv(1);
-                    combattant.setPv(20);
-                    combattant.setPvMax(20);
-                    combattant.setPuissance(5);
-                    combattant.setCapacite(2);
-                    combattant.setVitesse(4);
-                    combattant.setChance(0);
-                    combattant.setDef(2);
-                    combattant.setResistance(0);
-                    combattant.setConstitution(11);
+                    combattant.setMoveBehaviour(new WarriorMovement());
+                    combattant.setBehaviour(new FighterFightBehaviour());
                     return combattant;
-                case corbeau :
-                	Character corbeau = new Character(nom, organisation);
-                	return corbeau;
-                case dark_druide :
-                    Character nergal = new Character(nom, organisation);
-                    nergal.setComportementPersonnage(new DarkDruidBehaviour());
-                    /*nergal.setComportementDeplacement(new DeplacementDarkDruide());
-                    nergal.setComportementCombat(new CombatAPiedAvecArc());*/
-                    nergal.setNiv(20);
-                    nergal.setPv(75);
-                    nergal.setPvMax(75);
-                    nergal.setPuissance(30);
-                    nergal.setCapacite(18);
-                    nergal.setVitesse(15);
-                    nergal.setChance(20);
-                    nergal.setDef(28);
-                    nergal.setResistance(30);
-                    nergal.setConstitution(10);
-                    return nergal;
-                case dragon_rouge :
-                	Character dragon_rouge = new Character(nom, organisation);
-                	return dragon_rouge;
-                case dragon_blanc :
-                	Character dragon_blanc = new Character(nom, organisation);
-                	return dragon_blanc;
-                case faucon :
-                	Character faucon = new Character(nom, organisation);
-                	return faucon;
-                case king_daein :
-                	Character ashnard = new Character(nom, organisation);
-                	return ashnard;
-                case lion :
-                	Character lion = new Character(nom, organisation);
-                	return lion;
-                case lord_eirika :
-                	Character eirika = new Character(nom, organisation);
-                	return eirika;
+                case general :
+                    Character general = new Character(nom, organisation);
+                    general.setComportementPersonnage(new GeneralBehaviour());
+                    general.setMoveBehaviour(new GeneralMovement());
+                    general.setBehaviour(new GeneralFightBehaviour());
+                    return general;
                 case lord_eliwood :
                     Character eliwood = new Character(nom, organisation);
-                    eliwood.setComportementPersonnage(new LordBehaviour());
-                    eliwood.getComportementPersonnage().setPromotedClass(new LordEquusBehaviour());
+                    eliwood.setComportementPersonnage(new LordEliwoodBehaviour());
+                    eliwood.getComportementPersonnage().setPromotedClass(FireEmblemCharacterType.lord_equus);
                     eliwood.setMoveBehaviour(new LordMovement());
-                    //eliwood.setComportementCombat(new CombatAPiedAvecArc());
-                    eliwood.setNiv(1);
-                    eliwood.setPv(18);
-                    eliwood.setPvMax(18);
-                    eliwood.setPuissance(5);
-                    eliwood.setCapacite(5);
-                    eliwood.setVitesse(7);
-                    eliwood.setChance(7);
-                    eliwood.setDef(5);
-                    eliwood.setResistance(0);
-                    eliwood.setConstitution(7);
+                    eliwood.setBehaviour(new LordEliwoodFightBehaviour());
                     eliwood.setPourcentagePv(80);
                     eliwood.setPourcentagePuissance(45);
                     eliwood.setPourcentageCapacite(50);
@@ -120,24 +71,38 @@ public class FireEmblemCharacterFactory extends CreateCharactersFactoryAbstract 
                     eliwood.setPourcentageResistance(35);
                     eliwood.setExperience(90);
                     return eliwood;
-                case lord_ephraim :
-                	Character ephraim = new Character(nom, organisation);
-                	return ephraim;
+                case lord_equus :
+                    Character lord_equus = new Character(nom, organisation);
+                    lord_equus.setComportementPersonnage(new LordEquusBehaviour());
+                    lord_equus.setMoveBehaviour(new LordEquusMovement());
+                    lord_equus.setBehaviour(new LordEquusFightBehaviour());
+                    lord_equus.setPourcentagePv(80);
+                    lord_equus.setPourcentagePuissance(45);
+                    lord_equus.setPourcentageCapacite(50);
+                    lord_equus.setPourcentageVitesse(40);
+                    lord_equus.setPourcentageChance(45);
+                    lord_equus.setPourcentageDefense(30);
+                    lord_equus.setPourcentageResistance(35);
+                    return lord_equus;
+                case lord_happia :
+                    Character lord_happia = new Character(nom, organisation);
+                    lord_happia.setComportementPersonnage(new LordHappiaBehaviour());
+                    lord_happia.setMoveBehaviour(new LordHappiaMovement());
+                    lord_happia.setBehaviour(new LordHappiaFightBehavior());
+                    lord_happia.setPourcentagePv(90);
+                    lord_happia.setPourcentagePuissance(60);
+                    lord_happia.setPourcentageCapacite(45);
+                    lord_happia.setPourcentageVitesse(35);
+                    lord_happia.setPourcentageChance(30);
+                    lord_happia.setPourcentageDefense(50);
+                    lord_happia.setPourcentageResistance(25);
+                    return lord_happia;
                 case lord_hector :
                     Character hector = new Character(nom, organisation);
-                    hector.setComportementPersonnage(new LordBehaviour());
+                    hector.setComportementPersonnage(new LordHectorBehaviour());
+                    hector.getComportementPersonnage().setPromotedClass(FireEmblemCharacterType.lord_happia);
                     hector.setMoveBehaviour(new LordMovement());
-                    /*hector.setComportementCombat(new CombatAPiedAvecArc());*/
-                    hector.setNiv(1);
-                    hector.setPv(19);
-                    hector.setPvMax(19);
-                    hector.setPuissance(7);
-                    hector.setCapacite(4);
-                    hector.setVitesse(5);
-                    hector.setChance(3);
-                    hector.setDef(8);
-                    hector.setResistance(0);
-                    hector.setConstitution(13);
+                    hector.setBehaviour(new LordHectorFightBehaviour());
                     hector.setPourcentagePv(90);
                     hector.setPourcentagePuissance(60);
                     hector.setPourcentageCapacite(45);
@@ -148,19 +113,10 @@ public class FireEmblemCharacterFactory extends CreateCharactersFactoryAbstract 
                     return hector;
                 case lord_lyn :
                     Character lyn = new Character(nom, organisation);
-                    lyn.setComportementPersonnage(new LordBehaviour());
+                    lyn.setComportementPersonnage(new LordLynBehaviour());
+                    lyn.getComportementPersonnage().setPromotedClass(FireEmblemCharacterType.lord_spatha);
                     lyn.setMoveBehaviour(new LordMovement());
-                    /*lyn.setComportementCombat(new CombatAPiedAvecArc());*/
-                    lyn.setNiv(1);
-                    lyn.setPv(16);
-                    lyn.setPvMax(16);
-                    lyn.setPuissance(4);
-                    lyn.setCapacite(7);
-                    lyn.setVitesse(9);
-                    lyn.setChance(5);
-                    lyn.setDef(2);
-                    lyn.setResistance(0);
-                    lyn.setConstitution(5);
+                    lyn.setBehaviour(new LordLynFightBehaviour());
                     lyn.setPourcentagePv(70);
                     lyn.setPourcentagePuissance(40);
                     lyn.setPourcentageCapacite(60);
@@ -169,20 +125,21 @@ public class FireEmblemCharacterFactory extends CreateCharactersFactoryAbstract 
                     lyn.setPourcentageDefense(20);
                     lyn.setPourcentageResistance(30);
                     return lyn;
-                case lord_roy :
-                	Character roy = new Character(nom, organisation);
-                	return roy;
-                case marchand :
-                	Character marchand = new Character(nom, organisation);
-                	return marchand;
-                case ranger :
-                	Character ike = new Character(nom, organisation);
-                	return ike;
+                case lord_spatha :
+                    Character lord_spartha = new Character(nom, organisation);
+                    lord_spartha.setComportementPersonnage(new LordSparthaBehaviour());
+                    lord_spartha.setMoveBehaviour(new LordSparthaMovement());
+                    lord_spartha.setBehaviour(new LordSparthaFightBehaviour());
+                    lord_spartha.setPourcentagePv(70);
+                    lord_spartha.setPourcentagePuissance(40);
+                    lord_spartha.setPourcentageCapacite(60);
+                    lord_spartha.setPourcentageVitesse(60);
+                    lord_spartha.setPourcentageChance(55);
+                    lord_spartha.setPourcentageDefense(20);
+                    lord_spartha.setPourcentageResistance(30);
+                    return lord_spartha;
                 default :
                     Character perso = new Character(nom, organisation);
-                    /*perso.setComportementPersonnage(new ComportementArcher());
-                    perso.setComportementDeplacement(new DeplacementArcher());
-                    perso.setComportementCombat(new CombatAPiedAvecArc());*/
                     return perso;
                     
             }

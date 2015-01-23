@@ -1,18 +1,20 @@
-package implementations.character;
+package implementations.behaviour;
 
-public class LordBehaviour extends CharacterBehaviour {
+
+public class LordLynBehaviour extends CharacterBehaviour {
     
-    public LordBehaviour () {
+    public LordLynBehaviour () {
     	
     	this.name = "Lord";
     	
-        this.pvBase = 0;
-        this.puissanceBase = 0;
-        this.capaciteBase = 0;
-        this.vitesseBase = 0;
+        this.pvBase = 16;
+        this.puissanceBase = 4;
+        this.capaciteBase = 7;
+        this.vitesseBase = 9;
         this.chanceBase = 0;
-        this.defBase = 0;
+        this.defBase = 2;
         this.resistanceBase = 0;
+        this.constitutionBase = 5;
 
         this.pvMax = 60;
         this.puissanceMax = 20;
@@ -21,6 +23,7 @@ public class LordBehaviour extends CharacterBehaviour {
         this.chanceMax = 30;
         this.defMax = 20;
         this.resistanceMax = 20;
+        this.constitutionMax = 20;
         
         this.promoted = false;
         this.power = 3;
