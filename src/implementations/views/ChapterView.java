@@ -407,7 +407,7 @@ public class ChapterView {
     		data[i][1] = perso.getName();
     		data[i][2] = perso.getComportementPersonnage().getName();
     		data[i][3] = perso.getNiv();
-    		data[i][4] = 0;
+    		data[i][4] = perso.getExperience();
     		data[i][5] = perso.getPv();
     		data[i][6] = perso.getPvMax();
         }
