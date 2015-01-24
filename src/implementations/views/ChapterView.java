@@ -144,6 +144,7 @@ public class ChapterView {
         this.keyAction.setCursorPosition(this.centerPosition);
         this.fenetre.addKeyBoardManager(new KeyDispatcher(this.keyAction));
         this.fenetre.ajouterPanel(this.panel);
+        this.changeCursorPosition(this.centerPosition, this.centerPosition);
     }
     
     private void afficheMenu (menu menu[]) {
@@ -174,19 +175,6 @@ public class ChapterView {
     }
     
     private void changeCursorPosition (Position oldPosition, Position newPosition) {
-    	/*if (newPosition.getPositionX() == this.centerPosition.getPositionX() + (this.camera.getLigne()/2)) {
-        	this.centerPosition.setPositionX(this.centerPosition.getPositionX()+1);
-        	this.refresh();
-        } else if (newPosition.getPositionY() == this.centerPosition.getPositionY() + (this.camera.getColone()/2)) {
-        	this.centerPosition.setPositionY(this.centerPosition.getPositionY()+1);
-        	this.refresh();
-        } else if (newPosition.getPositionX() == this.centerPosition.getPositionX() - (this.camera.getLigne()/2)) {
-        	this.centerPosition.setPositionX(this.centerPosition.getPositionX()-1);
-        	this.refresh();
-        } else if (newPosition.getPositionY() == this.centerPosition.getPositionY() - (this.camera.getColone()/2)) {
-        	this.centerPosition.setPositionY(this.centerPosition.getPositionY()-1);
-        	this.refresh();
-        }*/
     	if (this.camera.move(oldPosition, newPosition, this.components.length, this.components[0].length)) {
     		this.refresh();
     	}
@@ -215,31 +203,35 @@ public class ChapterView {
 
         for (CharacterAbstract perso : this.chapitre.getPlateauDeJeu().getPersonnages()) {
             Character p = (Character) perso;
-            if (p.getPosition().equals(newPosition)) {
-                this.afficheFenetrePerso(p);
-                this.camera.refresh(this.panel, p.getPosition(), 2, this.centerPosition, this.components, new ComponentView(new PanelImage(CharacterImage.getImageIconMapFocusFromPersonnage(perso), width, height)));
-                /*this.components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2] = new ViewComponent(new PanelImage(ImagePersonnage.getImageIconMapFocusFromPersonnage(perso), width, height));
-                this.panel.getPanelCentre().ajouterViewContent(this.components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2], p.getPosition().getPositionX(), p.getPosition().getPositionY(), 2);
-                *///this.refresh();
-                break;
-            } else if (p.getPosition().equals(oldPosition)) {
-                this.fenetrePerso.hide();
+            if (p.getPosition().equals(oldPosition)) {
+            	if (this.fenetrePerso != null) {
+            		this.fenetrePerso.hide();
+            	}
                 this.camera.refresh(this.panel, p.getPosition(), 2, this.centerPosition, this.components, new ComponentView(new PanelImage(CharacterImage.getImageIconMapFromPersonnage(perso), width, height)));
-                /*this.components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2] = new ViewComponent(new PanelImage(ImagePersonnage.getImageIconMapFromPersonnage(perso), width, height));
-                this.panel.getPanelCentre().ajouterViewContent(this.components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2], p.getPosition().getPositionX(), p.getPosition().getPositionY(), 2);
-                *///this.refresh();
-                break;
+            }
+        }
+        
+        for (CharacterAbstract perso : this.chapitre.getPlateauDeJeu().getEnnemies()) {
+            Character p = (Character) perso;
+            if (p.getPosition().equals(oldPosition)) {
+            	if (this.fenetrePerso != null) {
+            		this.fenetrePerso.hide();
+            	}
             }
         }
 
+        for (CharacterAbstract perso : this.chapitre.getPlateauDeJeu().getPersonnages()) {
+            Character p = (Character) perso;
+            if (p.getPosition().equals(newPosition)) {
+                this.afficheFenetrePerso(p);
+                this.camera.refresh(this.panel, p.getPosition(), 2, this.centerPosition, this.components, new ComponentView(new PanelImage(CharacterImage.getImageIconMapFocusFromPersonnage(perso), width, height)));
+            }
+        }
+        
         for (CharacterAbstract perso : this.chapitre.getPlateauDeJeu().getEnnemies()) {
             Character p = (Character) perso;
             if (p.getPosition().equals(newPosition)) {
                 this.afficheFenetrePerso(p);
-                break;
-            } else if (p.getPosition().equals(oldPosition)) {
-                this.fenetrePerso.hide();
-                break;
             }
         }
     }
@@ -312,26 +304,11 @@ public class ChapterView {
     	this.camera.refresh(this.panel, olPosition, 2, this.centerPosition, this.components, null);
     	this.camera.refresh(this.panel, p.getPosition(), 1, this.centerPosition, this.components, new ComponentView(new PanelDrawing(color, PanelDrawing.drawingType.circle, width, height)));
     	this.camera.refresh(this.panel, p.getPosition(), 2, this.centerPosition, this.components, new ComponentView(new PanelImage(CharacterImage.getImageIconMapFromPersonnage(perso), width, height)));
-        
-    	/*this.components[olPosition.getPositionX()][olPosition.getPositionY()][1] = null;
-    	this.components[olPosition.getPositionX()][olPosition.getPositionY()][2] = null;
-    	this.components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][1] = new ViewComponent(new PanelDrawing(color, PanelDrawing.drawingType.circle, width, height));
-    	this.components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2] = new ViewComponent(new PanelImage(ImagePersonnage.getImageIconMapFromPersonnage(perso), width, height));
-        this.panel.getPanelCentre().ajouterViewContent(null, olPosition.getPositionX(), olPosition.getPositionY(), 1);
-        this.panel.getPanelCentre().ajouterViewContent(null, olPosition.getPositionX(), olPosition.getPositionY(), 2);
-        this.panel.getPanelCentre().ajouterViewContent(this.components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][1], p.getPosition().getPositionX(), p.getPosition().getPositionY(), 1);
-        this.panel.getPanelCentre().ajouterViewContent(this.components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2], p.getPosition().getPositionX(), p.getPosition().getPositionY(), 2);*/
-        //this.refresh();
     }
     
     private void enlevePerso (Character perso) {
     	this.camera.refresh(this.panel, perso.getPosition(), 1, this.centerPosition, this.components, null);
     	this.camera.refresh(this.panel, perso.getPosition(), 2, this.centerPosition, this.components, null);
-        /*this.components[perso.getPosition().getPositionX()][perso.getPosition().getPositionY()][1] = null;
-        this.components[perso.getPosition().getPositionX()][perso.getPosition().getPositionY()][2] = null;
-        this.panel.getPanelCentre().ajouterViewContent(null, perso.getPosition().getPositionX(), perso.getPosition().getPositionY(), 1);
-        this.panel.getPanelCentre().ajouterViewContent(null, perso.getPosition().getPositionX(), perso.getPosition().getPositionY(), 2);*/
-        //this.refresh();
     }
     
     private void action (Position pos) {
@@ -346,20 +323,14 @@ public class ChapterView {
         for (ZoneAbstract zone : zones) {
             Square c = (Square) zone;
             this.camera.refresh(this.panel, c.getPosition(), 1, this.centerPosition, this.components, new ComponentView(new ColoredCase(width, height, new Color(0, 0, 255, 50))));
-            /*this.components[c.getPosition().getPositionX()][c.getPosition().getPositionY()][1] = new ViewComponent(new ColoredCase(width, height, new Color(0, 0, 255, 50)));
-            this.panel.getPanelCentre().ajouterViewContent(this.components[c.getPosition().getPositionX()][c.getPosition().getPositionY()][1], c.getPosition().getPositionX(), c.getPosition().getPositionY(), 1);*/
         }
-        //this.refresh();
     }
     
     private void effaceDeplacementDisponible (List<ZoneAbstract> zones) {
         for (ZoneAbstract zone : zones) {
             Square c = (Square) zone;
             this.camera.refresh(this.panel, c.getPosition(), 1, this.centerPosition, this.components, null);
-            /*this.components[c.getPosition().getPositionX()][c.getPosition().getPositionY()][1] = null;
-            this.panel.getPanelCentre().ajouterViewContent(null, c.getPosition().getPositionX(), c.getPosition().getPositionY(), 1);*/
         }
-        //this.refresh();
     }
     
     private void afficheArmesPerso (CharacterAbstract personnage) {
@@ -381,20 +352,14 @@ public class ChapterView {
         for (ZoneAbstract zone : zones) {
             Square c = (Square) zone;
             this.camera.refresh(this.panel, c.getPosition(), 1, this.centerPosition, this.components, new ComponentView(new ColoredCase(width, height, new Color(255, 0, 0, 50))));
-            /*this.components[c.getPosition().getPositionX()][c.getPosition().getPositionY()][1] = new ViewComponent(new ColoredCase(width, height, new Color(255, 0, 0, 50)));
-            this.panel.getPanelCentre().ajouterViewContent(this.components[c.getPosition().getPositionX()][c.getPosition().getPositionY()][1], c.getPosition().getPositionX(), c.getPosition().getPositionY(), 1);*/
         }
-        //this.refresh();
     }
     
     private void effaceAttaqueDisponible (List<ZoneAbstract> zones) {
         for (ZoneAbstract zone : zones) {
             Square c = (Square) zone;
             this.camera.refresh(this.panel, c.getPosition(), 1, this.centerPosition, this.components, null);
-            /*this.components[c.getPosition().getPositionX()][c.getPosition().getPositionY()][1] = null;
-            this.panel.getPanelCentre().ajouterViewContent(null, c.getPosition().getPositionX(), c.getPosition().getPositionY(), 1);*/
         }
-        //this.refresh();
     }
     
     private void unites () {

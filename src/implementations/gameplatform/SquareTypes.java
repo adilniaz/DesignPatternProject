@@ -2,6 +2,6 @@ package implementations.gameplatform;
 
 public enum SquareTypes {
     
-    plaine, montagne, fort
+    plaine, montagne, fort, chateau
     
 }

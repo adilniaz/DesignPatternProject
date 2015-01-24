@@ -1,5 +1,19 @@
 <?xml version="1.0"?>
 <map width="20" height="20">
+	<case type="chateau" x="0" y="10"></case>
+	<case type="fort" x="2" y="9"></case>
+	<case type="fort" x="2" y="11"></case>
+	<case type="montagne" x="5" y="7"></case>
+	<case type="montagne" x="5" y="13"></case>
+	<case type="montagne" x="5" y="8"></case>
+	<case type="montagne" x="5" y="12"></case>
+	<case type="montagne" x="6" y="8"></case>
+	<case type="montagne" x="6" y="9"></case>
+	<case type="montagne" x="6" y="11"></case>
+	<case type="montagne" x="6" y="12"></case>
+	<case type="montagne" x="7" y="9"></case>
+	<case type="montagne" x="7" y="10"></case>
+	<case type="montagne" x="7" y="11"></case>
 	<case type="fort" x="8" y="6"></case>
 	<case type="fort" x="8" y="14"></case>
 </map>

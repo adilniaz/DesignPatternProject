@@ -17,6 +17,8 @@ public class LordSparthaMovement extends BehaviourMoveAbstract {
     @Override
     public int getDeplacement(SquareTypes type) {
         switch (type) {
+	    	case chateau :
+	    		return 100;
             case fort :
                 return 2;
             case montagne :

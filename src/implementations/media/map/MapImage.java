@@ -1,6 +1,8 @@
 package implementations.media.map;
 
+import implementations.gameplatform.CaseChateau;
 import implementations.gameplatform.CaseFort;
+import implementations.gameplatform.CaseMontagne;
 import implementations.gameplatform.CasePlaine;
 import implementations.views.Image;
 
@@ -22,13 +24,21 @@ public class MapImage extends Image {
     
     public BufferedImage getImage (ZoneAbstract zone) {
     	 
-        if (zone instanceof CasePlaine) {
-        	if (this.aImage("plaine")) {
-                return this.getImage(this.getUrlImage("plaine"));
+        if (zone instanceof CaseChateau) {
+        	if (this.aImage("chateau")) {
+                return this.getImage(this.getUrlImage("chateau"));
             }
         } else if (zone instanceof CaseFort) {
             if (this.aImage("fort")) {
                 return this.getImage(this.getUrlImage("fort"));
+            }
+        } else if (zone instanceof CaseMontagne) {
+            if (this.aImage("montagne")) {
+                return this.getImage(this.getUrlImage("montagne"));
+            }
+        } else if (zone instanceof CasePlaine) {
+        	if (this.aImage("plaine")) {
+                return this.getImage(this.getUrlImage("plaine"));
             }
         }
         return null;
