@@ -1,6 +1,7 @@
 package implementations.controller;
 
 import implementations.Position;
+import implementations.chapters.FreeState;
 import implementations.character.Character;
 import implementations.dbconnection.Connexion;
 import implementations.dbconnection.DBConnection;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import abstracts_interfaces.CharacterAbstract;
 import abstracts_interfaces.factories.gameplatforms.ZoneAbstract;
+import abstracts_interfaces.state.AbstractState;
 
 public class Chapter extends Controller {
     
@@ -33,6 +35,7 @@ public class Chapter extends Controller {
     private boolean continuer;
     private Combat combat;
     private int nbTour;
+    private AbstractState state;
     
     public final String AFFICHE_ACTION_PERSO = "afficheActionPerso";
     public final String AFFICHE_ARMES_PERSO = "afficheArmePerso";
@@ -53,7 +56,7 @@ public class Chapter extends Controller {
     public final String VICTOIRE = "victoire";
     
     public enum menu {
-        unite, statut, suspen, fin;
+        unite, statut, renfort, ordre, suspen, fin;
     }
     
     public enum actionPerso {
@@ -74,6 +77,7 @@ public class Chapter extends Controller {
         this.mode = Mode.libre;
         this.objectif = objectif;
         this.nbTour = 1;
+        this.state = new FreeState(null);
     }
     
     public Window getFenetre () {
@@ -186,7 +190,8 @@ public class Chapter extends Controller {
     }
     
     public void action (Position pos) {
-        switch (this.mode) {
+    	this.state.action();
+        /*switch (this.mode) {
             case libre:
                 boolean aPerso = false;
                 for (CharacterAbstract perso : this.plateauDeJeu.getPersonnages()) {
@@ -241,7 +246,7 @@ public class Chapter extends Controller {
             	break;
             case arme:
             	break;
-        }
+        }*/
     }
     
     public void deplacePerso (Character perso, Position p) {

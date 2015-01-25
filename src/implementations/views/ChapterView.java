@@ -6,8 +6,9 @@ import implementations.controller.Chapter;
 import implementations.controller.Chapter.Tour;
 import implementations.controller.Chapter.menu;
 import implementations.gameplatform.Square;
-import implementations.keyevent.KeyAction;
+import implementations.keyevent.MapKeyAction;
 import implementations.keyevent.KeyDispatcher;
+import implementations.keyevent.MenuKeyAction;
 import implementations.media.character.CharacterImage;
 import implementations.media.map.MapImage;
 import implementations.object.Objet;
@@ -18,6 +19,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +44,7 @@ public class ChapterView {
     private final Chapter chapitre;
     private final Window fenetre;
     
-    private final KeyAction keyAction;
+    private final MapKeyAction keyAction;
     private Popup fenetreObjectif;
     private Popup fenetreTerrain;
     private Popup fenetrePerso;
@@ -63,7 +65,7 @@ public class ChapterView {
     public ChapterView (Chapter chapitre, Window fenetre) {
         this.chapitre = chapitre;
         this.fenetre = fenetre;
-        this.keyAction = new KeyAction();
+        this.keyAction = new MapKeyAction();
         this.popupFactory = PopupFactory.getSharedInstance();
         this.camera = new Camera();
         this.centerPosition = new Position(10, 10);
@@ -149,13 +151,30 @@ public class ChapterView {
     
     private void afficheMenu (menu menu[]) {
         JPanel panel = new JPanel (new GridLayout(menu.length, 1));
+        JComponent[] components = new JComponent[menu.length];
+        int indice = 0;
         for (menu m : menu) {
             JButton bouton = new JButton(m.name());
             bouton.addActionListener(new boutonMenu(m));
             panel.add(bouton);
+            components[indice] = bouton;
+            indice++;
         }
+        
+        MenuKeyAction menuKeyAction = new MenuKeyAction(components);
+        menuKeyAction.ajouterEcouteur(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals("action")) {
+                    action((Position) evt.getOldValue());
+                } else if (evt.getPropertyName().equals("annulation")) {
+                    annulation();
+                }
+            }
+        });
         this.fenetreMenu = this.popupFactory.getPopup(this.fenetre, panel, 100, 250);
         this.fenetreMenu.show();
+        this.fenetre.addKeyBoardManager(new KeyDispatcher(menuKeyAction));
     }
     
     private void afficheActionPerso (Chapter.actionPerso actions[]) {
@@ -175,6 +194,7 @@ public class ChapterView {
     }
     
     private void changeCursorPosition (Position oldPosition, Position newPosition) {
+    	
     	if (this.camera.move(oldPosition, newPosition, this.components.length, this.components[0].length)) {
     		this.refresh();
     	}

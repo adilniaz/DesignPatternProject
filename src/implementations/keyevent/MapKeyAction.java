@@ -18,7 +18,7 @@ import javax.swing.border.LineBorder;
 
 import abstracts_interfaces.factories.gameplatforms.ZoneAbstract;
 
-public class KeyAction implements KeyListener  {
+public class MapKeyAction implements KeyListener  {
     
     private Border oldBorder;
     private Border newBorder;
@@ -27,11 +27,11 @@ public class KeyAction implements KeyListener  {
     private ZoneAbstract currentZone;
     protected PropertyChangeSupport pcsControlleurVue;
     
-    public KeyAction () {
+    public MapKeyAction () {
         this.pcsControlleurVue = new PropertyChangeSupport(this);
     }
     
-    public KeyAction (GamePlatform plateauDeJeu, Map<ZoneAbstract, JComponent> componentZone) {
+    public MapKeyAction (GamePlatform plateauDeJeu, Map<ZoneAbstract, JComponent> componentZone) {
         this.plateauDeJeu = plateauDeJeu;
         this.componentZone = componentZone;
         this.currentZone = this.plateauDeJeu.getZones().get(0);

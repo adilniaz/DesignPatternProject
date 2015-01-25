@@ -1,8 +1,6 @@
 package implementations.dbconnection;
 
 import implementations.Position;
-import implementations.chapters.Chapters;
-import implementations.chapters.ChapterFactory;
 import implementations.character.FireEmblemCharacterFactory;
 import implementations.character.Character;
 import implementations.character.FireEmblemCharacterType;
@@ -168,7 +166,7 @@ public class Connexion extends Method {
 	public Chapter loadPartie () {
 		System.out.println("chargement en cours...");
 		Chapter chapitre = null;
-		PreparedStatement select = this.prepareStatement("SELECT tour, niveau FROM partie_sauvergarder");
+		/*PreparedStatement select = this.prepareStatement("SELECT tour, niveau FROM partie_sauvergarder");
         ResultSet result = this.executePreparedStatement(select);
         int tour = 0;
         Chapters chapitres = null;
@@ -192,7 +190,7 @@ public class Connexion extends Method {
         	chapitre.getPlateauDeJeu().getEnnemies().remove(0);
         }
         this.loadPersonnagesPartie("ennemie", chapitre.getPlateauDeJeu());
-        System.out.println("chargement terminer");
+        System.out.println("chargement terminer");*/
 		return chapitre;
 	}
 	
