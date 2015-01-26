@@ -6,6 +6,7 @@ import java.awt.event.KeyListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
@@ -68,7 +69,8 @@ public class MenuKeyAction implements KeyListener  {
             	}
                 break;
             case ButtonCode.ACTION :
-                this.pcsControlleurVue.firePropertyChange("action", this.cursor, null);
+            	((JButton)this.components[this.cursor]).getActionListeners()[0].actionPerformed(null);
+                //this.pcsControlleurVue.firePropertyChange("action", null, null);
                 break;
             case ButtonCode.ANNULATION :
                 this.pcsControlleurVue.firePropertyChange("annulation", null, null);

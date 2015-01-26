@@ -13,79 +13,53 @@ public class FreeState implements AbstractState {
 
 	@Override
 	public void action() {
-		/*boolean aPerso = false;
-        for (CharacterAbstract perso : this.plateauDeJeu.getPersonnages()) {
-            Character p = (Character) perso;
-            if (p.getPosition().equals(pos)) {
-                aPerso = true;
-                List<ZoneAbstract> zones = p.getMove().getCaseAvailable(this.plateauDeJeu, p);
-                List<ZoneAbstract> zonesAtk = this.getPorteAttaque(zones, this.plateauDeJeu.getZones());
-                this.pcsControlleurVue.firePropertyChange(AFFICHE_DEPLACEMENT_DISPONIBLE, zones, null);
-                this.pcsControlleurVue.firePropertyChange(AFFICHE_ATTAQUE_DISPONIBLE, zonesAtk, null);
-                this.mode = Mode.deplacement;
-                this.persoEnCours = p;
-                this.zonesSelectionner = zones;
-                this.zonesAtkSelectionner = zonesAtk;
-                break;
-            }
-        }
-        if (!aPerso) {
-            this.pcsControlleurVue.firePropertyChange(AFFICHE_MENU, menu.values(), null);
-        }*/
+		this.chapter.freeStateAction();
 	}
 
 	@Override
 	public void cancel() {
 		/* nothing */
-
 	}
 
 	@Override
 	public void left() {
-		// TODO Auto-generated method stub
-		
+		/* nothing */
 	}
 
 	@Override
 	public void right() {
-		// TODO Auto-generated method stub
-		
+		/* nothing */
 	}
 
 	@Override
 	public void up() {
-		// TODO Auto-generated method stub
-		
+		/* nothing */
 	}
 
 	@Override
 	public void down() {
-		// TODO Auto-generated method stub
-		
+		/* nothing */
 	}
 
 	@Override
 	public void start() {
-		// TODO Auto-generated method stub
-		
+		/* nothing */
 	}
 
 	@Override
 	public void select() {
-		// TODO Auto-generated method stub
-		
+		/* nothing */
 	}
 
 	@Override
 	public void info() {
-		// TODO Auto-generated method stub
-		
+		/* Si perso, afffiche info du perso */
+		this.chapter.freeStateInfo();
 	}
 
 	@Override
 	public void l() {
-		// TODO Auto-generated method stub
-		
+		/* nothing */
 	}
 
 }

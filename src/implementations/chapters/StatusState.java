@@ -3,71 +3,52 @@ package implementations.chapters;
 import implementations.controller.Chapter;
 import abstracts_interfaces.state.AbstractState;
 
-public class FightSimulationState implements AbstractState {
+public class StatusState implements AbstractState {
 	
 	private Chapter chapter;
 	
-	public FightSimulationState (Chapter chapter) {
+	public StatusState (Chapter chapter) {
 		this.chapter = chapter;
 	}
 
 	@Override
 	public void action() {
-		this.chapter.combat();
 	}
 
 	@Override
 	public void cancel() {
-		// TODO Auto-generated method stub
-
+		this.chapter.unitsStateCancel();
 	}
 
 	@Override
 	public void left() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void right() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void up() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void down() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void start() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void select() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void info() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void l() {
-		// TODO Auto-generated method stub
-		
 	}
-
 }

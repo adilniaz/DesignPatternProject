@@ -96,20 +96,31 @@ public class AttackNearestStrategy extends Strategy {
 		double distance = 100;
 		double tmpDistance;
 		Character p = null;
-		for (CharacterAbstract c : chapitre.getPlateauDeJeu().getAnnexes()) {
-			Character perso = (Character) c;
-			tmpDistance = this.distanceEuclidienne(this.personnage.getPosition().getPositionX(), this.personnage.getPosition().getPositionY(), perso.getPosition().getPositionX(), perso.getPosition().getPositionY());
-			if (tmpDistance < distance) {
-				distance = tmpDistance;
-				p = perso;
+		if (chapitre.getPlateauDeJeu().getEnnemies().contains(this.personnage)) {
+			for (CharacterAbstract c : chapitre.getPlateauDeJeu().getAnnexes()) {
+				Character perso = (Character) c;
+				tmpDistance = this.distanceEuclidienne(this.personnage.getPosition().getPositionX(), this.personnage.getPosition().getPositionY(), perso.getPosition().getPositionX(), perso.getPosition().getPositionY());
+				if (tmpDistance < distance) {
+					distance = tmpDistance;
+					p = perso;
+				}
 			}
-		}
-		for (CharacterAbstract c : chapitre.getPlateauDeJeu().getPersonnages()) {
-			Character perso = (Character) c;
-			tmpDistance = this.distanceEuclidienne(this.personnage.getPosition().getPositionX(), this.personnage.getPosition().getPositionY(), perso.getPosition().getPositionX(), perso.getPosition().getPositionY());
-			if (tmpDistance < distance) {
-				distance = tmpDistance;
-				p = perso;
+			for (CharacterAbstract c : chapitre.getPlateauDeJeu().getPersonnages()) {
+				Character perso = (Character) c;
+				tmpDistance = this.distanceEuclidienne(this.personnage.getPosition().getPositionX(), this.personnage.getPosition().getPositionY(), perso.getPosition().getPositionX(), perso.getPosition().getPositionY());
+				if (tmpDistance < distance) {
+					distance = tmpDistance;
+					p = perso;
+				}
+			}
+		} else if (chapitre.getPlateauDeJeu().getAnnexes().contains(this.personnage)) {
+			for (CharacterAbstract c : chapitre.getPlateauDeJeu().getEnnemies()) {
+				Character perso = (Character) c;
+				tmpDistance = this.distanceEuclidienne(this.personnage.getPosition().getPositionX(), this.personnage.getPosition().getPositionY(), perso.getPosition().getPositionX(), perso.getPosition().getPositionY());
+				if (tmpDistance < distance) {
+					distance = tmpDistance;
+					p = perso;
+				}
 			}
 		}
 		return p;

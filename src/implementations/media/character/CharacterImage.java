@@ -1,6 +1,7 @@
 package implementations.media.character;
 
 import implementations.behaviour.CharacterBehaviour;
+import implementations.behaviour.KnightBehaviour;
 import implementations.behaviour.WarriorBehaviour;
 import implementations.character.Character;
 import implementations.views.Image;
@@ -30,6 +31,8 @@ public class CharacterImage extends Image {
     private String getNameFromComportement (CharacterBehaviour cp) {
         if (cp instanceof WarriorBehaviour) {
             return "combattant_ennemie";
+        } else if (cp instanceof KnightBehaviour) {
+            return "chevalier";
         }
         return null;
     }

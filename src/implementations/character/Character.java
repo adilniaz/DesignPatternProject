@@ -345,6 +345,24 @@ public class Character extends CharacterAbstract {
     public Weapon getArme() {
         return (Weapon) this.objets[0];
     }
+    
+    public void setArme (int indice) {
+    	Objet obj = this.objets[0];
+    	this.objets[0] = this.objets[indice];
+    	this.objets[indice] = obj;
+    }
+    
+    public int getNbCombat () {
+    	return 0;
+    }
+    
+    public int getNbVictoire () {
+    	return 0;
+    }
+    
+    public int getNbDefaite () {
+    	return 0;
+    }
 
     @Override
     public void update() {

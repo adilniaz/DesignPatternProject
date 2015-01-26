@@ -27,7 +27,7 @@ public class ButtonCode {
     public static int F11 = 122;
     public static int F12 = 123;
     public static int E = 69;
-    public static int R = 82;
+    public final static int R = 82;
     
     public static String getKeyCharByCode (int code) {
         return KeyEvent.getKeyText(code);

@@ -108,11 +108,14 @@ public class MapKeyAction implements KeyListener  {
                 this.modifyCursor(c4, zone4);
                 break;
             case ButtonCode.ACTION :
-                Square c5 = (Square) this.currentZone;
-                this.pcsControlleurVue.firePropertyChange("action", c5.getPosition(), null);
+                this.pcsControlleurVue.firePropertyChange("action", null, null);
                 break;
             case ButtonCode.ANNULATION :
                 this.pcsControlleurVue.firePropertyChange("annulation", null, null);
+                break;
+            case ButtonCode.R :
+            	System.out.println("bouton r : info");
+                this.pcsControlleurVue.firePropertyChange("info", null, null);
                 break;
         }
     }

@@ -3,23 +3,23 @@ package implementations.chapters;
 import implementations.controller.Chapter;
 import abstracts_interfaces.state.AbstractState;
 
-public class FightSimulationState implements AbstractState {
+public class UnitsState implements AbstractState {
 	
 	private Chapter chapter;
 	
-	public FightSimulationState (Chapter chapter) {
+	public UnitsState (Chapter chapter) {
 		this.chapter = chapter;
 	}
 
 	@Override
 	public void action() {
-		this.chapter.combat();
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public void cancel() {
-		// TODO Auto-generated method stub
-
+		this.chapter.unitsStateCancel();
 	}
 
 	@Override
@@ -69,5 +69,4 @@ public class FightSimulationState implements AbstractState {
 		// TODO Auto-generated method stub
 		
 	}
-
 }

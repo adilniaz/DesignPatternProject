@@ -1,8 +1,15 @@
 package implementations.chapters;
 
+import implementations.controller.Chapter;
 import abstracts_interfaces.state.AbstractState;
 
 public class MenuState implements AbstractState {
+	
+	private Chapter chapter;
+	
+	public MenuState (Chapter chapter) {
+		this.chapter = chapter;
+	}
 
 	@Override
 	public void action() {
@@ -12,8 +19,7 @@ public class MenuState implements AbstractState {
 
 	@Override
 	public void cancel() {
-		// TODO Auto-generated method stub
-
+		this.chapter.menuStateCancel();
 	}
 
 	@Override

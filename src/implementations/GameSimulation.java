@@ -9,6 +9,7 @@ import implementations.dbconnection.DBConnection;
 import implementations.dbconnection.DBCreation;
 import implementations.gameplatform.FactoryTerrain;
 import implementations.gameplatform.GamePlatform;
+import implementations.organizations.Organization;
 import implementations.views.View;
 import implementations.views.Window;
 
@@ -22,7 +23,7 @@ public class GameSimulation implements SimulationAbstract {
     		GameEnvironnementFactoryAbstract factoryEnvironnementDeJeu = new FactoryTerrain();
             GameEnvironnementAbstract environnementJeu = factoryEnvironnementDeJeu.createGameEnvironnement();
     		GamePlatformAbstract plateauDeJeu = environnementJeu.createGamePlatform();
-            Chapter chapter = new Chapter("blazing sword", (GamePlatform)plateauDeJeu, "battre le boss");
+            Chapter chapter = new Chapter("blazing sword", (GamePlatform)plateauDeJeu, new Organization(), "battre le boss");
             View.createVue(chapter, window);
             chapter.run();
     	}
