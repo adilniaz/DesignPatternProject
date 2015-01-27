@@ -18,8 +18,7 @@ public class FightSimulationState implements AbstractState {
 
 	@Override
 	public void cancel() {
-		// TODO Auto-generated method stub
-
+		this.chapter.fightSimulationStateCancel();
 	}
 
 	@Override

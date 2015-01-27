@@ -69,6 +69,7 @@ public class Image {
     }
     
     public boolean aImage (String nom, String type) {
+    	System.out.println("aImage : " + type + nom);
         return this.getInputStreamImage(nom, type) != null;
     }
     

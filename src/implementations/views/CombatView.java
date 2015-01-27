@@ -384,14 +384,14 @@ public class CombatView {
     		panelStatPerso.add(new JLabel("Def   " + perso.getDef() + "  (+"+(perso.getDef()-oldPerso.getDef())+")"));
     	}
     	if (oldPerso.getResistance() == perso.getResistance()) {
-    		panelStatPerso.add(new JLabel("PV   " + perso.getResistance()));
+    		panelStatPerso.add(new JLabel("Res   " + perso.getResistance()));
     	} else {
-    		panelStatPerso.add(new JLabel("PV   " + perso.getResistance() + "  (+"+(perso.getResistance()-oldPerso.getResistance())+")"));
+    		panelStatPerso.add(new JLabel("Res   " + perso.getResistance() + "  (+"+(perso.getResistance()-oldPerso.getResistance())+")"));
     	}
     	if (oldPerso.getConstitution() == perso.getConstitution()) {
-    		panelStatPerso.add(new JLabel("PV   " + perso.getConstitution()));
+    		panelStatPerso.add(new JLabel("Cons   " + perso.getConstitution()));
     	} else {
-    		panelStatPerso.add(new JLabel("PV   " + perso.getConstitution() + "  (+"+(perso.getConstitution()-oldPerso.getConstitution())+")"));
+    		panelStatPerso.add(new JLabel("Cons   " + perso.getConstitution() + "  (+"+(perso.getConstitution()-oldPerso.getConstitution())+")"));
     	}
     	boxStatPerso.add(panelStatPerso);
     	panel.add(boxStatPerso);
@@ -399,7 +399,7 @@ public class CombatView {
     	panel.add(panelImage);
         Popup popup = popupFactory.getPopup(fenetre, panel, 600, 400);
     	popup.show();
-    	this.attendre(10000);
+    	this.attendre(5000);
     	popup.hide();
     	
     }

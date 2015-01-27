@@ -13,8 +13,6 @@ import implementations.views.Window;
 public class SimulationLauncher {
 	
 	public static void main(String[] args) {
-		/*GameSimulation gameSimulation = new GameSimulation();
-        gameSimulation.runSimulation();*/
 		
 		Window window = new Window("Game simulation");
 		JPanel panel = new JPanel();

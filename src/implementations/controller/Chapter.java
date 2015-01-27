@@ -21,7 +21,6 @@ import implementations.gameplatform.GamePlatform;
 import implementations.gameplatform.GamePlatform.Etat;
 import implementations.object.ObjetFactory;
 import implementations.object.ObjetType;
-import implementations.object.Weapon;
 import implementations.organizations.Organization;
 import implementations.strategy.AttackNearestStrategy;
 import implementations.views.View;
@@ -86,7 +85,7 @@ public class Chapter extends Controller {
     }
     
     public enum actionPerso {
-        attaquer, baton, objet, echange, convoi, attendre;
+        attaquer, objet, echange, attendre;
     }
     
     public enum Tour {
@@ -223,86 +222,10 @@ public class Chapter extends Controller {
     public void action () {
     	System.out.println(this.state.getClass().getName());
     	this.state.action();
-        /*switch (this.mode) {
-            case libre:
-                boolean aPerso = false;
-                for (CharacterAbstract perso : this.plateauDeJeu.getPersonnages()) {
-                    Character p = (Character) perso;
-                    if (p.getPosition().equals(pos)) {
-                        aPerso = true;
-                        List<ZoneAbstract> zones = p.getMove().getCaseAvailable(this.plateauDeJeu, p);
-                        List<ZoneAbstract> zonesAtk = this.getPorteAttaque(zones, this.plateauDeJeu.getZones());
-                        this.pcsControlleurVue.firePropertyChange(AFFICHE_DEPLACEMENT_DISPONIBLE, zones, null);
-                        this.pcsControlleurVue.firePropertyChange(AFFICHE_ATTAQUE_DISPONIBLE, zonesAtk, null);
-                        this.mode = Mode.deplacement;
-                        this.persoEnCours = p;
-                        this.zonesSelectionner = zones;
-                        this.zonesAtkSelectionner = zonesAtk;
-                        break;
-                    }
-                }
-                if (!aPerso) {
-                    this.pcsControlleurVue.firePropertyChange(AFFICHE_MENU, menu.values(), null);
-                }
-                break;
-            case deplacement :
-                boolean aPerso2 = false;
-                for (CharacterAbstract perso : this.plateauDeJeu.getPersonnages()) {
-                    Character p = (Character) perso;
-                    if (p.getPosition().equals(pos) && !p.equals(this.persoEnCours)) {
-                        aPerso2 = true;
-                        break;
-                    }
-                }
-                if (!aPerso2) {
-                    Character p = (Character) this.persoEnCours;
-                    this.deplacePerso(p, pos);
-                    List<actionPerso> list = new ArrayList<>();
-                    list.add(actionPerso.attaquer);
-                    list.add(actionPerso.baton);
-                    list.add(actionPerso.objet);
-                    list.add(actionPerso.convoi);
-                    list.add(actionPerso.echange);
-                    list.add(actionPerso.attendre);
-                    actionPerso actions[] = new actionPerso[list.size()];
-                    for (int i =  0 ; i < list.size() ; i++) {
-                        actions[i] = list.get(i);
-                    }
-                    this.pcsControlleurVue.firePropertyChange(AFFICHE_ACTION_PERSO, actions, null);
-                    this.pcsControlleurVue.firePropertyChange(EFFACE_DEPLACEMENT_DISPONIBLE, this.zonesSelectionner, null);
-                    this.pcsControlleurVue.firePropertyChange(EFFACE_ATTAQUE_DISPONIBLE, this.zonesAtkSelectionner, null);
-                    this.mode = Mode.action;
-                }
-                break;
-            case action :
-            	break;
-            case arme:
-            	break;
-        }*/
     }
     
     public void annulation () {
     	this.state.cancel();
-        /*switch (this.mode) {
-        	case libre:
-        		break;
-            case deplacement:
-                this.pcsControlleurVue.firePropertyChange(EFFACE_DEPLACEMENT_DISPONIBLE, this.zonesSelectionner, null);
-                this.pcsControlleurVue.firePropertyChange(EFFACE_ATTAQUE_DISPONIBLE, this.zonesAtkSelectionner, null);
-                this.mode = Mode.libre;
-                break;
-            case action:
-                Character perso = (Character) this.persoEnCours;
-                Position pos = new Position(perso.getPosition());
-                perso.setPosition(this.oldPosition);
-                this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, this.persoEnCours, pos);
-                this.pcsControlleurVue.firePropertyChange(AFFICHE_DEPLACEMENT_DISPONIBLE, this.zonesSelectionner, null);
-                this.pcsControlleurVue.firePropertyChange(AFFICHE_ATTAQUE_DISPONIBLE, this.zonesAtkSelectionner, null);
-                this.mode = Mode.deplacement;
-                break;
-            case arme:
-            	break;
-        }*/
     }
     
     public void info () {
@@ -437,9 +360,7 @@ public class Chapter extends Controller {
             this.deplacePerso(p, this.currentPosition);
             List<actionPerso> list = new ArrayList<>();
             list.add(actionPerso.attaquer);
-            list.add(actionPerso.baton);
             list.add(actionPerso.objet);
-            list.add(actionPerso.convoi);
             list.add(actionPerso.echange);
             list.add(actionPerso.attendre);
             actionPerso actions[] = new actionPerso[list.size()];
@@ -483,6 +404,98 @@ public class Chapter extends Controller {
     public void statusStateCancel () {
     	this.pcsControlleurVue.firePropertyChange(HIDE_STATUS, null, null);
     	this.state = new FreeState(this);
+    }
+    
+    public void weaponChoiceStateCancel () {
+    	List<actionPerso> list = new ArrayList<>();
+        list.add(actionPerso.attaquer);
+        list.add(actionPerso.objet);
+        list.add(actionPerso.echange);
+        list.add(actionPerso.attendre);
+        actionPerso actions[] = new actionPerso[list.size()];
+        for (int i =  0 ; i < list.size() ; i++) {
+            actions[i] = list.get(i);
+        }
+    	this.pcsControlleurVue.firePropertyChange(AFFICHE_ACTION_PERSO, actions, null);
+        this.state = new ActionMenuState(this);
+    }
+    
+    public void choiceWeapon (int indice) {
+    	Character p = (Character) this.persoEnCours;
+    	p.setArme(indice);
+    	this.simuleCombat();
+    }
+    
+    public void simuleCombat () {
+        for (CharacterAbstract perso : this.plateauDeJeu.getEnnemies()) {
+            Character p = (Character) perso;
+            Character p2 = (Character) this.persoEnCours;
+            if (p.getPosition().equals(new Position(p2.getPosition().getPositionX()-1, p2.getPosition().getPositionY()))) {
+                this.combat = new Combat(p2, p, this);
+                View.createVue(combat, this.fenetre);
+                this.combat.simulerCombat();
+            } else if (p.getPosition().equals(new Position(p2.getPosition().getPositionX()+1, p2.getPosition().getPositionY()))) {
+                this.combat = new Combat(p2, p, this);
+                View.createVue(combat, this.fenetre);
+                this.combat.simulerCombat();
+            } else if (p.getPosition().equals(new Position(p2.getPosition().getPositionX(), p2.getPosition().getPositionY()-1))) {
+                this.combat = new Combat(p2, p, this);
+                View.createVue(combat, this.fenetre);
+                this.combat.simulerCombat();
+            } else if (p.getPosition().equals(new Position(p2.getPosition().getPositionX(), p2.getPosition().getPositionY()+1))) {
+                this.combat = new Combat(p2, p, this);
+                View.createVue(combat, this.fenetre);
+                this.combat.simulerCombat();
+            }
+        }
+        this.pcsControlleurVue.firePropertyChange(SIMULATION_COMBAT, null, null);
+        this.state = new FightSimulationState(this);
+    }
+    
+    public void fightSimulationStateCancel () {
+    	this.combat.finSimulation();
+    	this.pcsControlleurVue.firePropertyChange(AFFICHE_ARMES_PERSO, this.persoEnCours, null);
+        this.state = new WeaponChoiceState(this);
+    }
+    
+    public void combat () {
+        for (CharacterAbstract perso : this.plateauDeJeu.getEnnemies()) {
+            Character p = (Character) perso;
+            Character p2 = (Character) this.persoEnCours;
+            if (p.getPosition().equals(new Position(p2.getPosition().getPositionX()-1, p2.getPosition().getPositionY()))) {
+            	this.persoAttaquer = p;
+            	this.combat.finSimulation();
+                new RunControlleur(combat).start();
+                this.plateauDeJeu.changeEtatCharacter(p2, Etat.attendre);
+                this.state = new FreeState(this);
+                this.pcsControlleurVue.firePropertyChange(FREE_STATE, null, null);
+                break;
+            } else if (p.getPosition().equals(new Position(p2.getPosition().getPositionX()+1, p2.getPosition().getPositionY()))) {
+            	this.persoAttaquer = p;
+            	this.combat.finSimulation();
+                new RunControlleur(combat).start();
+                this.plateauDeJeu.changeEtatCharacter(p2, Etat.attendre);
+                this.state = new FreeState(this);
+                this.pcsControlleurVue.firePropertyChange(FREE_STATE, null, null);
+                break;
+            } else if (p.getPosition().equals(new Position(p2.getPosition().getPositionX(), p2.getPosition().getPositionY()+1))) {
+            	this.persoAttaquer = p;
+            	this.combat.finSimulation();
+                new RunControlleur(combat).start();
+                this.plateauDeJeu.changeEtatCharacter(p2, Etat.attendre);
+                this.state = new FreeState(this);
+                this.pcsControlleurVue.firePropertyChange(FREE_STATE, null, null);
+                break;
+            } else if (p.getPosition().equals(new Position(p2.getPosition().getPositionX(), p2.getPosition().getPositionY()-1))) {
+            	this.persoAttaquer = p;
+            	this.combat.finSimulation();
+                new RunControlleur(combat).start();
+                this.plateauDeJeu.changeEtatCharacter(p2, Etat.attendre);
+                this.state = new FreeState(this);
+                this.pcsControlleurVue.firePropertyChange(FREE_STATE, null, null);
+                break;
+            }
+        }
     }
     
     public void deplacePerso (Character perso, Position p) {
@@ -585,93 +598,18 @@ public class Chapter extends Controller {
         switch (action) {
             case attaquer:
                 this.pcsControlleurVue.firePropertyChange(AFFICHE_ARMES_PERSO, this.persoEnCours, null);
-                this.state = new WeaponChoiceState();
-                break;
-            case baton:
+                this.state = new WeaponChoiceState(this);
                 break;
             case objet:
                 break;
             case echange:
                 break;
-            case convoi:
-                break;
             case attendre:
             	this.plateauDeJeu.changeEtatCharacter(this.persoEnCours, Etat.attendre);
             	this.state = new FreeState(this);
+            	this.pcsControlleurVue.firePropertyChange(FREE_STATE, null, null);
             	this.continuer = true;
             	break;
-        }
-    }
-    
-    public void choiceWeapon (int indice) {
-    	Character p = (Character) this.persoEnCours;
-    	p.setArme(indice);
-    	this.simuleCombat();
-    }
-    
-    public void simuleCombat () {
-        for (CharacterAbstract perso : this.plateauDeJeu.getEnnemies()) {
-            Character p = (Character) perso;
-            Character p2 = (Character) this.persoEnCours;
-            if (p.getPosition().equals(new Position(p2.getPosition().getPositionX()-1, p2.getPosition().getPositionY()))) {
-                this.combat = new Combat(p2, p, this);
-                View.createVue(combat, this.fenetre);
-                this.combat.simulerCombat();
-            } else if (p.getPosition().equals(new Position(p2.getPosition().getPositionX()+1, p2.getPosition().getPositionY()))) {
-                this.combat = new Combat(p2, p, this);
-                View.createVue(combat, this.fenetre);
-                this.combat.simulerCombat();
-            } else if (p.getPosition().equals(new Position(p2.getPosition().getPositionX(), p2.getPosition().getPositionY()-1))) {
-                this.combat = new Combat(p2, p, this);
-                View.createVue(combat, this.fenetre);
-                this.combat.simulerCombat();
-            } else if (p.getPosition().equals(new Position(p2.getPosition().getPositionX(), p2.getPosition().getPositionY()+1))) {
-                this.combat = new Combat(p2, p, this);
-                View.createVue(combat, this.fenetre);
-                this.combat.simulerCombat();
-            }
-        }
-        this.pcsControlleurVue.firePropertyChange(AFFICHE_MAP, null, null);
-        this.state = new FightSimulationState(this);
-    }
-    
-    public void combat () {
-        for (CharacterAbstract perso : this.plateauDeJeu.getEnnemies()) {
-            Character p = (Character) perso;
-            Character p2 = (Character) this.persoEnCours;
-            if (p.getPosition().equals(new Position(p2.getPosition().getPositionX()-1, p2.getPosition().getPositionY()))) {
-            	this.persoAttaquer = p;
-            	this.combat.finSimulation();
-                new RunControlleur(combat).start();
-                this.plateauDeJeu.changeEtatCharacter(p2, Etat.attendre);
-                this.state = new FreeState(this);
-                this.pcsControlleurVue.firePropertyChange(FREE_STATE, null, null);
-                break;
-            } else if (p.getPosition().equals(new Position(p2.getPosition().getPositionX()+1, p2.getPosition().getPositionY()))) {
-            	this.persoAttaquer = p;
-            	this.combat.finSimulation();
-                new RunControlleur(combat).start();
-                this.plateauDeJeu.changeEtatCharacter(p2, Etat.attendre);
-                this.state = new FreeState(this);
-                this.pcsControlleurVue.firePropertyChange(FREE_STATE, null, null);
-                break;
-            } else if (p.getPosition().equals(new Position(p2.getPosition().getPositionX(), p2.getPosition().getPositionY()+1))) {
-            	this.persoAttaquer = p;
-            	this.combat.finSimulation();
-                new RunControlleur(combat).start();
-                this.plateauDeJeu.changeEtatCharacter(p2, Etat.attendre);
-                this.state = new FreeState(this);
-                this.pcsControlleurVue.firePropertyChange(FREE_STATE, null, null);
-                break;
-            } else if (p.getPosition().equals(new Position(p2.getPosition().getPositionX(), p2.getPosition().getPositionY()-1))) {
-            	this.persoAttaquer = p;
-            	this.combat.finSimulation();
-                new RunControlleur(combat).start();
-                this.plateauDeJeu.changeEtatCharacter(p2, Etat.attendre);
-                this.state = new FreeState(this);
-                this.pcsControlleurVue.firePropertyChange(FREE_STATE, null, null);
-                break;
-            }
         }
     }
     

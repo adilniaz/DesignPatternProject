@@ -1,19 +1,24 @@
 package implementations.chapters;
 
+import implementations.controller.Chapter;
 import abstracts_interfaces.state.AbstractState;
 
 public class WeaponChoiceState implements AbstractState {
+	
+	private Chapter chapter;
+	
+	public WeaponChoiceState (Chapter chapter) {
+		this.chapter = chapter;
+	}
 
 	@Override
 	public void action() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void cancel() {
-		// TODO Auto-generated method stub
-
+		this.chapter.weaponChoiceStateCancel();
+		
 	}
 
 	@Override

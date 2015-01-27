@@ -39,12 +39,19 @@ public class Character extends CharacterAbstract {
     
     private boolean aJouer;
     
+    private Status status;
+    
+    public enum Status {
+    	normal, boss;
+    }
+    
     public Character (String nom, Organization organisation) {
         super(organisation, nom);
         this.experience = 0;
         this.objets = new Objet[5];
         this.aJouer = false;
         this.niv = 1;
+        this.status = Status.normal;
     }
     
     public Character (Character perso) {
@@ -191,7 +198,7 @@ public class Character extends CharacterAbstract {
     }
     
     public void niveauSuivant () {
-    	if (this.niv < 20) {
+    	if (this.niv < 19) {
     		this.niv++;
     		if (this.getPvMax() < this.comportementPersonnage.getPvMax()) {
     			int alea = (int) (Math.random() *100 +1);
@@ -235,13 +242,14 @@ public class Character extends CharacterAbstract {
     				this.resistanceGagne++;
     			}
     		}
-    	} else if (this.niv == 20 && this.comportementPersonnage.hasPromotedClass()) {
+    	} else if (this.niv == 19 && this.comportementPersonnage.hasPromotedClass()) {
     		FireEmblemCharacterFactory characterFactory = new FireEmblemCharacterFactory();
     		Character character = (Character)characterFactory.createCharacter(this.getName(), this.subject, this.comportementPersonnage.getPromotedClass());
     		this.behaviour = character.behaviour;
     		this.move = character.move;
     		this.comportementPersonnage = character.comportementPersonnage;
     		this.niv = 1;
+    		this.experience = 0;
     	}
     }
 
@@ -335,7 +343,12 @@ public class Character extends CharacterAbstract {
     }
     
     public void ajouterObjet (Objet obj) {
-        this.objets[0] = obj;
+    	for (int i = 0 ; i < this.objets.length ; i++) {
+    		if (this.objets[i] == null) {
+    			this.objets[i] = obj;
+    			break;
+    		}
+    	}
     }
 
     public Objet[] getObjets() {
@@ -362,6 +375,10 @@ public class Character extends CharacterAbstract {
     
     public int getNbDefaite () {
     	return 0;
+    }
+    
+    public void setStatus (Status status) {
+    	
     }
 
     @Override

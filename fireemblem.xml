@@ -2,6 +2,7 @@
 <chapitre name="blazing sword" objectif="battre le boss">
 	<personnages>
 		<personnage nom="Eliwood" type="lord_eliwood" status="boss">
+			<stat niv="17" pv="31" pvgagne="13" puissancegagne="8" capacitegagne="8" vitessegagne="7" chancegagne="8" defgagne="5" resistancegagne="6" experience="0"></stat>
 			<position x="19" y="9" ></position>
 			<objets>
 				<objet nom="epee-fer" type="epee_fer"></objet>
@@ -11,6 +12,7 @@
 			</objets>
 		</personnage>
 		<personnage nom="hector" type="lord_hector">
+			<stat niv="19" pv="36" pvgagne="17" puissancegagne="11" capacitegagne="9" vitessegagne="7" chancegagne="6" defgagne="9" resistancegagne="5" experience="95"></stat>
 			<position x="19" y="10" ></position>
 			<objets>
 				<objet nom="hache-fer" type="hache_fer"></objet>
@@ -20,6 +22,7 @@
 			</objets>
 		</personnage>
 		<personnage nom="lyn" type="lord_lyn">
+			<stat niv="14" pv="26" pvgagne="10" puissancegagne="6" capacitegagne="8" vitessegagne="8" chancegagne="8" defgagne="3" resistancegagne="4" experience="50"></stat>
 			<position x="19" y="11" ></position>
 			<objets>
 				<objet nom="epee-fer" type="epee_fer"></objet>

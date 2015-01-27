@@ -194,6 +194,9 @@ public class Combat extends Controller {
         
         this.pcsControlleurVue.firePropertyChange(COMBAT, statPerso1, statPerso2);
         
+        int pvPerso1 = this.perso1.getPv();
+        int pvPerso2 = this.perso2.getPv();
+        
         this.pile = new ArrayList<>();
         pile.add(1);
         pile.add(2);
@@ -211,9 +214,11 @@ public class Combat extends Controller {
         	this.attendre(100);
         }
         if (this.chapitre.getPlateauDeJeu().getPersonnages().contains(this.perso1)) {
-        	this.gagneExp(this.perso1, this.perso2, true);
+        	boolean damage = pvPerso2 > this.perso2.getPv();
+        	this.gagneExp(this.perso1, this.perso2, damage);
         } else if (this.chapitre.getPlateauDeJeu().getPersonnages().contains(this.perso2)) {
-        	this.gagneExp(this.perso2, this.perso1, true);
+        	boolean damage = pvPerso1 > this.perso1.getPv();
+        	this.gagneExp(this.perso2, this.perso1, damage);
         }
         this.pcsControlleurVue.firePropertyChange(FIN_COMBAT, null, null);
     }
@@ -271,7 +276,7 @@ public class Combat extends Controller {
     	Character tmpPerso = new Character(attaquant);
         attaquant.ajouterExperience(experience);
         if (!tmpPerso.getComportementPersonnage().equals(attaquant.getComportementPersonnage())) {
-        	this.pcsControlleurVue.firePropertyChange(MODIFY_EXP_PERSO, experience, tmpPerso);
+        	this.pcsControlleurVue.firePropertyChange(MODIFY_EXP_PERSO, 100 - tmpPerso.getExperience(), tmpPerso);
         	this.pcsControlleurVue.firePropertyChange(MODIFY_CLASS_PERSO, tmpPerso, attaquant);
         } else if (tmpPerso.getNiv() != attaquant.getNiv()) {
         	this.pcsControlleurVue.firePropertyChange(MODIFY_EXP_PERSO, experience, tmpPerso);
@@ -282,28 +287,35 @@ public class Combat extends Controller {
     }
     
     private int experience (Character perso, Character ennemy, boolean damage) {
+    	int experience = 1;
     	if (damage) {
     		if (ennemy.estKo()) {
-    			return (this.experienceFromDoingDamage(perso, ennemy) + 
+    			experience = (this.experienceFromDoingDamage(perso, ennemy) + 
     			(this.experienceFromDefeating(perso, ennemy) + 20 + 0 + 0)) * 1;
     		} else {
-    			return this.experienceFromDoingDamage(perso, ennemy);
+    			experience = this.experienceFromDoingDamage(perso, ennemy);
     		}
-    	} else {
-    		return 1;
     	}
+    	if (experience <= 0) {
+    		experience = 1;
+    	}
+    	return experience;
     }
     
     private int experienceFromDoingDamage (Character perso, Character ennemy) {
-    	return (31 + ((ennemy.getNiv() + (ennemy.getComportementPersonnage().getClassBonusA())) - 
-				(perso.getNiv() + (perso.getComportementPersonnage().getClassBonusA())))) / 
+    	return (31 + ((ennemy.getNiv() + ennemy.getComportementPersonnage().getClassBonusA()) - 
+				(perso.getNiv() + perso.getComportementPersonnage().getClassBonusA()))) / 
 				perso.getComportementPersonnage().getPower();
     }
     
     private int experienceFromDefeating (Character perso, Character ennemy) {
-    	return ((ennemy.getNiv() * ennemy.getComportementPersonnage().getPower()) + 
+    	int experience = ((ennemy.getNiv() * ennemy.getComportementPersonnage().getPower()) + 
     			ennemy.getComportementPersonnage().getClassBonusB()) - (((perso.getNiv() * 
     			perso.getComportementPersonnage().getPower()) + 
     			perso.getComportementPersonnage().getClassBonusB()) / 1);
+    	if (experience < 0) {
+    		experience = 0;
+    	}
+    	return experience;
     }
 }

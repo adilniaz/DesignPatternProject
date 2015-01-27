@@ -2,6 +2,7 @@ package implementations.media.character;
 
 import implementations.behaviour.CharacterBehaviour;
 import implementations.behaviour.KnightBehaviour;
+import implementations.behaviour.LordHappiaBehaviour;
 import implementations.behaviour.WarriorBehaviour;
 import implementations.character.Character;
 import implementations.views.Image;
@@ -33,8 +34,10 @@ public class CharacterImage extends Image {
             return "combattant_ennemie";
         } else if (cp instanceof KnightBehaviour) {
             return "chevalier";
+        } else if (cp instanceof LordHappiaBehaviour) {
+            return "lord_happia";
         }
-        return null;
+        return "";
     }
     
     public static BufferedImage getImageMenuFromPersonnage (CharacterAbstract perso) {
@@ -150,7 +153,9 @@ public class CharacterImage extends Image {
     
     public ImageIcon getImageIconMap (CharacterAbstract perso) {
         Character p = (Character) perso;
-        if (this.aImage(perso.getName(), MAP)) {
+        if (this.aImage(perso.getName()+"_"+this.getNameFromComportement(p.getComportementPersonnage()), MAP)) {
+            return this.getImageIcon(this.getUrlImage(perso.getName()+"_"+this.getNameFromComportement(p.getComportementPersonnage()), MAP));
+        } else if (this.aImage(perso.getName(), MAP)) {
             return this.getImageIcon(this.getUrlImage(perso.getName(), MAP));
         } else if (this.aImage(this.getNameFromComportement(p.getComportementPersonnage()), MAP)) {
             return this.getImageIcon(this.getUrlImage(this.getNameFromComportement(p.getComportementPersonnage()), MAP));
@@ -160,7 +165,9 @@ public class CharacterImage extends Image {
     
     public ImageIcon getImageIconMapFocus (CharacterAbstract perso) {
         Character p = (Character) perso;
-        if (this.aImage(perso.getName()+"_focus", MAP)) {
+        if (this.aImage(perso.getName()+"_" + this.getNameFromComportement(p.getComportementPersonnage()) + "_focus", MAP)) {
+            return this.getImageIcon(this.getUrlImage(perso.getName()+"_"+this.getNameFromComportement(p.getComportementPersonnage())+"_focus", MAP));
+        } else if (this.aImage(perso.getName()+"_focus", MAP)) {
             return this.getImageIcon(this.getUrlImage(perso.getName()+"_focus", MAP));
         } else if (this.aImage(this.getNameFromComportement(p.getComportementPersonnage()), MAP)) {
             return this.getImageIcon(this.getUrlImage(this.getNameFromComportement(p.getComportementPersonnage()), MAP));

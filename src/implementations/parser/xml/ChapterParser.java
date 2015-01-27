@@ -1,6 +1,7 @@
 package implementations.parser.xml;
 
 import implementations.Position;
+import implementations.character.Character.Status;
 import implementations.character.FireEmblemCharacterFactory;
 import implementations.character.Character;
 import implementations.character.FireEmblemCharacterType;
@@ -27,6 +28,7 @@ public class ChapterParser implements XMLParser {
 	 private Character perosEnCours;
 	 private CreateCharactersFactoryAbstract factoryPersonnage;
      private ObjetFactory factoryObjet;
+     private boolean isPerso;
 	    
 	 public ChapterParser (GamePlatform plateauJeu) {
 		 this.plateauJeu = plateauJeu;
@@ -55,10 +57,13 @@ public class ChapterParser implements XMLParser {
 	private void startElement (XMLStreamReader reader) {
 		if ("personnage".equals(reader.getLocalName())) {
 			this.perosEnCours = this.createPersonnage(reader);
+			this.isPerso = true;
 		} else if ("ennemie".equals(reader.getLocalName())) {
 			this.perosEnCours = this.createPersonnage(reader);
+			this.isPerso = false;
 		} else if ("annexe".equals(reader.getLocalName())) {
 			this.perosEnCours = this.createPersonnage(reader);
+			this.isPerso = false;
 		} else if ("position".equals(reader.getLocalName())) {
 			int x = 0;
 			int y = 0;
@@ -71,13 +76,34 @@ public class ChapterParser implements XMLParser {
 	        }
 			this.perosEnCours.setPosition(new Position(x, y));
 		} else if ("stat".equals(reader.getLocalName())) {
-			int niv = 1;
 			for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
+				int value = Integer.valueOf(reader.getAttributeValue(i));
 	        	if ("niv".equals(reader.getAttributeLocalName(i))) {
-	        		niv = Integer.valueOf(reader.getAttributeValue(i));
+	        		if (this.isPerso) {
+	            		this.perosEnCours.setNiv(value);
+	        		} else {
+	        			this.perosEnCours.changeNiveau(value);
+	        		}
+	        	} else if ("pv".equals(reader.getAttributeLocalName(i))) {
+	        		this.perosEnCours.setPv(value);
+	        	} else if ("pvgagne".equals(reader.getAttributeLocalName(i))) {
+	        		this.perosEnCours.setPvGagne(value);
+	        	} else if ("puissancegagne".equals(reader.getAttributeLocalName(i))) {
+	        		this.perosEnCours.setPuissanceGagne(value);
+	        	} else if ("capacitegagne".equals(reader.getAttributeLocalName(i))) {
+	        		this.perosEnCours.setCapaciteGagne(value);
+	        	} else if ("vitessegagne".equals(reader.getAttributeLocalName(i))) {
+	        		this.perosEnCours.setVitesseGagne(value);
+	        	} else if ("chancegagne".equals(reader.getAttributeLocalName(i))) {
+	        		this.perosEnCours.setChanceGagne(value);
+	        	} else if ("defgagne".equals(reader.getAttributeLocalName(i))) {
+	        		this.perosEnCours.setDefGagne(value);
+	        	} else if ("resistancegagne".equals(reader.getAttributeLocalName(i))) {
+	        		this.perosEnCours.setResistanceGagne(value);
+	        	} else if ("experience".equals(reader.getAttributeLocalName(i))) {
+	        		this.perosEnCours.setExperience(value);
 	        	}
 	        }
-			this.perosEnCours.changeNiveau(niv);
 		} else if ("objet".equals(reader.getLocalName())) {
 			String nom = null;
 			String type = null;
@@ -113,14 +139,20 @@ public class ChapterParser implements XMLParser {
 	private Character createPersonnage (XMLStreamReader reader) {
 		String nom = null;
 		String type = null;
+		Status status = null;
 		for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
         	if ("nom".equals(reader.getAttributeLocalName(i))) {
         		nom = reader.getAttributeValue(i);
         	} else if ("type".equals(reader.getAttributeLocalName(i))) {
         		type = reader.getAttributeValue(i);
+        	} else if ("status".equals(reader.getAttributeLocalName(i))) {
+        		status = Status.valueOf(reader.getAttributeValue(i));
         	}
         }
 		Character perso = (Character)factoryPersonnage.createCharacter(nom, null, FireEmblemCharacterType.valueOf(type));
+		if (status != null) {
+			perso.setStatus(status);
+		}
 		return perso;
 	}
 	

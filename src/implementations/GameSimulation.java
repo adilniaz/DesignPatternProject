@@ -1,5 +1,7 @@
 package implementations;
 
+import java.io.File;
+
 import abstracts_interfaces.SimulationAbstract;
 import abstracts_interfaces.factories.gameplatforms.GameEnvironnementAbstract;
 import abstracts_interfaces.factories.gameplatforms.GameEnvironnementFactoryAbstract;
@@ -47,6 +49,7 @@ public class GameSimulation implements SimulationAbstract {
     }
     
     private boolean hasSavedGame () {
+    	File file = new File("fireemblem.xml");
     	return false;
     }
     

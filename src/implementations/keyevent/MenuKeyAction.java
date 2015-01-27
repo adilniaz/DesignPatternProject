@@ -29,7 +29,7 @@ public class MenuKeyAction implements KeyListener  {
         this.components = components;
         this.cursor = 0;
         this.oldBorder = this.components[this.cursor].getBorder();
-        this.newBorder = new LineBorder(Color.yellow, 10);
+        this.newBorder = new LineBorder(Color.yellow, 5);
         this.components[this.cursor].setBorder(this.newBorder);
         this.pcsControlleurVue = new PropertyChangeSupport(this);
     }

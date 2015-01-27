@@ -1,5 +1,7 @@
 package implementations.gameplatform;
 
+import java.io.File;
+
 import implementations.Position;
 import implementations.parser.xml.ChapterParser;
 import implementations.parser.xml.Parser;
@@ -14,8 +16,14 @@ public class Terrain extends GameEnvironnementAbstract {
     @Override
     public GamePlatformAbstract createGamePlatform () {
     	GamePlatform plateauDeJeu = new GamePlatform();
-    	Parser.Parse("src/implementations/xml/map/blazing_sword.xml", new PlatformParser(this, plateauDeJeu));
-    	Parser.Parse("src/implementations/xml/character/blazing_sword.xml", new ChapterParser(plateauDeJeu));
+    	File file = new File("fireemblem.xml");
+    	if (file != null) {
+    		Parser.Parse("src/implementations/xml/map/blazing_sword.xml", new PlatformParser(this, plateauDeJeu));
+        	Parser.Parse("fireemblem.xml", new ChapterParser(plateauDeJeu));
+    	} else {
+    		Parser.Parse("src/implementations/xml/map/blazing_sword.xml", new PlatformParser(this, plateauDeJeu));
+        	Parser.Parse("src/implementations/xml/character/blazing_sword.xml", new ChapterParser(plateauDeJeu));
+    	}
     	return plateauDeJeu;
     }
 

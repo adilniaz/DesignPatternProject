@@ -26,7 +26,7 @@ public class GeneralBehaviour extends CharacterBehaviour {
         
         this.promoted = true;
         this.power = 3;
-        this.classBonusA = 0;
-        this.classBonusB = 0;
+        this.classBonusA = 20;
+        this.classBonusB = 60;
     }
 }

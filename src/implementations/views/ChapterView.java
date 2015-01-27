@@ -2,6 +2,7 @@ package implementations.views;
 
 import implementations.Position;
 import implementations.character.Character;
+import implementations.combat.FightBehaviour;
 import implementations.controller.Chapter;
 import implementations.controller.Chapter.Tour;
 import implementations.controller.Chapter.menu;
@@ -21,7 +22,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,10 +53,7 @@ public class ChapterView {
     private Popup fenetreMenu;
     private Popup fenetreActionPerso;
     private final PopupFactory popupFactory;
-    
-    private List<ZoneAbstract> zonesSelectionner;
-    private Character persoEnCours;
-    ComponentView components[][][];
+    private ComponentView components[][][];
     
     private Camera camera;
     private Position centerPosition;
@@ -90,7 +87,8 @@ public class ChapterView {
             }
         });
         this.chapitre.addListener(new PropertyChangeListener() {
-            @Override
+            @SuppressWarnings("unchecked")
+			@Override
             public void propertyChange(PropertyChangeEvent evt) {
                 if (evt.getPropertyName().equals(ChapterView.this.chapitre.AFFICHE_MAP)) {
                     afficheMap();
@@ -425,12 +423,18 @@ public class ChapterView {
     
     private void afficheArmesPerso (CharacterAbstract personnage) {
         Character perso = (Character) personnage;
-        JPanel panel = new JPanel (new GridLayout(perso.getObjets().length, 1));
-        JComponent[] components = new JComponent[perso.getObjets().length];
+        int nbComponent = 0;
+        for (Objet obj : perso.getObjets()) {
+            if (obj instanceof Weapon && ((FightBehaviour)perso.getBehaviour()).isWeaponAvailable((Weapon)obj)) {
+            	nbComponent++;
+            }
+        }
+        JPanel panel = new JPanel (new GridLayout(nbComponent, 1));
+        JComponent[] components = new JComponent[nbComponent];
         int indice = 0;
         int objIndice = 0;
         for (Objet obj : perso.getObjets()) {
-            if (obj instanceof Weapon) {
+            if (obj instanceof Weapon && ((FightBehaviour)perso.getBehaviour()).isWeaponAvailable((Weapon)obj)) {
                 JButton bouton = new JButton(obj.getName());
                 bouton.addActionListener(new weaponChoiceButton(objIndice));
                 panel.add(bouton);
@@ -635,15 +639,6 @@ public class ChapterView {
         public void actionPerformed (ActionEvent event) {
         	fenetreActionPerso.hide();
             chapitre.choiceWeapon(this.choice);
-        }
-    }
-    
-    private class boutonCombat implements ActionListener {
-        
-        @Override
-        public void actionPerformed (ActionEvent event) {
-        	fenetreActionPerso.hide();
-            chapitre.combat();
         }
     }
     
