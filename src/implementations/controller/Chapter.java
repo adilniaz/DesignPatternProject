@@ -252,6 +252,22 @@ public class Chapter extends Controller {
     	this.state.info();
     }
     
+    public void left () {
+    	this.state.left();
+    }
+    
+    public void right () {
+    	this.state.right();
+    }
+    
+    public void up () {
+    	this.state.up();
+    }
+    
+    public void down () {
+    	this.state.down();
+    }
+    
     public void freeStateAction () {
     	boolean aPerso = false;
         for (CharacterAbstract perso : this.plateauDeJeu.getPersonnages()) {
@@ -576,7 +592,6 @@ public class Chapter extends Controller {
     public void menu (menu m) {
         switch (m) {
             case unite:
-            	this.pcsControlleurVue.firePropertyChange(UNITES, null, null);
             	this.state = new UnitsState(this);
                break;
             case statut:
@@ -657,6 +672,10 @@ public class Chapter extends Controller {
 				this.plateauDeJeu.getPersonnages().remove(this.persoEnCours);
 			}
 		}
+    }
+    
+    public void fire (String code, Object obj1, Object obj2) {
+    	this.pcsControlleurVue.firePropertyChange(code, obj1, obj2);
     }
 	
 	public class RunControlleur extends Thread {
