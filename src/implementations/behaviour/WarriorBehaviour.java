@@ -1,11 +1,14 @@
 package implementations.behaviour;
 
+import implementations.character.FireEmblemCharacterType;
+
 
 public class WarriorBehaviour extends CharacterBehaviour {
     
     public WarriorBehaviour () {
     	
     	this.name = "Combattant";
+    	this.charactersType = FireEmblemCharacterType.combattant;
     	
         this.pvBase = 20;
         this.puissanceBase = 5;

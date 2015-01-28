@@ -12,5 +12,7 @@ public abstract class Strategy {
 	}
 	
 	public abstract void run (Chapter chapitre);
+	
+	public abstract String name ();
 
 }

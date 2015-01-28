@@ -20,6 +20,10 @@ public class RangeStrategy extends Strategy {
 	public RangeStrategy (Character perso) {
 		super(perso);
 	}
+	
+	public String name () {
+		return "portee";
+	}
 
 	@Override
 	public void run(Chapter chapitre) {

@@ -1,11 +1,14 @@
 package implementations.behaviour;
 
+import implementations.character.FireEmblemCharacterType;
+
 
 public class KnightBehaviour extends CharacterBehaviour {
     
     public KnightBehaviour () {
     	
     	this.name = "chevalier";
+    	this.charactersType = FireEmblemCharacterType.chevalier;
     	
         this.pvBase = 17;
         this.puissanceBase = 5;

@@ -127,6 +127,10 @@ public class Character extends CharacterAbstract {
     public void setPvGagne(int pv) {
         this.pvGagne = pv;
     }
+    
+    public int getPvGagne () {
+    	return this.pvGagne;
+    }
 
     public int getPuissance() {
         return this.comportementPersonnage.getPuissanceBase() + this.puissanceGagne;
@@ -134,6 +138,10 @@ public class Character extends CharacterAbstract {
 
     public void setPuissanceGagne(int puissance) {
         this.puissanceGagne = puissance;
+    }
+    
+    public int getPuissanceGagne () {
+    	return this.puissanceGagne;
     }
 
     public int getCapacite() {
@@ -143,6 +151,10 @@ public class Character extends CharacterAbstract {
     public void setCapaciteGagne(int capacite) {
         this.capaciteGagne = capacite;
     }
+    
+    public int getCapaciteGagne () {
+    	return this.capaciteGagne;
+    }
 
     public int getVitesse() {
         return this.comportementPersonnage.getVitesseBase() + this.vitesseGagne;
@@ -150,6 +162,10 @@ public class Character extends CharacterAbstract {
 
     public void setVitesseGagne(int vitesse) {
         this.vitesseGagne = vitesse;
+    }
+    
+    public int getVitesseGagne () {
+    	return this.vitesseGagne;
     }
 
     public int getChance() {
@@ -159,6 +175,10 @@ public class Character extends CharacterAbstract {
     public void setChanceGagne(int chance) {
         this.chanceGagne = chance;
     }
+    
+    public int getChanceGagner () {
+    	return this.chanceGagne;
+    }
 
     public int getDef() {
         return this.comportementPersonnage.getDefBase() + this.defGagne;
@@ -167,6 +187,10 @@ public class Character extends CharacterAbstract {
     public void setDefGagne(int def) {
         this.defGagne = def;
     }
+    
+    public int getDefGagne () {
+    	return this.defGagne;
+    }
 
     public int getResistance() {
         return this.comportementPersonnage.getResistanceBase() + this.resistanceGagne;
@@ -174,6 +198,10 @@ public class Character extends CharacterAbstract {
 
     public void setResistanceGagne(int resistance) {
         this.resistanceGagne = resistance;
+    }
+    
+    public int getResistanceGagne () {
+    	return this.resistanceGagne;
     }
 
     public int getConstitution() {

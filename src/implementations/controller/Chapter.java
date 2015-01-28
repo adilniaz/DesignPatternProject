@@ -15,18 +15,16 @@ import implementations.character.Character;
 import implementations.character.Character.Etat;
 import implementations.character.FireEmblemCharacterFactory;
 import implementations.character.FireEmblemCharacterType;
-import implementations.dbconnection.Connexion;
-import implementations.dbconnection.DBConnection;
 import implementations.gameplatform.Square;
 import implementations.gameplatform.GamePlatform;
 import implementations.object.ObjetFactory;
 import implementations.object.ObjetType;
 import implementations.organizations.Organization;
+import implementations.parser.xml.XMLWriter;
 import implementations.strategy.AttackNearestStrategy;
 import implementations.views.View;
 import implementations.views.Window;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -602,11 +600,8 @@ public class Chapter extends Controller {
             	break;
             case suspen:
             	this.pcsControlleurVue.firePropertyChange(SUSPENDRE, null, null);
-            	DBConnection connexionBD = new DBConnection();
-            	Connection connection = connexionBD.getConnexionHSQL("fireemblem", "sa", "");
-            	Connexion connexion = new Connexion(connection);
-            	connexion.savePartie(this);
-            	connexionBD.closeHSQLConnection();
+            	XMLWriter xmlWriter = new XMLWriter();
+            	xmlWriter.write(this);
             	this.pcsControlleurVue.firePropertyChange(PARTIE_SUSPENDU, null, null);
             	this.fin = true;
                break;

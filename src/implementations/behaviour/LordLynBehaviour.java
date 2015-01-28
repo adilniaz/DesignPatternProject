@@ -1,11 +1,14 @@
 package implementations.behaviour;
 
+import implementations.character.FireEmblemCharacterType;
+
 
 public class LordLynBehaviour extends CharacterBehaviour {
     
     public LordLynBehaviour () {
     	
     	this.name = "Lord";
+    	this.charactersType = FireEmblemCharacterType.lord_lyn;
     	
         this.pvBase = 16;
         this.puissanceBase = 4;

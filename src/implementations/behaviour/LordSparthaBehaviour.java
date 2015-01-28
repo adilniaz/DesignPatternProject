@@ -1,10 +1,13 @@
 package implementations.behaviour;
 
+import implementations.character.FireEmblemCharacterType;
+
 public class LordSparthaBehaviour extends CharacterBehaviour {
     
     public LordSparthaBehaviour () {
     	
     	this.name = "Lord Spartha";
+    	this.charactersType = FireEmblemCharacterType.lord_spatha;
     	
         this.pvBase = 19;
         this.puissanceBase = 6;
