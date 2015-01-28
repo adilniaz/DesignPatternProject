@@ -12,13 +12,13 @@ import implementations.chapters.UnitsState;
 import implementations.chapters.ViewMoveState;
 import implementations.chapters.WeaponChoiceState;
 import implementations.character.Character;
+import implementations.character.Character.Etat;
 import implementations.character.FireEmblemCharacterFactory;
 import implementations.character.FireEmblemCharacterType;
 import implementations.dbconnection.Connexion;
 import implementations.dbconnection.DBConnection;
 import implementations.gameplatform.Square;
 import implementations.gameplatform.GamePlatform;
-import implementations.gameplatform.GamePlatform.Etat;
 import implementations.object.ObjetFactory;
 import implementations.object.ObjetType;
 import implementations.organizations.Organization;
@@ -170,7 +170,7 @@ public class Chapter extends Controller {
 			case perso:
 				boolean hasPersoNormal = false;
 				for (CharacterAbstract perso : this.plateauDeJeu.getPersonnages()) {
-					if (this.plateauDeJeu.getEtatByCharacter(perso) == Etat.normal) {
+					if (((Character)perso).getEtat() == Etat.normal) {
 						hasPersoNormal = true;
 						break;
 					}
@@ -179,7 +179,8 @@ public class Chapter extends Controller {
 					this.tour = Tour.ennemie;
 					this.state = new OtherPhaseState(this);
 					for (CharacterAbstract perso : this.plateauDeJeu.getPersonnages()) {
-						this.plateauDeJeu.changeEtatCharacter(perso, Etat.normal);
+						((Character)perso).setEtat(Etat.normal);
+						this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, perso, null);
 					}
 					this.pcsControlleurVue.firePropertyChange(CHANGE_TOUR, this.tour, null);
 				}
@@ -195,26 +196,47 @@ public class Chapter extends Controller {
 						pcsControlleurVue.firePropertyChange(ENLEVE_PERSO, p, null);
 						this.plateauDeJeu.getEnnemies().remove(p);
 						i--;
+					} else {
+						p.setEtat(Etat.attendre);
+		                this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, p, null);
 					}
+					this.attendre(2000);
 				}
 				if (this.plateauDeJeu.getEnnemies().isEmpty()) {
 					this.fin = true;
 				} else {
 					this.tour = Tour.annexes;
 					this.pcsControlleurVue.firePropertyChange(CHANGE_TOUR, this.tour, null);
+					for (CharacterAbstract perso : this.plateauDeJeu.getEnnemies()) {
+						((Character)perso).setEtat(Etat.normal);
+						this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, perso, null);
+					}
 				}
 				break;
 			case annexes:
-				for (CharacterAbstract perso : this.plateauDeJeu.getAnnexes()) {
-					Character p = (Character) perso;
+				for (int i = 0 ; i < this.plateauDeJeu.getAnnexes().size() ; i++) {
+					Character p = (Character) this.plateauDeJeu.getAnnexes().get(i);
 					this.persoEnCours = p;
 					p.getStrategie().run(this);
+					if (p.estKo()) {
+						pcsControlleurVue.firePropertyChange(ENLEVE_PERSO, p, null);
+						this.plateauDeJeu.getAnnexes().remove(p);
+						i--;
+					} else {
+						p.setEtat(Etat.attendre);
+		                this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, p, null);
+					}
+					this.attendre(2000);
 				}
 				this.tour = Tour.perso;
 				this.pcsControlleurVue.firePropertyChange(CHANGE_TOUR, this.tour, null);
 				this.renfortAppeler = false;
 				this.state = new FreeState(this);
 				this.nbTour++;
+				for (CharacterAbstract perso : this.plateauDeJeu.getAnnexes()) {
+					((Character)perso).setEtat(Etat.normal);
+					this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, perso, null);
+				}
 				break;
 		}
     }
@@ -236,7 +258,7 @@ public class Chapter extends Controller {
     	boolean aPerso = false;
         for (CharacterAbstract perso : this.plateauDeJeu.getPersonnages()) {
             Character p = (Character) perso;
-            if (p.getPosition().equals(this.currentPosition)) {
+            if (p.getPosition().equals(this.currentPosition) && p.getEtat() == Etat.normal) {
                 aPerso = true;
                 List<ZoneAbstract> zones = p.getMove().getCaseAvailable(this.plateauDeJeu, p);
                 List<ZoneAbstract> zonesAtk = this.getPorteAttaque(zones, this.plateauDeJeu.getZones());
@@ -466,7 +488,8 @@ public class Chapter extends Controller {
             	this.persoAttaquer = p;
             	this.combat.finSimulation();
                 new RunControlleur(combat).start();
-                this.plateauDeJeu.changeEtatCharacter(p2, Etat.attendre);
+                p2.setEtat(Etat.attendre);
+                this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, p2, null);
                 this.state = new FreeState(this);
                 this.pcsControlleurVue.firePropertyChange(FREE_STATE, null, null);
                 break;
@@ -474,7 +497,8 @@ public class Chapter extends Controller {
             	this.persoAttaquer = p;
             	this.combat.finSimulation();
                 new RunControlleur(combat).start();
-                this.plateauDeJeu.changeEtatCharacter(p2, Etat.attendre);
+                p2.setEtat(Etat.attendre);
+                this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, p2, null);
                 this.state = new FreeState(this);
                 this.pcsControlleurVue.firePropertyChange(FREE_STATE, null, null);
                 break;
@@ -482,7 +506,8 @@ public class Chapter extends Controller {
             	this.persoAttaquer = p;
             	this.combat.finSimulation();
                 new RunControlleur(combat).start();
-                this.plateauDeJeu.changeEtatCharacter(p2, Etat.attendre);
+                p2.setEtat(Etat.attendre);
+                this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, p2, null);
                 this.state = new FreeState(this);
                 this.pcsControlleurVue.firePropertyChange(FREE_STATE, null, null);
                 break;
@@ -490,7 +515,8 @@ public class Chapter extends Controller {
             	this.persoAttaquer = p;
             	this.combat.finSimulation();
                 new RunControlleur(combat).start();
-                this.plateauDeJeu.changeEtatCharacter(p2, Etat.attendre);
+                p2.setEtat(Etat.attendre);
+                this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, p2, null);
                 this.state = new FreeState(this);
                 this.pcsControlleurVue.firePropertyChange(FREE_STATE, null, null);
                 break;
@@ -586,7 +612,8 @@ public class Chapter extends Controller {
                break;
             case fin:
             	for (CharacterAbstract perso : this.plateauDeJeu.getPersonnages()) {
-            		this.plateauDeJeu.changeEtatCharacter(perso, Etat.attendre);
+            		((Character)perso).setEtat(Etat.attendre);
+            		this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, perso, null);
             	}
             	this.menuStateCancel();
             	this.continuer = true;
@@ -605,7 +632,8 @@ public class Chapter extends Controller {
             case echange:
                 break;
             case attendre:
-            	this.plateauDeJeu.changeEtatCharacter(this.persoEnCours, Etat.attendre);
+            	((Character)persoEnCours).setEtat(Etat.attendre);
+            	this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, this.persoEnCours, null);
             	this.state = new FreeState(this);
             	this.pcsControlleurVue.firePropertyChange(FREE_STATE, null, null);
             	this.continuer = true;
@@ -647,6 +675,8 @@ public class Chapter extends Controller {
 		@Override
 		public void run () {
 			this.controleur.run();
+			((Character)persoEnCours).setEtat(Etat.attendre);
+			pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, persoEnCours, null);
 			verifMort();
 			continuer = true;
 		}

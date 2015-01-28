@@ -40,9 +40,14 @@ public class Character extends CharacterAbstract {
     private boolean aJouer;
     
     private Status status;
+    private Etat etat;
     
     public enum Status {
     	normal, boss;
+    }
+    
+    public enum Etat {
+    	normal, attendre;
     }
     
     public Character (String nom, Organization organisation) {
@@ -52,6 +57,7 @@ public class Character extends CharacterAbstract {
         this.aJouer = false;
         this.niv = 1;
         this.status = Status.normal;
+        this.etat = Etat.normal;
     }
     
     public Character (Character perso) {
@@ -378,7 +384,19 @@ public class Character extends CharacterAbstract {
     }
     
     public void setStatus (Status status) {
-    	
+    	this.status = status;
+    }
+    
+    public Status getStatus () {
+    	return this.status;
+    }
+    
+    public void setEtat (Etat etat) {
+    	this.etat = etat;
+    }
+    
+    public Etat getEtat () {
+    	return this.etat;
     }
 
     @Override
