@@ -15,6 +15,7 @@ import implementations.media.character.CharacterImage;
 import implementations.media.map.MapImage;
 import implementations.object.Objet;
 import implementations.object.Weapon;
+import implementations.object.WeaponType;
 
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -47,29 +48,34 @@ public class ChapterView {
     private final Window fenetre;
     
     private final MapKeyAction keyAction;
-    private Popup fenetreObjectif;
-    private Popup fenetreTerrain;
-    private Popup fenetrePerso;
-    private Popup fenetreMenu;
-    private Popup fenetreActionPerso;
     private final PopupFactory popupFactory;
+    private final MyPopup fenetreObjectif;
+    private final MyPopup fenetreTerrain;
+    private final MyPopup fenetrePerso;
+    private final MyPopup fenetreMenu;
     private ComponentView components[][][];
     
     private Camera camera;
     private Position centerPosition;
     private Panel panel;
     private JPanel menuPanel;
-    int width = 125;
-    int height = 65;
+    private int width = 70;
+    private int height = 50;
     
     public ChapterView (Chapter chapitre, Window fenetre) {
         this.chapitre = chapitre;
         this.fenetre = fenetre;
         this.keyAction = new MapKeyAction();
-        this.popupFactory = PopupFactory.getSharedInstance();
         this.camera = new Camera();
         this.centerPosition = new Position(10, 10);
         this.camera.setCenterPoint(this.centerPosition);
+        
+        this.popupFactory = PopupFactory.getSharedInstance();
+
+        this.fenetreObjectif = new MyPopup(600, 50, this.fenetre);
+        this.fenetreTerrain = new MyPopup(50, 400, this.fenetre);
+        this.fenetrePerso = new MyPopup(50, 40, this.fenetre);
+        this.fenetreMenu = new MyPopup(50, 150, this.fenetre);
         
         
         this.keyAction.ajouterEcouteur(new PropertyChangeListener() {
@@ -131,7 +137,7 @@ public class ChapterView {
                 } else if (evt.getPropertyName().equals(ChapterView.this.chapitre.STATUS)) {
                     status();
                 } else if (evt.getPropertyName().equals(ChapterView.this.chapitre.UNITES)) {
-                    unites();
+                    unites((int)evt.getOldValue());
                 } else if (evt.getPropertyName().equals(ChapterView.this.chapitre.VICTOIRE)) {
                     victoire();
                 }
@@ -164,8 +170,7 @@ public class ChapterView {
         this.fenetre.addKeyBoardManager(new KeyDispatcher(this.keyAction));
         this.fenetre.ajouterPanel(this.panel);
         JLabel label = new JLabel(this.chapitre.getObjectif());
-        this.fenetreObjectif = this.popupFactory.getPopup(this.fenetre, label, 1200, 80);
-        this.fenetreObjectif.show();
+        this.fenetreObjectif.addComponent(label);
         this.changeCursorPosition(this.centerPosition, this.centerPosition);
     }
     
@@ -203,16 +208,16 @@ public class ChapterView {
         });
         this.fenetreObjectif.hide();
         this.fenetreTerrain.hide();
-        this.fenetreMenu = this.popupFactory.getPopup(this.fenetre, panel, 100, 250);
-        this.fenetreMenu.show();
+        //this.addToPanel(this.fenetreMenuContent, panel);
+        this.fenetreMenu.addComponent(panel);
         this.fenetre.addKeyBoardManager(new KeyDispatcher(menuKeyAction));
     }
     
     private void hideMenu () {
     	this.fenetreMenu.hide();
     	this.fenetre.addKeyBoardManager(new KeyDispatcher(this.keyAction));
-    	/*this.fenetreObjectif.show();
-    	this.fenetreTerrain.show();*/
+    	this.fenetreObjectif.show();
+    	this.fenetreTerrain.show();
     }
     
     private void afficheActionPerso (Chapter.actionPerso actions[]) {
@@ -226,8 +231,8 @@ public class ChapterView {
             components[indice] = bouton;
             indice++;
         }
-        this.fenetreActionPerso = this.popupFactory.getPopup(this.fenetre, panel, 100, 250);
-        this.fenetreActionPerso.show();
+        //this.addToPanel(this.fenetreMenuContent, panel);
+        this.fenetreMenu.addComponent(panel);
         MenuKeyAction menuKeyAction = new MenuKeyAction(components);
         menuKeyAction.ajouterEcouteur(new PropertyChangeListener() {
             @Override
@@ -243,7 +248,7 @@ public class ChapterView {
     }
     
     private void cancelActionPerso () {
-    	this.fenetreActionPerso.hide();
+    	this.fenetreMenu.hide();
     	this.fenetre.addKeyBoardManager(new KeyDispatcher(this.keyAction));
     }
     
@@ -257,10 +262,6 @@ public class ChapterView {
     	if (this.camera.move(oldPosition, newPosition, this.components.length, this.components[0].length)) {
     		this.refresh();
     	}
-    	this.fenetreObjectif.hide();
-    	JLabel label = new JLabel(this.chapitre.getObjectif());
-        this.fenetreObjectif = this.popupFactory.getPopup(this.fenetre, label, 1200, 80);
-        this.fenetreObjectif.show();
         JPanel panelTerrain = new JPanel (new GridLayout(2, 1));
         for (ZoneAbstract zone : this.chapitre.getPlateauDeJeu().getZones()) {
             Square c = (Square) zone;
@@ -277,18 +278,12 @@ public class ChapterView {
                 break;
             }
         }
-        if (this.fenetreTerrain != null) {
-        	this.fenetreTerrain.hide();
-        }
-        this.fenetreTerrain = this.popupFactory.getPopup(this.fenetre, panelTerrain, 100, 600);
-        this.fenetreTerrain.show();
+        this.fenetreTerrain.addComponent(panelTerrain);
 
         for (CharacterAbstract perso : this.chapitre.getPlateauDeJeu().getPersonnages()) {
             Character p = (Character) perso;
             if (p.getPosition().equals(oldPosition)) {
-            	if (this.fenetrePerso != null) {
-            		this.fenetrePerso.hide();
-            	}
+            	this.fenetrePerso.hide();
                 this.camera.refresh(this.panel, p.getPosition(), 2, this.centerPosition, this.components, new ComponentView(new PanelImage(CharacterImage.getImageIconMapFromPersonnage(perso), width, height)));
             }
         }
@@ -296,9 +291,7 @@ public class ChapterView {
         for (CharacterAbstract perso : this.chapitre.getPlateauDeJeu().getEnnemies()) {
             Character p = (Character) perso;
             if (p.getPosition().equals(oldPosition)) {
-            	if (this.fenetrePerso != null) {
-            		this.fenetrePerso.hide();
-            	}
+            	this.fenetrePerso.hide();
             }
         }
 
@@ -368,8 +361,7 @@ public class ChapterView {
         JLabel labelPersoPV = new JLabel("PV  " + perso.getPv() + "/" + perso.getPvMax());
         boxStat.add(labelPersoPV);
         boxPerso.add(boxStat);
-        this.fenetrePerso = this.popupFactory.getPopup(this.fenetre, boxPerso, 100, 80);
-        this.fenetrePerso.show();
+        this.fenetrePerso.addComponent(boxPerso);
     }
     
     private void deplacePerso (CharacterAbstract perso, Position oldPosition) {
@@ -393,18 +385,6 @@ public class ChapterView {
     private void enlevePerso (Character perso) {
     	this.camera.refresh(this.panel, perso.getPosition(), 1, this.centerPosition, this.components, null);
     	this.camera.refresh(this.panel, perso.getPosition(), 2, this.centerPosition, this.components, null);
-    }
-    
-    private void action () {
-        this.chapitre.action();
-    }
-    
-    private void annulation () {
-        this.chapitre.annulation();
-    }
-    
-    private void info () {
-        this.chapitre.info();
     }
     
     private void afficheDeplacementDisponible (List<ZoneAbstract> zones) {
@@ -443,8 +423,7 @@ public class ChapterView {
             }
             objIndice++;
         }
-        this.fenetreActionPerso = this.popupFactory.getPopup(this.fenetre, panel, 100, 250);
-        this.fenetreActionPerso.show();
+        this.fenetreMenu.addComponent(panel);
         
         MenuKeyAction menuKeyAction = new MenuKeyAction(components);
         menuKeyAction.ajouterEcouteur(new PropertyChangeListener() {
@@ -490,25 +469,110 @@ public class ChapterView {
         }
     }
     
-    private void unites () {
-    	Box box = Box.createVerticalBox();
-    	String[] columnNames = {"", "Nom", "Classe", "Niv", "Exp", "PV", "Max"};
-    	Object[][] data = new Object[this.chapitre.getPlateauDeJeu().getPersonnages().size()][7];
-    	for(int i = 0 ; i < this.chapitre.getPlateauDeJeu().getPersonnages().size() ; i++) {
-    		Character perso = (Character) this.chapitre.getPlateauDeJeu().getPersonnages().get(i);
-    		data[i][0] = "";
-    		data[i][1] = perso.getName();
-    		data[i][2] = perso.getComportementPersonnage().getName();
-    		data[i][3] = perso.getNiv();
-    		data[i][4] = perso.getExperience();
-    		data[i][5] = perso.getPv();
-    		data[i][6] = perso.getPvMax();
-        }
-    	box.add(new JLabel("Personnages"));
-    	JTable table = new JTable(data, columnNames);
-    	box.add(new JScrollPane(table));
-    	this.fenetreMenu.hide();
-    	this.fenetre.ajouterPanel(box);
+    private void unites (int page) {
+    	if (page == 1) {
+    		Box box = Box.createVerticalBox();
+        	String[] columnNames = {"", "Nom", "Classe", "Niv", "Exp", "PV  Max"};
+        	Object[][] data = new Object[this.chapitre.getPlateauDeJeu().getPersonnages().size()][6];
+        	for(int i = 0 ; i < this.chapitre.getPlateauDeJeu().getPersonnages().size() ; i++) {
+        		Character perso = (Character) this.chapitre.getPlateauDeJeu().getPersonnages().get(i);
+        		data[i][0] = "";
+        		data[i][1] = perso.getName();
+        		data[i][2] = perso.getComportementPersonnage().getName();
+        		data[i][3] = perso.getNiv();
+        		data[i][4] = perso.getExperience();
+        		data[i][5] = perso.getPv() + " / " + perso.getPvMax();
+            }
+        	box.add(new JLabel("Personnages  (1/4)"));
+        	JTable table = new JTable(data, columnNames);
+        	box.add(new JScrollPane(table));
+        	this.fenetreMenu.hide();
+        	this.fenetre.ajouterPanel(box);
+    	} else if (page == 2) {
+    		Box box = Box.createVerticalBox();
+        	String[] columnNames = {"", "Nom", "F/M", "Tec", "Vit", "Ch", "Déf", "Rés"};
+        	Object[][] data = new Object[this.chapitre.getPlateauDeJeu().getPersonnages().size()][8];
+        	for(int i = 0 ; i < this.chapitre.getPlateauDeJeu().getPersonnages().size() ; i++) {
+        		Character perso = (Character) this.chapitre.getPlateauDeJeu().getPersonnages().get(i);
+        		data[i][0] = "";
+        		data[i][1] = perso.getName();
+        		data[i][2] = perso.getPuissance();
+        		data[i][3] = perso.getCapacite();
+        		data[i][4] = perso.getVitesse();
+        		data[i][5] = perso.getChance();
+        		data[i][6] = perso.getDef();
+        		data[i][7] = perso.getResistance();
+            }
+        	box.add(new JLabel("Aptitudes  (2/4)"));
+        	JTable table = new JTable(data, columnNames);
+        	box.add(new JScrollPane(table));
+        	this.fenetre.ajouterPanel(box);
+    	} else if (page == 3) {
+    		Box box = Box.createVerticalBox();
+        	String[] columnNames = {"", "Nom", "Equip", "Dmg", "Prc", "Esq"};
+        	Object[][] data = new Object[this.chapitre.getPlateauDeJeu().getPersonnages().size()][6];
+        	for(int i = 0 ; i < this.chapitre.getPlateauDeJeu().getPersonnages().size() ; i++) {
+        		Character perso = (Character) this.chapitre.getPlateauDeJeu().getPersonnages().get(i);
+        		
+        		Weapon weapon = perso.getArme();
+                int sRankBonus = weapon.getRang() == Weapon.Rang.S ? 5 : 0;
+                int precision = weapon.getPrecision() + (perso.getCapacite() * 2) + (perso.getChance() /2) + sRankBonus;
+                int vitesseAttaque = perso.getVitesse() - (weapon.getPoids() - perso.getConstitution());
+                int avoid = (vitesseAttaque * 2) + perso.getChance();
+        		
+        		data[i][0] = "";
+        		data[i][1] = perso.getName();
+        		data[i][2] = weapon.getName();
+        		data[i][3] = perso.getPuissance() + weapon.getPuisance();
+        		data[i][4] = precision;
+        		data[i][5] = avoid;
+            }
+        	box.add(new JLabel("Equipement  (3/4)"));
+        	JTable table = new JTable(data, columnNames);
+        	box.add(new JScrollPane(table));
+        	this.fenetre.ajouterPanel(box);
+    	} else if (page == 4) {
+    		Box box = Box.createVerticalBox();
+        	String[] columnNames = {"", "Nom", "Mvt", "Cons", "Arme"};
+        	Object[][] data = new Object[this.chapitre.getPlateauDeJeu().getPersonnages().size()][5];
+        	for(int i = 0 ; i < this.chapitre.getPlateauDeJeu().getPersonnages().size() ; i++) {
+        		Character perso = (Character) this.chapitre.getPlateauDeJeu().getPersonnages().get(i);
+        		WeaponType[] weaponTypes = ((FightBehaviour)perso.getBehaviour()).getWeaponTypes();
+        		String weapons = "";
+        		for (WeaponType weaponType : weaponTypes) {
+        			weapons += weaponType.name() + ";";
+        		}
+        		data[i][0] = "";
+        		data[i][1] = perso.getName();
+        		data[i][2] = perso.getMove().getNbDeplacement();
+        		data[i][3] = perso.getConstitution();
+        		data[i][4] = weapons;
+            }
+        	box.add(new JLabel("Attributs  (4/4)"));
+        	JTable table = new JTable(data, columnNames);
+        	box.add(new JScrollPane(table));
+        	this.fenetre.ajouterPanel(box);
+    	}
+    	SimpleKeyAction simpleKeyAction = new SimpleKeyAction();
+    	simpleKeyAction.ajouterEcouteur(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals("action")) {
+                    action();
+                } else if (evt.getPropertyName().equals("annulation")) {
+                    annulation();
+                } else if (evt.getPropertyName().equals("left")) {
+                    left();
+                } else if (evt.getPropertyName().equals("right")) {
+                    right();
+                } else if (evt.getPropertyName().equals("up")) {
+                    up();
+                } else if (evt.getPropertyName().equals("down")) {
+                    down();
+                }
+            }
+        });
+        this.fenetre.addKeyBoardManager(new KeyDispatcher(simpleKeyAction));
     }
     
     private void status () {
@@ -590,6 +654,34 @@ public class ChapterView {
         this.fenetreTerrain.hide();
     }
     
+    private void action () {
+        this.chapitre.action();
+    }
+    
+    private void annulation () {
+        this.chapitre.annulation();
+    }
+    
+    private void info () {
+        this.chapitre.info();
+    }
+    
+    private void left () {
+        this.chapitre.left();
+    }
+    
+    private void right () {
+        this.chapitre.right();
+    }
+    
+    private void up () {
+        this.chapitre.up();
+    }
+    
+    private void down () {
+        this.chapitre.down();
+    }
+    
     public synchronized void attendre (int time) {
         try {
             this.wait(time);
@@ -622,7 +714,7 @@ public class ChapterView {
         
         @Override
         public void actionPerformed (ActionEvent event) {
-        	fenetreActionPerso.hide();
+        	fenetreMenu.hide();
             chapitre.actionPerso(this.actionPerso);
         }
     }
@@ -637,7 +729,7 @@ public class ChapterView {
         
         @Override
         public void actionPerformed (ActionEvent event) {
-        	fenetreActionPerso.hide();
+        	fenetreMenu.hide();
             chapitre.choiceWeapon(this.choice);
         }
     }

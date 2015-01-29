@@ -1,10 +1,13 @@
 package implementations.behaviour;
 
+import implementations.character.FireEmblemCharacterType;
+
 public class GeneralBehaviour extends CharacterBehaviour {
     
     public GeneralBehaviour () {
     	
     	this.name = "General";
+    	this.charactersType = FireEmblemCharacterType.general;
         
         this.pvBase = 21;
         this.puissanceBase = 7;

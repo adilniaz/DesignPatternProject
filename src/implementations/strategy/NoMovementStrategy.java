@@ -15,6 +15,10 @@ public class NoMovementStrategy extends Strategy {
 	public NoMovementStrategy (Character perso) {
 		super(perso);
 	}
+	
+	public String name () {
+		return "immobile";
+	}
 
 	@Override
 	public void run(Chapter chapitre) {

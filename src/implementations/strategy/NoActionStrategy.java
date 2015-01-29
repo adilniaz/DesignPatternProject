@@ -11,6 +11,10 @@ public class NoActionStrategy extends Strategy {
 		super(perso);
 	}
 	
+	public String name () {
+		return "rien";
+	}
+	
 	@Override
 	public void run(Chapter chapitre) {
 		

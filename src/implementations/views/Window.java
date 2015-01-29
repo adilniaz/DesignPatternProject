@@ -19,7 +19,7 @@ public class Window extends JFrame {
     }
     
     public Window (String title) {
-        this(title, 1250, 650);
+        this(title, 700, 500);
     }
     
     public Window (String title, int width, int height) {

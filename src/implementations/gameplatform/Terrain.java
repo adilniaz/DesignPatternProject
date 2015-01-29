@@ -17,7 +17,7 @@ public class Terrain extends GameEnvironnementAbstract {
     public GamePlatformAbstract createGamePlatform () {
     	GamePlatform plateauDeJeu = new GamePlatform();
     	File file = new File("fireemblem.xml");
-    	if (file != null) {
+    	if (file.exists()) {
     		Parser.Parse("src/implementations/xml/map/blazing_sword.xml", new PlatformParser(this, plateauDeJeu));
         	Parser.Parse("fireemblem.xml", new ChapterParser(plateauDeJeu));
     	} else {

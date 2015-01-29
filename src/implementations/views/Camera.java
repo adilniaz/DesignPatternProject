@@ -4,15 +4,15 @@ import implementations.Position;
 
 public class Camera {
 	
-	private int width;
-	private int height;
-	private int ligne;
-	private int colone;
+	private final int width;
+	private final int height;
+	private final int ligne;
+	private final int colone;
 	private Position centerPoint;
 	
 	public Camera () {
-		this.width = 1250;
-		this.height = 650;
+		this.width = 700;
+		this.height = 500;
 		this.ligne = 10;
 		this.colone = 10;
 	}

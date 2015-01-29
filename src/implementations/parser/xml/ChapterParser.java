@@ -1,6 +1,7 @@
 package implementations.parser.xml;
 
 import implementations.Position;
+import implementations.character.Character.Etat;
 import implementations.character.Character.Status;
 import implementations.character.FireEmblemCharacterFactory;
 import implementations.character.Character;
@@ -140,6 +141,7 @@ public class ChapterParser implements XMLParser {
 		String nom = null;
 		String type = null;
 		Status status = null;
+		Etat etat = Etat.normal;
 		for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
         	if ("nom".equals(reader.getAttributeLocalName(i))) {
         		nom = reader.getAttributeValue(i);
@@ -147,11 +149,14 @@ public class ChapterParser implements XMLParser {
         		type = reader.getAttributeValue(i);
         	} else if ("status".equals(reader.getAttributeLocalName(i))) {
         		status = Status.valueOf(reader.getAttributeValue(i));
+        	} else if ("etat".equals(reader.getAttributeLocalName(i))) {
+        		etat = Etat.valueOf(reader.getAttributeValue(i));
         	}
         }
 		Character perso = (Character)factoryPersonnage.createCharacter(nom, null, FireEmblemCharacterType.valueOf(type));
 		if (status != null) {
 			perso.setStatus(status);
+			perso.setEtat(etat);
 		}
 		return perso;
 	}

@@ -1,10 +1,13 @@
 package implementations.behaviour;
 
+import implementations.character.FireEmblemCharacterType;
+
 public class LordHappiaBehaviour extends CharacterBehaviour {
     
     public LordHappiaBehaviour () {
     	
     	this.name = "Lord Happia";
+    	this.charactersType = FireEmblemCharacterType.lord_happia;
     	
         this.pvBase = 22;
         this.puissanceBase = 7;

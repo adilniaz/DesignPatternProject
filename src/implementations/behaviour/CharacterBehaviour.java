@@ -24,6 +24,7 @@ public class CharacterBehaviour {
     protected int resistanceMax;
     protected int constitutionMax;
     
+    protected FireEmblemCharacterType charactersType;
     protected boolean promoted;
     protected int power;
     protected int classBonusA;
@@ -33,6 +34,10 @@ public class CharacterBehaviour {
     
     public String getName () {
     	return this.name;
+    }
+    
+    public FireEmblemCharacterType getType () {
+    	return this.charactersType;
     }
 
     public int getPvBase() {

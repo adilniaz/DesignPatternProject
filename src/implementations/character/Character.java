@@ -40,9 +40,14 @@ public class Character extends CharacterAbstract {
     private boolean aJouer;
     
     private Status status;
+    private Etat etat;
     
     public enum Status {
     	normal, boss;
+    }
+    
+    public enum Etat {
+    	normal, attendre;
     }
     
     public Character (String nom, Organization organisation) {
@@ -52,6 +57,7 @@ public class Character extends CharacterAbstract {
         this.aJouer = false;
         this.niv = 1;
         this.status = Status.normal;
+        this.etat = Etat.normal;
     }
     
     public Character (Character perso) {
@@ -121,6 +127,10 @@ public class Character extends CharacterAbstract {
     public void setPvGagne(int pv) {
         this.pvGagne = pv;
     }
+    
+    public int getPvGagne () {
+    	return this.pvGagne;
+    }
 
     public int getPuissance() {
         return this.comportementPersonnage.getPuissanceBase() + this.puissanceGagne;
@@ -128,6 +138,10 @@ public class Character extends CharacterAbstract {
 
     public void setPuissanceGagne(int puissance) {
         this.puissanceGagne = puissance;
+    }
+    
+    public int getPuissanceGagne () {
+    	return this.puissanceGagne;
     }
 
     public int getCapacite() {
@@ -137,6 +151,10 @@ public class Character extends CharacterAbstract {
     public void setCapaciteGagne(int capacite) {
         this.capaciteGagne = capacite;
     }
+    
+    public int getCapaciteGagne () {
+    	return this.capaciteGagne;
+    }
 
     public int getVitesse() {
         return this.comportementPersonnage.getVitesseBase() + this.vitesseGagne;
@@ -144,6 +162,10 @@ public class Character extends CharacterAbstract {
 
     public void setVitesseGagne(int vitesse) {
         this.vitesseGagne = vitesse;
+    }
+    
+    public int getVitesseGagne () {
+    	return this.vitesseGagne;
     }
 
     public int getChance() {
@@ -153,6 +175,10 @@ public class Character extends CharacterAbstract {
     public void setChanceGagne(int chance) {
         this.chanceGagne = chance;
     }
+    
+    public int getChanceGagner () {
+    	return this.chanceGagne;
+    }
 
     public int getDef() {
         return this.comportementPersonnage.getDefBase() + this.defGagne;
@@ -161,6 +187,10 @@ public class Character extends CharacterAbstract {
     public void setDefGagne(int def) {
         this.defGagne = def;
     }
+    
+    public int getDefGagne () {
+    	return this.defGagne;
+    }
 
     public int getResistance() {
         return this.comportementPersonnage.getResistanceBase() + this.resistanceGagne;
@@ -168,6 +198,10 @@ public class Character extends CharacterAbstract {
 
     public void setResistanceGagne(int resistance) {
         this.resistanceGagne = resistance;
+    }
+    
+    public int getResistanceGagne () {
+    	return this.resistanceGagne;
     }
 
     public int getConstitution() {
@@ -378,7 +412,19 @@ public class Character extends CharacterAbstract {
     }
     
     public void setStatus (Status status) {
-    	
+    	this.status = status;
+    }
+    
+    public Status getStatus () {
+    	return this.status;
+    }
+    
+    public void setEtat (Etat etat) {
+    	this.etat = etat;
+    }
+    
+    public Etat getEtat () {
+    	return this.etat;
     }
 
     @Override

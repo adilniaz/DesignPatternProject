@@ -1,11 +1,14 @@
 package implementations.behaviour;
 
+import implementations.character.FireEmblemCharacterType;
+
 
 public class LordEquusBehaviour extends CharacterBehaviour {
     
     public LordEquusBehaviour () {
     	
     	this.name = "Lord Equus";
+    	this.charactersType = FireEmblemCharacterType.lord_equus;
     	
         this.pvBase = 22;
         this.puissanceBase = 7;

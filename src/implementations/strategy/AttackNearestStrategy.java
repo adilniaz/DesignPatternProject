@@ -19,6 +19,10 @@ public class AttackNearestStrategy extends Strategy {
 	public AttackNearestStrategy (Character perso) {
 		super(perso);
 	}
+	
+	public String name () {
+		return "plusProche";
+	}
 
 	@Override
 	public void run(Chapter chapitre) {

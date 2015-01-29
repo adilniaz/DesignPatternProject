@@ -22,4 +22,8 @@ public class FightBehaviour extends BehaviourCombatAbstract {
     	return false;
     }
     
+    public WeaponType [] getWeaponTypes () {
+    	return this.weaponTypes;
+    }
+    
 }

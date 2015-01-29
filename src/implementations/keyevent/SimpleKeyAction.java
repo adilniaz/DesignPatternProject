@@ -23,12 +23,16 @@ public class SimpleKeyAction implements KeyListener  {
         System.out.println("Code touche pressée : " + ke.getKeyCode() + " - caractère touche pressée : " + ke.getKeyChar());
         switch (ke.getKeyCode()) {
             case ButtonCode.BAS :
+            	this.pcsControlleurVue.firePropertyChange("down", null, null);
                 break;
             case ButtonCode.DROITE :
+            	this.pcsControlleurVue.firePropertyChange("right", null, null);
                 break;
             case ButtonCode.GAUCHE :
+            	this.pcsControlleurVue.firePropertyChange("left", null, null);
                 break;
             case ButtonCode.HAUT :
+            	this.pcsControlleurVue.firePropertyChange("up", null, null);
                 break;
             case ButtonCode.ACTION :
                 this.pcsControlleurVue.firePropertyChange("action", null, null);
