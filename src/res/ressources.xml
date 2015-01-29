@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ages>
+	<age id="0" name="stoneAge">
+		<characters>
+			<character code="0" name="caveman" health="100" speed="10" defense="10" cost="100"/>
+			<character code="1" name="slinger" health="80" speed="10" defense="8" cost="120"/>
+			<character code="2" name="raptorRider" health="120" speed="20" defense="15" cost="150"/>
+			<character code="3" name="rhinoRider" health="150" speed="30" defense="20" cost="200"/>
+		</characters>
+	</age>
+	
+	<age id="1" name="middleAge">
+		<characters>
+			<character code="0" name="swordsman" health="200" speed="20" defense="20" cost="150"/>
+			<character code="1" name="archer" health="160" speed="20" defense="16" cost="175"/>
+			<character code="2" name="catapult" health="240" speed="15" defense="30" cost="200"/>
+			<character code="3" name="knight" health="300" speed="40" defense="40" cost="250"/>
+		</characters>
+	</age>
+	
+	<age id="2" name="worldWar">
+		<characters>
+			<character code="0" name="soldier" health="300" speed="30" defense="30" cost="200"/>
+			<character code="1" name="grenadier" health="240" speed="30" defense="24" cost="240"/>
+			<character code="2" name="longCanon" health="360" speed="25" defense="45" cost="300"/>
+			<character code="3" name="tank" health="450" speed="60" defense="50" cost="400"/>
+		</characters>
+	</age>
+	
+	<age id="3" name="contemporaryAge">
+		<characters>
+			<character code="0" name="gunner" health="400" speed="40" defense="40" cost="300"/>
+			<character code="1" name="sniper" health="320" speed="35" defense="32" cost="350"/>
+			<character code="2" name="rocketLauncher" health="480" speed="35" defense="40" cost="400"/>
+			<character code="3" name="superTank" health="600" speed="65" defense="55" cost="500"/>
+		</characters>
+	</age>
+	
+	<age id="4" name="futureAge">
+		<characters>
+			<character code="0" name="laserGunner" health="500" speed="50" defense="50" cost="400"/>
+			<character code="1" name="laserSniper" health="400" speed="45" defense="40" cost="500"/>
+			<character code="2" name="cyborg" health="600" speed="50" defense="60" cost="600"/>
+			<character code="3" name="hovercraft" health="750" speed="60" defense="65" cost="750"/>
+		</characters>
+	</age>
+</ages>

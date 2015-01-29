@@ -24,7 +24,6 @@ public class SimulationLauncher {
 		}
 		window.ajouterPanel(panel);
 	}
-    
     public class StartButton implements ActionListener {
         
         private final SimulationType simulationType;

@@ -18,8 +18,25 @@ public abstract class CharacterAbstract extends ObserverAbstract{
 	protected Organization subject;
 	protected String operatingState;
 	protected WeaponAbstract weapon;
-	protected StatisticsAbstract stats;
+	public StatisticsAbstract statistics;
+	public int cost;
 	
+	public int getCost() {
+		return cost;
+	}
+
+	public void setCost(int cost) {
+		this.cost = cost;
+	}
+
+	public StatisticsAbstract getStatistics() {
+		return statistics;
+	}
+
+	public void setStatistics(StatisticsAbstract statistics) {
+		this.statistics = statistics;
+	}
+
 	public WeaponAbstract getWeapon() {
 		return weapon;
 	}
@@ -47,20 +64,11 @@ public abstract class CharacterAbstract extends ObserverAbstract{
 		this.speech = null;
 		this.weapon = null;
 		this.subject = subject;
-		this.stats = null;
 		if (this.subject != null) {
 			this.subject.attach(this);
 		}
 	}
 	
-	public StatisticsAbstract getStats() {
-		return stats;
-	}
-
-	public void setStats(StatisticsAbstract stats) {
-		this.stats = stats;
-	}
-
 	public void update(){
 		this.operatingState = subject.getOperatingMode();
 	}

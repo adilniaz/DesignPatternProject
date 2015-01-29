@@ -21,8 +21,8 @@ public abstract class StatisticsDecorator extends StatisticsAbstract{
 	}
 	
 	@Override
-	public int getAgility(){
-		return stats.getAgility();
+	public int getDefence(){
+		return stats.getDefence();
 	}
 	
 }
