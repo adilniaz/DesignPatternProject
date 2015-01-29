@@ -1,10 +1,18 @@
 package implementations.character;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import implementations.Position;
 import implementations.behaviour.CharacterBehaviour;
+import implementations.controller.Chapter.Ordre;
 import implementations.object.Weapon;
 import implementations.object.Objet;
 import implementations.organizations.Organization;
+import implementations.strategy.AttackNearestStrategy;
+import implementations.strategy.NoActionStrategy;
+import implementations.strategy.NoMovementStrategy;
+import implementations.strategy.RangeStrategy;
 import implementations.strategy.Strategy;
 import abstracts_interfaces.CharacterAbstract;
 
@@ -58,6 +66,16 @@ public class Character extends CharacterAbstract {
         this.niv = 1;
         this.status = Status.normal;
         this.etat = Etat.normal;
+        if (organisation != null) {
+	        organisation.addListener(new PropertyChangeListener() {
+	            @Override
+	            public void propertyChange(PropertyChangeEvent evt) {
+	                if (evt.getPropertyName().equals("ordre")) {
+	                	ordre((Ordre)evt.getOldValue());
+	                }
+	            }
+	        });
+        }
     }
     
     public Character (Character perso) {
@@ -425,6 +443,24 @@ public class Character extends CharacterAbstract {
     
     public Etat getEtat () {
     	return this.etat;
+    }
+    
+    public void ordre (Ordre ordre) {
+    	System.out.println(this.getName() + " : changement ordre => " + ordre.toString());
+    	switch (ordre) {
+    		case immobile :
+    			this.setStrategie(new NoMovementStrategy(this));
+    			break;
+    		case plusProche :
+    			this.setStrategie(new AttackNearestStrategy(this));
+    			break;
+    		case portee :
+    			this.setStrategie(new RangeStrategy(this));
+    			break;
+    		case rien :
+    			this.setStrategie(new NoActionStrategy(this));
+    			break;
+    	}
     }
 
     @Override

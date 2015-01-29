@@ -11,6 +11,7 @@ public class Objet {
     public Objet (String nom, int utilisation, int prix, ObjetType typeObjet) {
         this.name = nom;
         this.utilisation = utilisation;
+        this.utilisationMax = utilisation;
         this.prix = prix;
         this.typeObjet = typeObjet;
     }

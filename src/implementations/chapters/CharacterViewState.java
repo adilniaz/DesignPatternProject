@@ -6,15 +6,16 @@ import abstracts_interfaces.state.AbstractState;
 public class CharacterViewState implements AbstractState {
 	
 	private Chapter chapter;
+	int page;
 	
 	public CharacterViewState (Chapter chapter) {
 		this.chapter = chapter;
+		this.page = 1;
+		this.chapter.fire(this.chapter.SHOW_CHARACTER_VIEW, this.chapter.getPersoEnCours(), this.page);
 	}
 
 	@Override
 	public void action() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -24,50 +25,42 @@ public class CharacterViewState implements AbstractState {
 
 	@Override
 	public void left() {
-		// TODO Auto-generated method stub
-		
+		if (this.page == 2) {
+			this.page--;
+			this.chapter.fire(this.chapter.SHOW_CHARACTER_VIEW, this.chapter.getPersoEnCours(), this.page);
+		}
 	}
 
 	@Override
 	public void right() {
-		// TODO Auto-generated method stub
-		
+		if (this.page == 1) {
+			this.page++;
+			this.chapter.fire(this.chapter.SHOW_CHARACTER_VIEW, this.chapter.getPersoEnCours(), this.page);
+		}
 	}
 
 	@Override
 	public void up() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void down() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void start() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void select() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void info() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void l() {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

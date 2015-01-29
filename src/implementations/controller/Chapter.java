@@ -7,7 +7,9 @@ import implementations.chapters.FightSimulationState;
 import implementations.chapters.FreeState;
 import implementations.chapters.MenuState;
 import implementations.chapters.MoveState;
+import implementations.chapters.OrdreState;
 import implementations.chapters.OtherPhaseState;
+import implementations.chapters.StatusState;
 import implementations.chapters.UnitsState;
 import implementations.chapters.ViewMoveState;
 import implementations.chapters.WeaponChoiceState;
@@ -21,7 +23,6 @@ import implementations.object.ObjetFactory;
 import implementations.object.ObjetType;
 import implementations.organizations.Organization;
 import implementations.parser.xml.XMLWriter;
-import implementations.strategy.AttackNearestStrategy;
 import implementations.views.View;
 import implementations.views.Window;
 
@@ -68,8 +69,10 @@ public class Chapter extends Controller {
     public final String GAME_OVER = "gameOver";
     public final String HIDE_CHARACTER_VIEW = "hideCaractereView";
     public final String HIDE_MENU = "hideMenu";
+    public final String HIDE_ORDRE = "hideOrdre";
     public final String HIDE_STATUS = "hideStatus";
     public final String HIDE_UNITS = "hideUnits";
+    public final String ORDRES = "ordres";
     public final String PARTIE_SUSPENDU = "partieSuspendu";
     public final String SHOW_CHARACTER_VIEW = "showCaractereView";
     public final String SIMULATION_COMBAT = "simulationCombat";
@@ -88,6 +91,10 @@ public class Chapter extends Controller {
     
     public enum Tour {
     	perso, ennemie, annexes;
+    }
+    
+    public enum Ordre {
+    	rien, immobile, plusProche, portee;
     }
     
     public Chapter (String nom, GamePlatform plateauDeJeu, Organization organization, String objectif) {
@@ -134,6 +141,10 @@ public class Chapter extends Controller {
     
     public void setCurrentPosition (Position position) {
     	this.currentPosition = position;
+    }
+    
+    public CharacterAbstract getPersoEnCours () {
+    	return this.persoEnCours;
     }
     
     public void run () {
@@ -320,38 +331,41 @@ public class Chapter extends Controller {
             }
         }
         if (!aPerso) {
-        	menu[] menus;
-        	if (this.renfortAppeler) {
-        		menus = new menu[menu.values().length-1];
-        		int indice = 0;
-        		for (menu m : menu.values()) {
-        			if (m != menu.renfort) {
-        				menus[indice] = m;
-        				indice++;
-        			}
-        		}
-        	} else if (this.plateauDeJeu.getAnnexes().isEmpty()) {
-        		menus = new menu[menu.values().length-1];
-        		int indice = 0;
-        		for (menu m : menu.values()) {
-        			if (m != menu.ordre) {
-        				menus[indice] = m;
-        				indice++;
-        			}
-        		}
-        	} else {
-        		menus = menu.values();
-        	}
-            this.pcsControlleurVue.firePropertyChange(AFFICHE_MENU, menus, null);
-            this.state = new MenuState(this);
+        	this.displayMenu();
         }
+    }
+    
+    private void displayMenu () {
+    	menu[] menus;
+    	if (this.renfortAppeler) {
+    		menus = new menu[menu.values().length-1];
+    		int indice = 0;
+    		for (menu m : menu.values()) {
+    			if (m != menu.renfort) {
+    				menus[indice] = m;
+    				indice++;
+    			}
+    		}
+    	} else if (this.plateauDeJeu.getAnnexes().isEmpty()) {
+    		menus = new menu[menu.values().length-1];
+    		int indice = 0;
+    		for (menu m : menu.values()) {
+    			if (m != menu.ordre) {
+    				menus[indice] = m;
+    				indice++;
+    			}
+    		}
+    	} else {
+    		menus = menu.values();
+    	}
+        this.pcsControlleurVue.firePropertyChange(AFFICHE_MENU, menus, null);
+        this.state = new MenuState(this);
     }
     
     public void freeStateInfo () {
     	for (CharacterAbstract perso : this.plateauDeJeu.getPersonnages()) {
             Character p = (Character) perso;
             if (p.getPosition().equals(this.currentPosition)) {
-                this.pcsControlleurVue.firePropertyChange(SHOW_CHARACTER_VIEW, p, 1);
                 this.persoEnCours = p;
                 this.state = new CharacterViewState(this);
                 break;
@@ -360,7 +374,6 @@ public class Chapter extends Controller {
     	for (CharacterAbstract perso : this.plateauDeJeu.getAnnexes()) {
             Character p = (Character) perso;
             if (p.getPosition().equals(this.currentPosition)) {
-                this.pcsControlleurVue.firePropertyChange(SHOW_CHARACTER_VIEW, p, 1);
                 this.persoEnCours = p;
                 this.state = new CharacterViewState(this);
                 break;
@@ -369,7 +382,6 @@ public class Chapter extends Controller {
     	for (CharacterAbstract perso : this.plateauDeJeu.getEnnemies()) {
             Character p = (Character) perso;
             if (p.getPosition().equals(this.currentPosition)) {
-                this.pcsControlleurVue.firePropertyChange(SHOW_CHARACTER_VIEW, p, 1);
                 this.persoEnCours = p;
                 this.state = new CharacterViewState(this);
                 break;
@@ -438,8 +450,13 @@ public class Chapter extends Controller {
     }
     
     public void statusStateCancel () {
+    	System.out.println("statusStateCancel");
     	this.pcsControlleurVue.firePropertyChange(HIDE_STATUS, null, null);
     	this.state = new FreeState(this);
+    }
+    
+    public void ordreStateCancel () {
+    	this.displayMenu();
     }
     
     public void weaponChoiceStateCancel () {
@@ -596,13 +613,13 @@ public class Chapter extends Controller {
                break;
             case statut:
             	this.pcsControlleurVue.firePropertyChange(STATUS, null, null);
+            	this.state = new StatusState(this);
                break;
             case renfort:
             	if (!this.renfortAppeler) {
             		FireEmblemCharacterFactory characterFactory = new FireEmblemCharacterFactory();
             		ObjetFactory objetFactory = new ObjetFactory();
             		Character character = (Character)characterFactory.createCharacter("chevalier", this.organization, FireEmblemCharacterType.chevalier);
-            		character.setStrategie(new AttackNearestStrategy(character));
             		character.ajouterObjet(objetFactory.createObjet("lance-fer", ObjetType.hache_fer));
             		character.setPosition(new Position(19, 8));
             		this.plateauDeJeu.ajouterAnnexe(character);
@@ -612,6 +629,8 @@ public class Chapter extends Controller {
             	}
             	break;
             case ordre:
+            	this.pcsControlleurVue.firePropertyChange(ORDRES, Ordre.values(), null);
+            	this.state = new OrdreState(this);
             	break;
             case suspen:
             	this.pcsControlleurVue.firePropertyChange(SUSPENDRE, null, null);
@@ -649,6 +668,12 @@ public class Chapter extends Controller {
             	this.continuer = true;
             	break;
         }
+    }
+    
+    public void ordre (Ordre ordre) {
+    	this.organization.setOrder(ordre);
+    	this.pcsControlleurVue.firePropertyChange(HIDE_ORDRE, null, null);
+    	this.state = new FreeState(this);
     }
     
     public void verifMort () {

@@ -3,11 +3,11 @@ package implementations.chapters;
 import implementations.controller.Chapter;
 import abstracts_interfaces.state.AbstractState;
 
-public class StatusState implements AbstractState {
+public class OrdreState implements AbstractState {
 	
 	private Chapter chapter;
 	
-	public StatusState (Chapter chapter) {
+	public OrdreState (Chapter chapter) {
 		this.chapter = chapter;
 	}
 
