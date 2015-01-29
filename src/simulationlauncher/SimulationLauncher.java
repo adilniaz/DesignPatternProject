@@ -11,9 +11,7 @@ import abstracts_interfaces.SimulationAbstract;
 import implementations.views.Window;
 
 public class SimulationLauncher {
-	
 	public static void main(String[] args) {
-		
 		Window window = new Window("Game simulation");
 		JPanel panel = new JPanel();
 		SimulationLauncher simulationLauncher = new SimulationLauncher();

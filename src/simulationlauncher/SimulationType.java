@@ -2,6 +2,6 @@ package simulationlauncher;
 
 public enum SimulationType {
 	
-	fire_emblem
+	fire_emblem, ageOfWar
 
 }
