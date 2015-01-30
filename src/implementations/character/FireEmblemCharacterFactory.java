@@ -90,7 +90,6 @@ public class FireEmblemCharacterFactory extends CreateCharactersFactoryAbstract 
                     eliwood.setPourcentageChance(45);
                     eliwood.setPourcentageDefense(30);
                     eliwood.setPourcentageResistance(35);
-                    eliwood.setExperience(90);
                     return eliwood;
                 case lord_equus :
                     Character lord_equus = new Character(nom, organisation);

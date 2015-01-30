@@ -5,6 +5,7 @@ import implementations.character.Character;
 import implementations.character.Character.Status;
 import implementations.combat.FightBehaviour;
 import implementations.controller.Chapter;
+import implementations.controller.Chapter.ObjectAction;
 import implementations.controller.Chapter.Ordre;
 import implementations.controller.Chapter.Tour;
 import implementations.controller.Chapter.menu;
@@ -55,6 +56,7 @@ public class ChapterView {
     private final MyPopup fenetreTerrain;
     private final MyPopup fenetrePerso;
     private final MyPopup fenetreMenu;
+    private MyPopup fenetreObjet;
     private ComponentView components[][][];
     
     private Camera camera;
@@ -113,6 +115,8 @@ public class ChapterView {
                     afficheActionPerso((Chapter.actionPerso[]) evt.getOldValue());
                 } else if (evt.getPropertyName().equals(ChapterView.this.chapitre.CANCEL_ACTION_PERSO)) {
                 	cancelActionPerso();
+                } else if (evt.getPropertyName().equals(ChapterView.this.chapitre.CANCEL_OBJET_ACTION)) {
+                	cancelMenuObjet();
                 } else if (evt.getPropertyName().equals(ChapterView.this.chapitre.CHANGE_TOUR)) {
                 	afficherTour((Tour) evt.getOldValue());
                 } else if (evt.getPropertyName().equals(ChapterView.this.chapitre.DEPLACE_PERSO)) {
@@ -139,6 +143,10 @@ public class ChapterView {
                 	hideUnits();
                 } else if (evt.getPropertyName().equals(ChapterView.this.chapitre.ORDRES)) {
                     afficheOrdre((Ordre[])evt.getOldValue());
+                } else if (evt.getPropertyName().equals(ChapterView.this.chapitre.OBJETS)) {
+                    afficheObjets((Objet[])evt.getOldValue());
+                } else if (evt.getPropertyName().equals(ChapterView.this.chapitre.OBJETS_ACTION)) {
+                	afficheMenuObjet((ObjectAction[])evt.getOldValue(), (int)evt.getNewValue());
                 } else if (evt.getPropertyName().equals(ChapterView.this.chapitre.SHOW_CHARACTER_VIEW)) {
                     showCharacterView((Character) evt.getOldValue(), (int)evt.getNewValue());
                 } else if (evt.getPropertyName().equals(ChapterView.this.chapitre.SIMULATION_COMBAT)) {
@@ -261,6 +269,69 @@ public class ChapterView {
     	this.fenetre.addKeyBoardManager(new KeyDispatcher(this.keyAction));
     }
     
+    private void afficheObjets (Objet[] objets) {
+        JPanel panel = new JPanel (new GridLayout(objets.length, 1));
+        JComponent[] components = new JComponent[objets.length];
+        int indice = 0;
+        for (Objet objet : objets) {
+            JButton bouton = new JButton(objet.getName());
+            bouton.addActionListener(new boutonChoixObjet(indice));
+            panel.add(bouton);
+            components[indice] = bouton;
+            indice++;
+        }
+        this.fenetreMenu.addComponent(panel);
+        MenuKeyAction menuKeyAction = new MenuKeyAction(components);
+        menuKeyAction.ajouterEcouteur(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals("action")) {
+                    action();
+                } else if (evt.getPropertyName().equals("annulation")) {
+                    annulation();
+                }
+            }
+        });
+        this.fenetre.addKeyBoardManager(new KeyDispatcher(menuKeyAction));
+    }
+    
+    private void afficheMenuObjet (ObjectAction[] actions, int indice) {
+    	JPanel panel = new JPanel (new GridLayout(actions.length, 1));
+        JComponent[] components = new JComponent[actions.length];
+        int i = 0;
+        for (ObjectAction objectAction : actions) {
+        	JButton bouton = new JButton(objectAction.name());
+        	if (objectAction == ObjectAction.utiliser) {
+        		bouton.addActionListener(new boutonUtiliseObjet(indice));
+        	} else if (objectAction == ObjectAction.equiper) {
+        		bouton.addActionListener(new boutonEquiperObjet(indice));
+        	} else if (objectAction == ObjectAction.jeter) {
+        		bouton.addActionListener(new boutonJeterObjet(indice));
+        	}
+        	panel.add(bouton);
+        	components[i] = bouton;
+        	i++;
+        }
+    	this.fenetreObjet = new MyPopup(170, 150, this.fenetre);
+    	this.fenetreObjet.addComponent(panel);
+    	MenuKeyAction menuKeyAction = new MenuKeyAction(components);
+        menuKeyAction.ajouterEcouteur(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if (evt.getPropertyName().equals("action")) {
+                    action();
+                } else if (evt.getPropertyName().equals("annulation")) {
+                    annulation();
+                }
+            }
+        });
+        this.fenetre.addKeyBoardManager(new KeyDispatcher(menuKeyAction));
+    }
+    
+    private void cancelMenuObjet () {
+    	this.fenetreObjet.hide();
+    }
+    
     private void afficheOrdre (Ordre ordres[]) {
         JPanel panel = new JPanel (new GridLayout(ordres.length, 1));
         JComponent[] components = new JComponent[ordres.length];
@@ -361,7 +432,6 @@ public class ChapterView {
     }
     
     private void afficherTour (Tour tour) {
-    	Popup popup;
     	String affichage = "";
     	switch (tour) {
     		case perso:
@@ -375,8 +445,8 @@ public class ChapterView {
     			break;
     	}
     	JLabel label = new JLabel(affichage);
-    	popup = popupFactory.getPopup(fenetre, label, 100, 100);
-    	popup.show();
+    	MyPopup popup = new MyPopup((this.fenetre.getWidth()/2) - (label.getWidth() /2), (this.fenetre.getHeight()/2) - (label.getHeight() /2), this.fenetre);
+    	popup.addComponent(label);
     	this.attendre(2000);
     	popup.hide();
     	chapitre.doContinue();
@@ -864,6 +934,62 @@ public class ChapterView {
         public void actionPerformed (ActionEvent event) {
         	fenetreMenu.hide();
             chapitre.choiceWeapon(this.choice);
+        }
+    }
+    
+    private class boutonChoixObjet implements ActionListener {
+        
+        private final int indice;
+        
+        public boutonChoixObjet (int indice) {
+            this.indice = indice;
+        }
+        
+        @Override
+        public void actionPerformed (ActionEvent event) {
+            chapitre.choixObjet(this.indice);
+        }
+    }
+    
+    private class boutonUtiliseObjet implements ActionListener {
+        
+        private final int indice;
+        
+        public boutonUtiliseObjet (int indice) {
+            this.indice = indice;
+        }
+        
+        @Override
+        public void actionPerformed (ActionEvent event) {
+            chapitre.utiliserObjet(this.indice);
+        }
+    }
+    
+    private class boutonEquiperObjet implements ActionListener {
+        
+        private final int indice;
+        
+        public boutonEquiperObjet (int indice) {
+            this.indice = indice;
+        }
+        
+        @Override
+        public void actionPerformed (ActionEvent event) {
+            chapitre.equiperObjet(this.indice);
+        }
+    }
+    
+    private class boutonJeterObjet implements ActionListener {
+        
+        private final int indice;
+        
+        public boutonJeterObjet (int indice) {
+            this.indice = indice;
+        }
+        
+        @Override
+        public void actionPerformed (ActionEvent event) {
+            chapitre.jeterObjet(this.indice);
         }
     }
     
