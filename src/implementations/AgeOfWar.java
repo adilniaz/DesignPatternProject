@@ -35,8 +35,15 @@ public class AgeOfWar implements SimulationAbstract{
 	JButton weaponBonus, characterBonus, specialAttack, ageButton, goldExpBonus;
 	JButton exitButton;
 	
+	JTextArea infoTextArea;
+	
+	int gold, experience;
+	
 	@Override
 	public void run(Window window) {
+		gold = 500;
+		experience = 0;
+		
 		//size of the screen
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		Double width = screenSize.getWidth();
@@ -78,20 +85,24 @@ public class AgeOfWar implements SimulationAbstract{
 
 		window.add(mainPanel);
 		
-
-//		weaponBonus, characterBonus, specialAttack, ageButton, goldExpBonus, exitButton;
 		characterButton1 = actionComponents(characterButton1, "character1.png", 0);
 		characterButton2 = actionComponents(characterButton2, "character2.png", 1);
 		characterButton3 = actionComponents(characterButton3, "character3.png", 2);
 		characterButton4 = actionComponents(characterButton4, "character4.png", 3);
 
-		weaponBonus = actionComponents(weaponBonus, "weaponBonus.png", 5);
-		characterBonus = actionComponents(characterBonus, "characterbonus.png", 6);
+		characterBonus = actionComponents(characterBonus, "characterbonus.png", 5);
+		weaponBonus = actionComponents(weaponBonus, "weaponBonus.png", 6);
 		specialAttack = actionComponents(specialAttack, "specialattack.png", 7);
 		ageButton = actionComponents(ageButton, "agebutton.png", 8);
 		goldExpBonus = actionComponents(goldExpBonus, "goldexpbonus.png", 9);
-		exitButton = actionComponents(exitButton, "exitbutton.png", 10);
-		
+		exitButton = actionComponents(exitButton, "exitbutton.png", 12);
+		exitButton.setLocation(exitButton.getLocation().x+34, exitButton.getLocation().y);
+
+		infoTextArea = new JTextArea();
+		infoTextArea.setSize(200, actionsPanel.getHeight());
+		infoTextArea.setLocation(1274, 0);
+		infoTextArea.setEditable(false);
+		setInformation(gold, experience);
 		
 		mainPanel.add(gamePanel);
 		mainPanel.add(actionsPanel);
@@ -101,7 +112,6 @@ public class AgeOfWar implements SimulationAbstract{
 		tabbedPane.setBounds(0, 0, displayPanel.getWidth(), displayPanel.getHeight());
 		
 		displayPanel.add(tabbedPane);
-
 		actionsPanel.add(characterButton1);
 		actionsPanel.add(characterButton2);
 		actionsPanel.add(characterButton3);
@@ -111,14 +121,18 @@ public class AgeOfWar implements SimulationAbstract{
 		actionsPanel.add(specialAttack);
 		actionsPanel.add(ageButton);
 		actionsPanel.add(goldExpBonus);
+		actionsPanel.add(infoTextArea);
 		actionsPanel.add(exitButton);
 		
 		addTabs("Player");
 		addTabs("AI");
 		
 		refresher(window);
-		
-		
+	}
+
+	private void setInformation(int gold, int experience) {
+		infoTextArea.setText(" GOLD :\n " + gold + "\n EXPERIENCE :\n " + experience);
+		infoTextArea.setFont(new Font("", 20, 20));
 	}
 
 	public void refresher(Window window) {
