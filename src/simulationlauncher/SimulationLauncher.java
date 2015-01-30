@@ -1,5 +1,7 @@
 package simulationlauncher;
 
+import implementations.views.Window;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -8,17 +10,22 @@ import javax.swing.JPanel;
 
 import abstracts_interfaces.SimulationAbstract;
 
-import implementations.views.Window;
-
 public class SimulationLauncher {
-	public static void main(String[] args) {
+	
+	public void initComponents() {
 		Window window = new Window("Game simulation");
+		
 		JPanel panel = new JPanel();
+		panel.setLayout(null);
+		
+		int index = 0;
 		SimulationLauncher simulationLauncher = new SimulationLauncher();
 		for (SimulationType simulationType : SimulationType.values()) {
 			JButton button = new JButton(simulationType.name());
+			button.setBounds(window.getWidth()/2-100, 75 * index + 20, 200, 75);
 			button.addActionListener(simulationLauncher.new StartButton(simulationType, window));
             panel.add(button);
+            index++;
 		}
 		window.ajouterPanel(panel);
 	}
@@ -55,5 +62,5 @@ public class SimulationLauncher {
 		}
 		
 	}
-	
+
 }
