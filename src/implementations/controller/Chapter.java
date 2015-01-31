@@ -224,7 +224,7 @@ public class Chapter extends Controller {
 						p.setEtat(Etat.attendre);
 		                this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, p, null);
 					}
-					this.attendre(2000);
+					this.attendre(1000);
 				}
 				if (this.plateauDeJeu.getEnnemies().isEmpty()) {
 					this.fin = true;
@@ -250,7 +250,7 @@ public class Chapter extends Controller {
 						p.setEtat(Etat.attendre);
 		                this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, p, null);
 					}
-					this.attendre(2000);
+					this.attendre(1000);
 				}
 				this.tour = Tour.perso;
 				this.pcsControlleurVue.firePropertyChange(CHANGE_TOUR, this.tour, null);
@@ -410,37 +410,44 @@ public class Chapter extends Controller {
     }
     
     public void moveStateAction () {
-    	boolean aPerso2 = false;
-        for (CharacterAbstract perso : this.plateauDeJeu.getPersonnages()) {
-            Character p = (Character) perso;
-            if (p.getPosition().equals(this.currentPosition) && !p.equals(this.persoEnCours)) {
-                aPerso2 = true;
+    	boolean inZone = false;
+    	for (ZoneAbstract zone : this.zonesSelectionner) {
+            Square c = (Square) zone;
+            if (c.getPosition().equals(this.currentPosition)) {
+            	inZone = true;
                 break;
             }
         }
-        if (!aPerso2) {
-            Character p = (Character) this.persoEnCours;
-            this.deplacePerso(p, this.currentPosition);
-            List<CharacterAbstract> ennemies = this.getEnnemies();
-            List<actionPerso> list = new ArrayList<>();
-            if (!ennemies.isEmpty()) {
-            	list.add(actionPerso.attaquer);
+    	if (!inZone) {
+    		return;
+    	}
+        for (CharacterAbstract perso : this.plateauDeJeu.getPersonnages()) {
+            Character p = (Character) perso;
+            if (p.getPosition().equals(this.currentPosition) && !p.equals(this.persoEnCours)) {
+                return;
             }
-            list.add(actionPerso.objet);
-            List<CharacterAbstract> alies = this.getAlies();
-            if (!alies.isEmpty()) {
-            	list.add(actionPerso.echange);
-            }
-            list.add(actionPerso.attendre);
-            actionPerso actions[] = new actionPerso[list.size()];
-            for (int i =  0 ; i < list.size() ; i++) {
-                actions[i] = list.get(i);
-            }
-            this.pcsControlleurVue.firePropertyChange(AFFICHE_ACTION_PERSO, actions, null);
-            this.pcsControlleurVue.firePropertyChange(EFFACE_DEPLACEMENT_DISPONIBLE, this.zonesSelectionner, null);
-            this.pcsControlleurVue.firePropertyChange(EFFACE_ATTAQUE_DISPONIBLE, this.zonesAtkSelectionner, null);
-            this.state = new ActionMenuState(this);
         }
+        Character p = (Character) this.persoEnCours;
+        this.deplacePerso(p, this.currentPosition);
+        List<CharacterAbstract> ennemies = this.getEnnemies();
+        List<actionPerso> list = new ArrayList<>();
+        if (!ennemies.isEmpty()) {
+        	list.add(actionPerso.attaquer);
+        }
+        list.add(actionPerso.objet);
+        List<CharacterAbstract> alies = this.getAlies();
+        if (!alies.isEmpty()) {
+        	list.add(actionPerso.echange);
+        }
+        list.add(actionPerso.attendre);
+        actionPerso actions[] = new actionPerso[list.size()];
+        for (int i =  0 ; i < list.size() ; i++) {
+            actions[i] = list.get(i);
+        }
+        this.pcsControlleurVue.firePropertyChange(AFFICHE_ACTION_PERSO, actions, null);
+        this.pcsControlleurVue.firePropertyChange(EFFACE_DEPLACEMENT_DISPONIBLE, this.zonesSelectionner, null);
+        this.pcsControlleurVue.firePropertyChange(EFFACE_ATTAQUE_DISPONIBLE, this.zonesAtkSelectionner, null);
+        this.state = new ActionMenuState(this);
     }
     
     public void moveStateCancel () {

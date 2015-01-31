@@ -15,8 +15,8 @@ public class Parcelle extends JLayeredPane {
     
     private Parcelle () {
         super();
-        this.content = new JPanel[3];
-        for (int i = 0 ; i < 2 ; i++) {
+        this.content = new JPanel[4];
+        for (int i = 0 ; i < this.content.length ; i++) {
             this.content[i] = null;
         }
     }
