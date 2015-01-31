@@ -23,6 +23,9 @@ import abstracts_interfaces.factories.characters.CreateCharactersFactoryAbstract
 
 public class GeneralCharacterFactory {
 	
+	int ageIndex, characterIndex;
+	Organization subject;
+	
 	String characterName;
 	CreateCharactersFactoryAbstract factory;
 	StatisticsAbstract statistics;
@@ -39,9 +42,21 @@ public class GeneralCharacterFactory {
 	
 	CharacterType typeCharacter;
 	
-	public GeneralCharacterFactory(int ageIndex, int characterIndex, Organization subject){
+	public GeneralCharacterFactory(){
+		this.ageIndex = 0;
+		this.characterIndex = 0;
+		this.subject = null;
+	}
+	
+	public CharacterAbstract createCharacter(int ageIndex, int characterIndex, Organization subject){
+		
+		this.ageIndex = ageIndex;
+		this.characterIndex = characterIndex;
+		this.subject = subject;
+		
 		typeCharacter = null;
 		characterName = "";
+		
 		try {
 			File fXmlFile = new File("src\\res\\ressources.xml");
 
@@ -166,9 +181,11 @@ public class GeneralCharacterFactory {
 		default:
 			break;
 		}
+		
 		factory.stats = statistics;
 		factory.cost = cost;
-		CharacterAbstract c = factory.createCharacter(characterName, subject, typeCharacter);
-		System.out.println(c.getName());
+		
+		CharacterAbstract character = factory.createCharacter(characterName, subject, typeCharacter);
+		return character;
 	}
 }
