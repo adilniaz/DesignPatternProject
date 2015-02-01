@@ -122,7 +122,7 @@ public class Character extends CharacterAbstract {
     public void setPv(int pv) {
     	if (pv < 0) {
     		this.pv = 0;
-    	} else if (this.pv > this.getPvMax()) {
+    	} else if (pv > this.getPvMax()) {
     		this.pv = this.getPvMax();
     	} else {
     		this.pv = pv;
@@ -249,6 +249,10 @@ public class Character extends CharacterAbstract {
 	    		this.experience = this.experience + experience;
 	    	}
     	}
+    }
+    
+    public void soin () {
+    	this.pv = this.getPvMax();
     }
     
     public void niveauSuivant () {

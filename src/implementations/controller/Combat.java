@@ -213,10 +213,10 @@ public class Combat extends Controller {
         	}
         	this.attendre(100);
         }
-        if (this.chapitre.getPlateauDeJeu().getPersonnages().contains(this.perso1)) {
+        if (this.chapitre.getPlateauDeJeu().getPersonnages().contains(this.perso1) && !this.perso1.estKo()) {
         	boolean damage = pvPerso2 > this.perso2.getPv();
         	this.gagneExp(this.perso1, this.perso2, damage);
-        } else if (this.chapitre.getPlateauDeJeu().getPersonnages().contains(this.perso2)) {
+        } else if (this.chapitre.getPlateauDeJeu().getPersonnages().contains(this.perso2) && !this.perso2.estKo()) {
         	boolean damage = pvPerso1 > this.perso1.getPv();
         	this.gagneExp(this.perso2, this.perso1, damage);
         }
@@ -247,26 +247,34 @@ public class Combat extends Controller {
         int critique = 0;
         int damage = 0;
         
-        this.pcsControlleurVue.firePropertyChange(ANNIMATION_ATTAQUE_PERSO, attaquant, null);
-        
         prec = (int) (Math.random() * 100 + 1);
         critique = (int) (Math.random() * 100 + 1);
         
-        if (prec < stats[1]) {
-            int pv = attaquer.getPv();
-            if (critique < stats[2]) {
-            	attaquer.setPv(attaquer.getPv() - (stats[0] * 3));
-            } else {
-            	attaquer.setPv(attaquer.getPv() - stats[0]);
-            }
-            damage = pv - attaquer.getPv();
+        if (critique < stats[2]) {
+        	int pv = attaquer.getPv();
+        	this.pcsControlleurVue.firePropertyChange(ANNIMATION_CRITIQUE_PERSO, attaquant, null);
+        	attaquer.setPv(attaquer.getPv() - (stats[0] * 3));
+        	damage = pv - attaquer.getPv();
             if (attaquant.equals(this.perso1)) {
             	this.pcsControlleurVue.firePropertyChange(MODIFY_PV_PERSO2, damage, null);
             } else {
             	this.pcsControlleurVue.firePropertyChange(MODIFY_PV_PERSO1, damage, null);
             }
         } else {
-            this.pcsControlleurVue.firePropertyChange(ANNIMATION_ESQUIVE_PERSO, attaquer, null);
+        	if (prec < stats[1]) {
+        		int pv = attaquer.getPv();
+        		this.pcsControlleurVue.firePropertyChange(ANNIMATION_ATTAQUE_PERSO, attaquant, null);
+        		attaquer.setPv(attaquer.getPv() - stats[0]);
+        		damage = pv - attaquer.getPv();
+                if (attaquant.equals(this.perso1)) {
+                	this.pcsControlleurVue.firePropertyChange(MODIFY_PV_PERSO2, damage, null);
+                } else {
+                	this.pcsControlleurVue.firePropertyChange(MODIFY_PV_PERSO1, damage, null);
+                }
+        	} else {
+        		this.pcsControlleurVue.firePropertyChange(ANNIMATION_ATTAQUE_PERSO, attaquant, null);
+                this.pcsControlleurVue.firePropertyChange(ANNIMATION_ESQUIVE_PERSO, attaquer, null);
+            }
         }
         return damage;
     }
@@ -278,6 +286,7 @@ public class Combat extends Controller {
         if (!tmpPerso.getComportementPersonnage().equals(attaquant.getComportementPersonnage())) {
         	this.pcsControlleurVue.firePropertyChange(MODIFY_EXP_PERSO, 100 - tmpPerso.getExperience(), tmpPerso);
         	this.pcsControlleurVue.firePropertyChange(MODIFY_CLASS_PERSO, tmpPerso, attaquant);
+        	attaquant.soin();
         } else if (tmpPerso.getNiv() != attaquant.getNiv()) {
         	this.pcsControlleurVue.firePropertyChange(MODIFY_EXP_PERSO, experience, tmpPerso);
         	this.pcsControlleurVue.firePropertyChange(MODIFY_NIV_PERSO, tmpPerso, attaquant);

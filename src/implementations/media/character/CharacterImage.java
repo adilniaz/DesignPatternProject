@@ -122,6 +122,9 @@ public class CharacterImage extends Image {
 	        imageManager.setDeplacement(0);
 	        images.put(indice, imageManager);
         }
+        if (images.isEmpty() && !"".equals(type) && !"_esquive".equals(type)) {
+        	images = this.getImageCombat(perso, "");
+        }
         return images;
     }
     

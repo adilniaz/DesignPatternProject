@@ -89,7 +89,7 @@ public class Chapter extends Controller {
     public final String STATUS = "status";
     public final String SUSPENDRE = "suspendre";
     public final String UNITES = "unites";
-    public final String USE_OBJECT = "unites";
+    public final String USE_OBJECT = "useObject";
     public final String VICTOIRE = "victoire";
     
     public enum menu {

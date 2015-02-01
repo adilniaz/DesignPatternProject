@@ -77,6 +77,7 @@ public class ChapterParser implements XMLParser {
 	        }
 			this.perosEnCours.setPosition(new Position(x, y));
 		} else if ("stat".equals(reader.getLocalName())) {
+			int pv = 0;
 			for (int i = 0 ; i < reader.getAttributeCount() ; i++) {
 				int value = Integer.valueOf(reader.getAttributeValue(i));
 	        	if ("niv".equals(reader.getAttributeLocalName(i))) {
@@ -86,7 +87,7 @@ public class ChapterParser implements XMLParser {
 	        			this.perosEnCours.changeNiveau(value);
 	        		}
 	        	} else if ("pv".equals(reader.getAttributeLocalName(i))) {
-	        		this.perosEnCours.setPv(value);
+	        		pv = value;
 	        	} else if ("pvgagne".equals(reader.getAttributeLocalName(i))) {
 	        		this.perosEnCours.setPvGagne(value);
 	        	} else if ("puissancegagne".equals(reader.getAttributeLocalName(i))) {
@@ -105,6 +106,7 @@ public class ChapterParser implements XMLParser {
 	        		this.perosEnCours.setExperience(value);
 	        	}
 	        }
+			this.perosEnCours.setPv(pv);
 		} else if ("objet".equals(reader.getLocalName())) {
 			String nom = null;
 			String type = null;

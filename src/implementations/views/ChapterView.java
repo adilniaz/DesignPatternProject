@@ -57,6 +57,9 @@ public class ChapterView {
     private MyPopup fenetreObjet;
     private ComponentView components[][][];
     
+    private MyPopup popupPv;
+    private PanelPv panelPvPerso;
+    
     private Camera camera;
     private Position centerPosition;
     private Panel panel;
@@ -151,6 +154,8 @@ public class ChapterView {
                     status();
                 } else if (evt.getPropertyName().equals(ChapterView.this.chapitre.UNITES)) {
                     unites((int)evt.getOldValue());
+                } else if (evt.getPropertyName().equals(ChapterView.this.chapitre.USE_OBJECT)) {
+                	useObject((Character)evt.getOldValue(), (Character)evt.getNewValue());
                 } else if (evt.getPropertyName().equals(ChapterView.this.chapitre.VICTOIRE)) {
                     victoire();
                 }
@@ -170,6 +175,11 @@ public class ChapterView {
         for (CharacterAbstract perso : this.chapitre.getPlateauDeJeu().getPersonnages()) {
             Character p = (Character) perso;
             components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2] = new ComponentView(new PanelDrawing(Color.BLUE, PanelDrawing.drawingType.circle, width, height));
+            components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][3] = new ComponentView(new PanelImage(CharacterImage.getImageIconMapFromPersonnage(perso), width, height));
+        }
+        for (CharacterAbstract perso : this.chapitre.getPlateauDeJeu().getAnnexes()) {
+            Character p = (Character) perso;
+            components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2] = new ComponentView(new PanelDrawing(Color.GREEN, PanelDrawing.drawingType.circle, width, height));
             components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][3] = new ComponentView(new PanelImage(CharacterImage.getImageIconMapFromPersonnage(perso), width, height));
         }
         for (CharacterAbstract perso : this.chapitre.getPlateauDeJeu().getEnnemies()) {
@@ -825,6 +835,16 @@ public class ChapterView {
             }
         });
         this.fenetre.addKeyBoardManager(new KeyDispatcher(simpleKeyAction));
+    }
+    
+    private void useObject (Character character, Character character2) {
+    	this.fenetreMenu.hide();
+    	this.fenetreObjet.hide();
+    	this.popupPv = new MyPopup(fenetre, Alignement.CENTER);
+    	this.panelPvPerso = new PanelPv(character.getPv(), character.getPvMax(), 240, 50);
+    	this.popupPv.addComponent(this.panelPvPerso, true);
+    	this.panelPvPerso.ajoutePv(character2.getPv() - character.getPv());
+    	this.popupPv.hide();
     }
     
     private void hideCharacterView () {

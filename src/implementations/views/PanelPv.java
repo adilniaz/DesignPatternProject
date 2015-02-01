@@ -21,12 +21,21 @@ public class PanelPv extends JPanel {
         this.pvMax = pvMax;
         this.width = width;
         this.height = height;
+        this.setPreferredSize(new Dimension(this.width, this.height));
     }
     
     public void enlevePv (int pv) {
         for (int i = 0 ; i < pv ; i++) {
             this.pv--;
             this.repaint();
+            this.attendre(100);
+        }
+    }
+    
+    public void ajoutePv (int pv) {
+        for (int i = 0 ; i < pv ; i++) {
+            this.pv++;
+            this.paintComponent(this.getGraphics());
             this.attendre(100);
         }
     }

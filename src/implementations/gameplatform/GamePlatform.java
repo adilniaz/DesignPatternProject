@@ -37,7 +37,7 @@ public class GamePlatform extends GamePlatformAbstract {
     }
     
     public void setHeight (int height) {
-    	this.height = width;
+    	this.height = height;
     }
     
     public int getHeight () {

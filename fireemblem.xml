@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <chapitre name="blazing sword" objectif="battre le boss">
 <personnages>
-<personnage etat="attendre" nom="Eliwood" status="boss" type="lord_eliwood">
+<personnage etat="normal" nom="Eliwood" status="boss" type="lord_eliwood">
 <stat capacitegagne="8" chancegagne="8" defgagne="5" experience="25" niv="17" puissancegagne="8" pv="31" pvgagne="13" resistancegagne="6" vitessegagne="7"/>
 <position x="15" y="9"/>
 <objets>
@@ -9,31 +9,44 @@
 <objet nom="epee-acier" type="epee_acier"/>
 <objet nom="epee-fer" type="epee_fer"/>
 <objet nom="lance-fer" type="lance_fer"/>
+<objet nom="potion" type="potion"/>
 </objets>
 </personnage>
 <personnage etat="normal" nom="hector" status="normal" type="lord_hector">
 <stat capacitegagne="9" chancegagne="6" defgagne="9" experience="95" niv="19" puissancegagne="11" pv="36" pvgagne="17" resistancegagne="5" vitessegagne="7"/>
-<position x="19" y="10"/>
+<position x="14" y="10"/>
 <objets>
 <objet nom="hache-fer" type="hache_fer"/>
 <objet nom="hache-acier" type="hache_acier"/>
 <objet nom="hache-argent" type="hache_argent"/>
 <objet nom="epee-fer" type="epee_fer"/>
+<objet nom="potion" type="potion"/>
 </objets>
 </personnage>
 <personnage etat="normal" nom="lyn" status="normal" type="lord_lyn">
 <stat capacitegagne="8" chancegagne="8" defgagne="3" experience="50" niv="14" puissancegagne="6" pv="26" pvgagne="10" resistancegagne="4" vitessegagne="8"/>
-<position x="19" y="11"/>
+<position x="14" y="11"/>
 <objets>
 <objet nom="epee-fer" type="epee_fer"/>
 <objet nom="epee-acier" type="epee_acier"/>
 <objet nom="epee-argent" type="epee_argent"/>
+<objet nom="potion" type="potion"/>
 </objets>
 </personnage>
 </personnages>
+<annexes>
+<annexe etat="normal" nom="chevalier" status="normal" type="chevalier">
+<stat capacitegagne="0" chancegagne="0" defgagne="0" experience="0" niv="1" puissancegagne="0" pv="17" pvgagne="0" resistancegagne="0" vitessegagne="0"/>
+<position x="15" y="8"/>
+<objets>
+<objet nom="lance-fer" type="hache_fer"/>
+</objets>
+<strategie nom="plusProche"/>
+</annexe>
+</annexes>
 <ennemies>
 <ennemie etat="normal" nom="general" status="boss" type="general">
-<stat capacitegagne="11" chancegagne="12" defgagne="2" experience="0" niv="10" puissancegagne="4" pv="29" pvgagne="8" resistancegagne="2" vitessegagne="4"/>
+<stat capacitegagne="15" chancegagne="16" defgagne="5" experience="0" niv="10" puissancegagne="4" pv="29" pvgagne="8" resistancegagne="2" vitessegagne="4"/>
 <position x="1" y="10"/>
 <objets>
 <objet nom="hache-argent" type="hache_fer"/>
@@ -42,7 +55,7 @@
 <strategie nom="immobile"/>
 </ennemie>
 <ennemie etat="normal" nom="chevalier" status="normal" type="chevalier">
-<stat capacitegagne="16" chancegagne="12" defgagne="3" experience="0" niv="15" puissancegagne="8" pv="29" pvgagne="12" resistancegagne="8" vitessegagne="5"/>
+<stat capacitegagne="18" chancegagne="22" defgagne="5" experience="0" niv="15" puissancegagne="8" pv="29" pvgagne="12" resistancegagne="8" vitessegagne="5"/>
 <position x="2" y="9"/>
 <objets>
 <objet nom="lance-fer" type="lance_fer"/>
@@ -50,7 +63,7 @@
 <strategie nom="immobile"/>
 </ennemie>
 <ennemie etat="normal" nom="chevalier" status="normal" type="chevalier">
-<stat capacitegagne="18" chancegagne="11" defgagne="2" experience="0" niv="15" puissancegagne="4" pv="28" pvgagne="11" resistancegagne="5" vitessegagne="9"/>
+<stat capacitegagne="18" chancegagne="18" defgagne="2" experience="0" niv="15" puissancegagne="4" pv="28" pvgagne="11" resistancegagne="5" vitessegagne="9"/>
 <position x="2" y="11"/>
 <objets>
 <objet nom="lance-fer" type="lance_fer"/>
@@ -58,7 +71,7 @@
 <strategie nom="immobile"/>
 </ennemie>
 <ennemie etat="normal" nom="Combattant" status="normal" type="combattant">
-<stat capacitegagne="8" chancegagne="11" defgagne="5" experience="0" niv="10" puissancegagne="4" pv="28" pvgagne="8" resistancegagne="5" vitessegagne="4"/>
+<stat capacitegagne="14" chancegagne="15" defgagne="5" experience="0" niv="10" puissancegagne="4" pv="28" pvgagne="8" resistancegagne="5" vitessegagne="4"/>
 <position x="4" y="3"/>
 <objets>
 <objet nom="hache-fer" type="hache_fer"/>
@@ -66,7 +79,7 @@
 <strategie nom="portee"/>
 </ennemie>
 <ennemie etat="normal" nom="Combattant" status="normal" type="combattant">
-<stat capacitegagne="12" chancegagne="9" defgagne="2" experience="0" niv="10" puissancegagne="1" pv="27" pvgagne="7" resistancegagne="3" vitessegagne="4"/>
+<stat capacitegagne="17" chancegagne="17" defgagne="2" experience="0" niv="10" puissancegagne="1" pv="27" pvgagne="7" resistancegagne="3" vitessegagne="4"/>
 <position x="4" y="18"/>
 <objets>
 <objet nom="hache-fer" type="hache_fer"/>
@@ -74,31 +87,31 @@
 <strategie nom="portee"/>
 </ennemie>
 <ennemie etat="normal" nom="chevalier" status="normal" type="chevalier">
-<stat capacitegagne="10" chancegagne="12" defgagne="1" experience="0" niv="10" puissancegagne="5" pv="24" pvgagne="7" resistancegagne="2" vitessegagne="4"/>
-<position x="8" y="8"/>
+<stat capacitegagne="15" chancegagne="14" defgagne="2" experience="0" niv="10" puissancegagne="5" pv="24" pvgagne="7" resistancegagne="2" vitessegagne="4"/>
+<position x="12" y="8"/>
 <objets>
 <objet nom="lance-fer" type="lance_fer"/>
 </objets>
 <strategie nom="plusProche"/>
 </ennemie>
 <ennemie etat="normal" nom="chevalier" status="normal" type="chevalier">
-<stat capacitegagne="12" chancegagne="12" defgagne="6" experience="0" niv="10" puissancegagne="6" pv="24" pvgagne="7" resistancegagne="1" vitessegagne="8"/>
-<position x="8" y="12"/>
+<stat capacitegagne="17" chancegagne="17" defgagne="8" experience="0" niv="10" puissancegagne="6" pv="24" pvgagne="7" resistancegagne="1" vitessegagne="8"/>
+<position x="12" y="12"/>
 <objets>
 <objet nom="lance-fer" type="lance_fer"/>
 </objets>
 <strategie nom="plusProche"/>
 </ennemie>
 <ennemie etat="normal" nom="Combattant" status="normal" type="combattant">
-<stat capacitegagne="7" chancegagne="3" defgagne="1" experience="0" niv="5" puissancegagne="3" pv="23" pvgagne="3" resistancegagne="2" vitessegagne="2"/>
-<position x="10" y="6"/>
+<stat capacitegagne="8" chancegagne="3" defgagne="2" experience="0" niv="5" puissancegagne="3" pv="23" pvgagne="3" resistancegagne="2" vitessegagne="2"/>
+<position x="12" y="9"/>
 <objets>
 <objet nom="hache-fer" type="hache_fer"/>
 </objets>
 <strategie nom="plusProche"/>
 </ennemie>
 <ennemie etat="normal" nom="chevalier" status="normal" type="chevalier">
-<stat capacitegagne="2" chancegagne="1" defgagne="0" experience="0" niv="5" puissancegagne="2" pv="18" pvgagne="1" resistancegagne="2" vitessegagne="1"/>
+<stat capacitegagne="3" chancegagne="3" defgagne="2" experience="0" niv="5" puissancegagne="2" pv="18" pvgagne="1" resistancegagne="2" vitessegagne="1"/>
 <position x="10" y="10"/>
 <objets>
 <objet nom="lance-fer" type="lance_fer"/>
@@ -106,7 +119,7 @@
 <strategie nom="immobile"/>
 </ennemie>
 <ennemie etat="normal" nom="Combattant" status="normal" type="combattant">
-<stat capacitegagne="5" chancegagne="4" defgagne="2" experience="0" niv="5" puissancegagne="3" pv="23" pvgagne="3" resistancegagne="1" vitessegagne="3"/>
+<stat capacitegagne="8" chancegagne="7" defgagne="4" experience="0" niv="5" puissancegagne="3" pv="23" pvgagne="3" resistancegagne="1" vitessegagne="3"/>
 <position x="10" y="14"/>
 <objets>
 <objet nom="hache-fer" type="hache_fer"/>

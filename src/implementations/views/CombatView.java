@@ -437,7 +437,10 @@ public class CombatView {
     }
     
     private void annimationCritiquePerso (Character perso) {
+    	Popup popupTexte = popupFactory.getPopup(fenetre, new JLabel("attaque critique"), 650, 450);
+        popupTexte.show();
         this.runAnnimation(CharacterImage.getImageCombatAttaqueCritiqueFromPersonnage(perso), perso, true);
+    	popupTexte.hide();
     }
     
     private void annimationDistancePerso (Character perso) {
@@ -449,7 +452,10 @@ public class CombatView {
     }
     
     private void annimationEsquivePerso (Character perso) {
+    	Popup popupTexte = popupFactory.getPopup(fenetre, new JLabel("esquive"), 650, 450);
+        popupTexte.show();
         this.runAnnimation(CharacterImage.getImageCombatEsquiveFromPersonnage(perso), perso, false);
+    	popupTexte.hide();
     }
     
     protected void runAnnimation (Map<Integer, ImageManager> images, Character perso, boolean continuer) {

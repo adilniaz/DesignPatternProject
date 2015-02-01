@@ -6,7 +6,7 @@ public class ObjetFactory {
         switch (typeObjet) {
         	/* Objet */
             case potion :
-                return new Objet(name, 3, 300, typeObjet);
+            	return new Potion(name, 3, 300, typeObjet, 10);
             /* Arme */
             case epee_fer :
                 return new Weapon(name, 46, 460, Weapon.Rang.E, 1, 5, 5, 90, 0, WeaponType.epee, typeObjet);
