@@ -38,7 +38,7 @@ public class AttackNearestStrategy extends Strategy {
         				 if (zones.contains(acce.getZoneB())) {
         					 chapitre.setPersoAttaquer(perso);
 	        				 chapitre.deplacePerso(personnage, ((Square)acce.getZoneB()).getPosition());
-	        				 Combat combat = new Combat(personnage, perso, chapitre);
+	        				 Combat combat = new Combat(personnage, perso, (Square)acce.getZoneB(), chapitre);
 	                		 View.createVue(combat, chapitre.getFenetre());
 	                         combat.run();
 	                         chapitre.verifMort();
@@ -61,7 +61,7 @@ public class AttackNearestStrategy extends Strategy {
 		       	 			if (zonesAtk.contains(acce.getZoneB())) {
 		       	 				chapitre.setPersoAttaquer(perso);
 			       	 			chapitre.deplacePerso(personnage, ((Square)acce.getZoneB()).getPosition());
-			       	 			Combat combat = new Combat(personnage, perso, chapitre);
+			       	 			Combat combat = new Combat(personnage, perso, (Square)acce.getZoneB(), chapitre);
 			       	 			View.createVue(combat, chapitre.getFenetre());
 			                    combat.run();
 			                    chapitre.verifMort();

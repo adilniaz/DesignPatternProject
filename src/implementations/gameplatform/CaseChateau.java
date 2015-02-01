@@ -1,6 +1,7 @@
 package implementations.gameplatform;
 
 import implementations.Position;
+import implementations.character.Character;
 
 public class CaseChateau extends Square {
     
@@ -20,6 +21,11 @@ public class CaseChateau extends Square {
     @Override
     public String getNom() {
         return "Château";
+    }
+    
+    @Override
+    public void effect (Character character) {
+    	
     }
 
 	@Override

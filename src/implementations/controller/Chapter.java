@@ -207,6 +207,20 @@ public class Chapter extends Controller {
 						this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, perso, null);
 					}
 					this.pcsControlleurVue.firePropertyChange(CHANGE_TOUR, this.tour, null);
+					for (int i = 0 ; i < this.plateauDeJeu.getEnnemies().size() ; i++) {
+						Character p = (Character) this.plateauDeJeu.getEnnemies().get(i);
+						for (ZoneAbstract zone : this.plateauDeJeu.getZones()) {
+				            Square c = (Square) zone;
+				            if (c.getPosition().equals(p.getPosition())) {
+				            	Character tmp = new Character(p);
+				            	c.effect(p);
+				            	if (tmp.getPv() < p.getPv()) {
+				            		this.pcsControlleurVue.firePropertyChange(USE_OBJECT, tmp, p);
+				            	}
+				                break;
+				            }
+				        }
+					}
 				}
 				break;
 			case ennemie:
@@ -230,10 +244,24 @@ public class Chapter extends Controller {
 					this.fin = true;
 				} else {
 					this.tour = Tour.annexes;
-					this.pcsControlleurVue.firePropertyChange(CHANGE_TOUR, this.tour, null);
 					for (CharacterAbstract perso : this.plateauDeJeu.getEnnemies()) {
 						((Character)perso).setEtat(Etat.normal);
 						this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, perso, null);
+					}
+					this.pcsControlleurVue.firePropertyChange(CHANGE_TOUR, this.tour, null);
+					for (int i = 0 ; i < this.plateauDeJeu.getAnnexes().size() ; i++) {
+						Character p = (Character) this.plateauDeJeu.getAnnexes().get(i);
+						for (ZoneAbstract zone : this.plateauDeJeu.getZones()) {
+				            Square c = (Square) zone;
+				            if (c.getPosition().equals(p.getPosition())) {
+				            	Character tmp = new Character(p);
+				            	c.effect(p);
+				            	if (tmp.getPv() < p.getPv()) {
+				            		this.pcsControlleurVue.firePropertyChange(USE_OBJECT, tmp, p);
+				            	}
+				                break;
+				            }
+				        }
 					}
 				}
 				break;
@@ -252,14 +280,28 @@ public class Chapter extends Controller {
 					}
 					this.attendre(1000);
 				}
+				for (CharacterAbstract perso : this.plateauDeJeu.getAnnexes()) {
+					((Character)perso).setEtat(Etat.normal);
+					this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, perso, null);
+				}
 				this.tour = Tour.perso;
 				this.pcsControlleurVue.firePropertyChange(CHANGE_TOUR, this.tour, null);
 				this.renfortAppeler = false;
 				this.state = new FreeState(this);
 				this.nbTour++;
-				for (CharacterAbstract perso : this.plateauDeJeu.getAnnexes()) {
-					((Character)perso).setEtat(Etat.normal);
-					this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, perso, null);
+				for (int i = 0 ; i < this.plateauDeJeu.getPersonnages().size() ; i++) {
+					Character p = (Character) this.plateauDeJeu.getPersonnages().get(i);
+					for (ZoneAbstract zone : this.plateauDeJeu.getZones()) {
+			            Square c = (Square) zone;
+			            if (c.getPosition().equals(p.getPosition())) {
+			            	Character tmp = new Character(p);
+			            	c.effect(p);
+			            	if (tmp.getPv() < p.getPv()) {
+			            		this.pcsControlleurVue.firePropertyChange(USE_OBJECT, tmp, p);
+			            	}
+			                break;
+			            }
+			        }
 				}
 				break;
 		}
@@ -522,7 +564,15 @@ public class Chapter extends Controller {
     public void simuleCombat () {
     	List<CharacterAbstract> list = this.getEnnemies();
     	if (!list.isEmpty()) {
-    		this.combat = new Combat((Character)this.persoEnCours, (Character)list.get(0), this);
+    		Square square = null;
+    		Character character = (Character)this.persoEnCours;
+    		for (ZoneAbstract zoneAbstract : this.getPlateauDeJeu().getZones()) {
+    			square = (Square)zoneAbstract;
+    			if (square.getPosition().equals(character.getPosition())) {
+    				break;
+    			}
+    		}
+    		this.combat = new Combat(character, (Character)list.get(0), square, this);
             View.createVue(combat, this.fenetre);
             this.combat.simulerCombat();
             this.pcsControlleurVue.firePropertyChange(SIMULATION_COMBAT, null, null);

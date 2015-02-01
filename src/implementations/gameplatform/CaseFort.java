@@ -1,6 +1,7 @@
 package implementations.gameplatform;
 
 import implementations.Position;
+import implementations.character.Character;
 
 public class CaseFort extends Square {
     
@@ -20,6 +21,13 @@ public class CaseFort extends Square {
     @Override
     public String getNom() {
         return "Fort";
+    }
+    
+    @Override
+    public void effect (Character character) {
+    	if (character != null) {
+    		character.setPv(character.getPv() + ((character.getPvMax() * 20)/100));
+    	}
     }
 
 	@Override

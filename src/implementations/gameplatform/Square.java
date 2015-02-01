@@ -2,6 +2,7 @@ package implementations.gameplatform;
 
 import implementations.Position;
 import abstracts_interfaces.factories.gameplatforms.ZoneAbstract;
+import implementations.character.Character;
 
 public abstract class Square extends ZoneAbstract {
     
@@ -27,5 +28,7 @@ public abstract class Square extends ZoneAbstract {
     public SquareTypes getType() {
         return type;
     }
+    
+    public abstract void effect (Character character);
     
 }

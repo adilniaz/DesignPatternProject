@@ -1,6 +1,8 @@
 package implementations.controller;
 
 import implementations.character.Character;
+import implementations.character.Character.Status;
+import implementations.gameplatform.Square;
 import implementations.object.Weapon;
 import implementations.object.WeaponType;
 
@@ -13,6 +15,7 @@ public class Combat extends Controller {
     private final Character perso1;
     private final Character perso2;
     private final Chapter chapitre;
+    private final Square square;
     
     public final String SIMULER_COMBAT = "simulerCombat";
     public final String COMBAT = "combat";
@@ -36,10 +39,11 @@ public class Combat extends Controller {
     
     private boolean continuer;
     
-    public Combat (Character perso1, Character perso2, Chapter chapitre) {
+    public Combat (Character perso1, Character perso2, Square square, Chapter chapitre) {
         this.perso1 = perso1;
         this.perso2 = perso2;
         this.chapitre = chapitre;
+        this.square = square;
     }
 
     public Character getPerso1() {
@@ -84,23 +88,26 @@ public class Combat extends Controller {
     }
     
     public int calculeForce (Character perso1, Character perso2) {
-        int weaponTriangleBonus = 0;
+        int weaponTriangleBonus = this.weaponTriangleBonus(perso1, perso2);
         int effectiveCoefficient = 1;
         int supportBonus = 0;
         int force = perso1.getPuissance() + ((perso1.getArme().getPuisance() + weaponTriangleBonus) * effectiveCoefficient) + supportBonus;
         return force;
     }
     
+    public int weaponTriangleBonus (Character perso1, Character perso2) {
+    	if (perso1.getArme().getTypeArme().isGood(perso2.getArme().getTypeArme())) {
+    		return 1;
+    	} else if (perso1.getArme().getTypeArme().isBad(perso2.getArme().getTypeArme())) {
+    		return -1;
+    	}
+    	return 0;
+    }
+    
     public int calculeDefense (Character perso1, Character perso2) {
-        int defense;
         int supportBonus = 0;
-        int terrainBonus = 0;
-        if (perso2.getArme().getTypeArme() == WeaponType.noir) {
-            defense = perso1.getResistance() + supportBonus + terrainBonus;
-        } else {
-            defense = perso1.getDef() + supportBonus + terrainBonus;
-        }
-        return defense;
+        int terrainBonus = this.square.getDef();
+        return perso1.getDef() + supportBonus + terrainBonus;
     }
     
     public int calculeVitesseAttaque (Character perso) {
@@ -114,12 +121,7 @@ public class Combat extends Controller {
     }
     
     public int calculePrecision (Character perso1, Character perso2) {
-        int weaponTriangleBonus = 0;
-        if (this.weaponIsEffective(perso1.getArme(), perso2.getArme())) {
-            weaponTriangleBonus = 15;
-        } else if (this.weaponIsWeak(perso1.getArme(), perso2.getArme())) {
-            weaponTriangleBonus = -15;
-        }
+        int weaponTriangleBonus = this.weaponTriangleBonus(perso1, perso2)*15;
         int supportBonus = 0;
         int sRankBonus = perso1.getArme().getRang() == Weapon.Rang.S ? 5 : 0;
         int precision = perso1.getArme().getPrecision() + (perso1.getCapacite() * 2) + (perso1.getChance() /2) + supportBonus + 
@@ -135,10 +137,9 @@ public class Combat extends Controller {
     
     public int calculeEsquive (Character perso) {
         int supportBonus = 0;
-        int terrainBonus = 0;
+        int terrainBonus = this.square.getEsq();
         int tacticianBonus = 0;
-        int avoid = (this.calculeVitesseAttaque(perso) * 2) + perso.getChance() + supportBonus + terrainBonus + tacticianBonus;
-        return avoid;
+        return (this.calculeVitesseAttaque(perso) * 2) + perso.getChance() + supportBonus + terrainBonus + tacticianBonus;
     }
     
     public int calculeCritique (Character perso1) {
@@ -147,24 +148,6 @@ public class Combat extends Controller {
         int sRankBonus = perso1.getArme().getRang() == Weapon.Rang.S ? 5 : 0;
         int critique = perso1.getArme().getCritique() + (perso1.getCapacite() / 2) + supportBonus + criticalBonus + sRankBonus;
         return critique;
-    }
-    
-    public boolean weaponIsEffective (Weapon arme1, Weapon arme2) {
-        switch (arme1.getTypeArme()) {
-            case epee:
-                switch (arme2.getTypeArme()) {
-                    case hache :
-                        return true;
-					default:
-						return false;
-                }
-			default:
-				return false;
-        }
-    }
-    
-    public boolean weaponIsWeak (Weapon arme1, Weapon arme2) {
-        return this.weaponIsEffective(arme2, arme1);
     }
     
     public void run () {
@@ -300,7 +283,7 @@ public class Combat extends Controller {
     	if (damage) {
     		if (ennemy.estKo()) {
     			experience = (this.experienceFromDoingDamage(perso, ennemy) + 
-    			(this.experienceFromDefeating(perso, ennemy) + 20 + 0 + 0)) * 1;
+    			(this.experienceFromDefeating(perso, ennemy) + 20 + this.bossBonus(ennemy) + 0)) * 1;
     		} else {
     			experience = this.experienceFromDoingDamage(perso, ennemy);
     		}
@@ -326,5 +309,9 @@ public class Combat extends Controller {
     		experience = 0;
     	}
     	return experience;
+    }
+    
+    private int bossBonus (Character ennemy) {
+    	return ennemy.getStatus() == Status.boss ? 40 : 0;
     }
 }
