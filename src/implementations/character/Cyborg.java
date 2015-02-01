@@ -1,7 +1,6 @@
 package implementations.character;
 
 import implementations.decorators.weapons.CyGun;
-import implementations.decorators.weapons.WoodenClub;
 import implementations.organizations.Organization;
 import abstracts_interfaces.CharacterAbstract;
 
@@ -23,5 +22,4 @@ public class Cyborg extends CharacterAbstract{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }
