@@ -1,5 +1,6 @@
 package implementations.character;
 
+import implementations.decorators.weapons.KnightSword;
 import implementations.organizations.Organization;
 import abstracts_interfaces.CharacterAbstract;
 
@@ -7,6 +8,7 @@ public class Knight extends CharacterAbstract{
 
 	public Knight(Organization subject, String name) {
 		super(subject, name);
+		setWeapon(new KnightSword());
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package implementations.character;
 
+import implementations.decorators.weapons.LaserCanon;
 import implementations.organizations.Organization;
 import abstracts_interfaces.CharacterAbstract;
 
@@ -7,6 +8,7 @@ public class Hovercraft extends CharacterAbstract{
 
 	public Hovercraft(Organization subject, String name) {
 		super(subject, name);
+		setWeapon(new LaserCanon());
 	}
 
 	@Override

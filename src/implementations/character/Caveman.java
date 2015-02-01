@@ -1,5 +1,6 @@
 package implementations.character;
 
+import implementations.decorators.weapons.WoodenClub;
 import implementations.organizations.Organization;
 import abstracts_interfaces.CharacterAbstract;
 
@@ -7,6 +8,7 @@ public class Caveman extends CharacterAbstract{
 	
 	public Caveman(Organization subject, String name) {
 		super(subject, name);
+		setWeapon(new WoodenClub());
 	}
 
 	@Override

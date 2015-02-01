@@ -24,5 +24,9 @@ public abstract class WeaponDecorator extends WeaponAbstract{
 	public int getRange() {
 		return weapon.getRange();
 	}
-
+	
+	@Override
+	public int getAttackRate() {
+		return weapon.getAttackRate();
+	}
 }

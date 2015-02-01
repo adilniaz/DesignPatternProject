@@ -1,5 +1,6 @@
 package implementations.character;
 
+import implementations.decorators.weapons.Rocket;
 import implementations.organizations.Organization;
 import abstracts_interfaces.CharacterAbstract;
 
@@ -7,6 +8,7 @@ public class RocketLauncher extends CharacterAbstract{
 
 	public RocketLauncher(Organization subject, String name) {
 		super(subject, name);
+		setWeapon(new Rocket());
 	}
 
 	@Override

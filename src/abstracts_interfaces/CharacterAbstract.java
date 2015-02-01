@@ -20,7 +20,16 @@ public abstract class CharacterAbstract extends ObserverAbstract{
 	protected WeaponAbstract weapon;
 	public StatisticsAbstract statistics;
 	public int cost;
+	public int moveDirection;
 	
+	public int getMoveDirection() {
+		return moveDirection;
+	}
+
+	public void setMoveDirection(int moveDirection) {
+		this.moveDirection = moveDirection;
+	}
+
 	public int getCost() {
 		return cost;
 	}
@@ -55,7 +64,7 @@ public abstract class CharacterAbstract extends ObserverAbstract{
 		return operatingState;
 	}
 
-	public abstract String move();
+	public abstract Object move();
 
 	
 	public CharacterAbstract(Organization subject, String name){

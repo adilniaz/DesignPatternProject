@@ -1,5 +1,6 @@
 package implementations.character;
 
+import implementations.decorators.weapons.Gun;
 import implementations.organizations.Organization;
 import abstracts_interfaces.CharacterAbstract;
 
@@ -7,6 +8,7 @@ public class Gunner extends CharacterAbstract{
 
 	public Gunner(Organization subject, String name) {
 		super(subject, name);
+		setWeapon(new Gun());
 	}
 
 	@Override
