@@ -100,6 +100,8 @@ public class Character extends CharacterAbstract {
     	this.pourcentageResistance = perso.pourcentageResistance;
     	this.position = perso.position;
     	this.comportementPersonnage = perso.comportementPersonnage;
+    	this.behaviour = perso.behaviour;
+    	this.move = perso.move;
     	this.strategie = perso.strategie;
     	this.objets = perso.objets;
     	this.aJouer = perso.aJouer;

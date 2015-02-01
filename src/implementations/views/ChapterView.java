@@ -19,6 +19,7 @@ import implementations.media.map.MapImage;
 import implementations.object.Objet;
 import implementations.object.Weapon;
 import implementations.object.WeaponType;
+import implementations.views.MyPopup.Alignement;
 
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -39,8 +40,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.Popup;
-import javax.swing.PopupFactory;
 
 import abstracts_interfaces.CharacterAbstract;
 import abstracts_interfaces.factories.gameplatforms.ZoneAbstract;
@@ -51,7 +50,6 @@ public class ChapterView {
     private final Window fenetre;
     
     private final MapKeyAction keyAction;
-    private final PopupFactory popupFactory;
     private final MyPopup fenetreObjectif;
     private final MyPopup fenetreTerrain;
     private final MyPopup fenetrePerso;
@@ -73,8 +71,6 @@ public class ChapterView {
         this.camera = new Camera();
         this.centerPosition = new Position(10, 10);
         this.camera.setCenterPoint(this.centerPosition);
-        
-        this.popupFactory = PopupFactory.getSharedInstance();
 
         this.fenetreObjectif = new MyPopup(600, 50, this.fenetre);
         this.fenetreTerrain = new MyPopup(50, 400, this.fenetre);
@@ -164,7 +160,7 @@ public class ChapterView {
     
     public void afficheMap () {
         Map<ZoneAbstract, JComponent> componentZone = new HashMap<>();
-        components = new ComponentView[this.chapitre.getPlateauDeJeu().getWidth()][this.chapitre.getPlateauDeJeu().getHeight()][3];
+        components = new ComponentView[this.chapitre.getPlateauDeJeu().getWidth()][this.chapitre.getPlateauDeJeu().getHeight()][4];
         for (ZoneAbstract zone : this.chapitre.getPlateauDeJeu().getZones()) {
             Square c = (Square) zone;
             PanelImage panelImage = new PanelImage(MapImage.getImageFromZone(zone), width, height);
@@ -173,13 +169,13 @@ public class ChapterView {
         }
         for (CharacterAbstract perso : this.chapitre.getPlateauDeJeu().getPersonnages()) {
             Character p = (Character) perso;
-            components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][1] = new ComponentView(new PanelDrawing(Color.BLUE, PanelDrawing.drawingType.circle, width, height));
-            components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2] = new ComponentView(new PanelImage(CharacterImage.getImageIconMapFromPersonnage(perso), width, height));
+            components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2] = new ComponentView(new PanelDrawing(Color.BLUE, PanelDrawing.drawingType.circle, width, height));
+            components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][3] = new ComponentView(new PanelImage(CharacterImage.getImageIconMapFromPersonnage(perso), width, height));
         }
         for (CharacterAbstract perso : this.chapitre.getPlateauDeJeu().getEnnemies()) {
             Character p = (Character) perso;
-            components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][1] = new ComponentView(new PanelDrawing(Color.RED, PanelDrawing.drawingType.circle, width, height));
-            components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2] = new ComponentView(new PanelImage(CharacterImage.getImageIconMapFromPersonnage(perso), width, height));
+            components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][2] = new ComponentView(new PanelDrawing(Color.RED, PanelDrawing.drawingType.circle, width, height));
+            components[p.getPosition().getPositionX()][p.getPosition().getPositionY()][3] = new ComponentView(new PanelImage(CharacterImage.getImageIconMapFromPersonnage(perso), width, height));
         }
         this.panel = this.camera.getCameraView(this.centerPosition, components);
         this.keyAction.init(this.chapitre.getPlateauDeJeu(), componentZone);
@@ -187,7 +183,7 @@ public class ChapterView {
         this.fenetre.addKeyBoardManager(new KeyDispatcher(this.keyAction));
         this.fenetre.ajouterPanel(this.panel);
         JLabel label = new JLabel(this.chapitre.getObjectif());
-        this.fenetreObjectif.addComponent(label);
+        this.fenetreObjectif.addComponent(label, true);
         this.changeCursorPosition(this.centerPosition, this.centerPosition);
     }
     
@@ -226,7 +222,7 @@ public class ChapterView {
         this.fenetreObjectif.hide();
         this.fenetreTerrain.hide();
         //this.addToPanel(this.fenetreMenuContent, panel);
-        this.fenetreMenu.addComponent(panel);
+        this.fenetreMenu.addComponent(panel, true);
         this.fenetre.addKeyBoardManager(new KeyDispatcher(menuKeyAction));
     }
     
@@ -248,8 +244,7 @@ public class ChapterView {
             components[indice] = bouton;
             indice++;
         }
-        //this.addToPanel(this.fenetreMenuContent, panel);
-        this.fenetreMenu.addComponent(panel);
+        this.fenetreMenu.addComponent(panel, true);
         MenuKeyAction menuKeyAction = new MenuKeyAction(components);
         menuKeyAction.ajouterEcouteur(new PropertyChangeListener() {
             @Override
@@ -280,7 +275,7 @@ public class ChapterView {
             components[indice] = bouton;
             indice++;
         }
-        this.fenetreMenu.addComponent(panel);
+        this.fenetreMenu.addComponent(panel, true);
         MenuKeyAction menuKeyAction = new MenuKeyAction(components);
         menuKeyAction.ajouterEcouteur(new PropertyChangeListener() {
             @Override
@@ -313,7 +308,7 @@ public class ChapterView {
         	i++;
         }
     	this.fenetreObjet = new MyPopup(170, 150, this.fenetre);
-    	this.fenetreObjet.addComponent(panel);
+    	this.fenetreObjet.addComponent(panel, true);
     	MenuKeyAction menuKeyAction = new MenuKeyAction(components);
         menuKeyAction.ajouterEcouteur(new PropertyChangeListener() {
             @Override
@@ -343,7 +338,7 @@ public class ChapterView {
             components[indice] = bouton;
             indice++;
         }
-        this.fenetreMenu.addComponent(panel);
+        this.fenetreMenu.addComponent(panel, true);
         MenuKeyAction menuKeyAction = new MenuKeyAction(components);
         menuKeyAction.ajouterEcouteur(new PropertyChangeListener() {
             @Override
@@ -384,13 +379,13 @@ public class ChapterView {
                 break;
             }
         }
-        this.fenetreTerrain.addComponent(panelTerrain);
+        this.fenetreTerrain.addComponent(panelTerrain, true);
 
         for (CharacterAbstract perso : this.chapitre.getPlateauDeJeu().getPersonnages()) {
             Character p = (Character) perso;
             if (p.getPosition().equals(oldPosition)) {
             	this.fenetrePerso.hide();
-                this.camera.refresh(this.panel, p.getPosition(), 2, this.centerPosition, this.components, new ComponentView(new PanelImage(CharacterImage.getImageIconMapFromPersonnage(perso), width, height)));
+                this.camera.refresh(this.panel, p.getPosition(), 3, this.centerPosition, this.components, new ComponentView(new PanelImage(CharacterImage.getImageIconMapFromPersonnage(perso), width, height)));
             }
         }
         
@@ -412,7 +407,7 @@ public class ChapterView {
             Character p = (Character) perso;
             if (p.getPosition().equals(newPosition)) {
                 this.afficheFenetrePerso(p);
-                this.camera.refresh(this.panel, p.getPosition(), 2, this.centerPosition, this.components, new ComponentView(new PanelImage(CharacterImage.getImageIconMapFocusFromPersonnage(perso), width, height)));
+                this.camera.refresh(this.panel, p.getPosition(), 3, this.centerPosition, this.components, new ComponentView(new PanelImage(CharacterImage.getImageIconMapFocusFromPersonnage(perso), width, height)));
             }
         }
         
@@ -446,26 +441,22 @@ public class ChapterView {
     	}
     	JLabel label = new JLabel(affichage);
     	MyPopup popup = new MyPopup((this.fenetre.getWidth()/2) - (label.getWidth() /2), (this.fenetre.getHeight()/2) - (label.getHeight() /2), this.fenetre);
-    	popup.addComponent(label);
+    	popup.addComponent(label, true);
     	this.attendre(2000);
     	popup.hide();
     	chapitre.doContinue();
     }
     
     private void gameOver () {
-    	Popup popup;
-    	JLabel label = new JLabel("GAME OVER");
-    	popup = popupFactory.getPopup(fenetre, label, 100, 100);
-    	popup.show();
+    	MyPopup popup = new MyPopup(fenetre, Alignement.CENTER);
+    	popup.addComponent(new JLabel("GAME OVER"), true);
     	this.attendre(2000);
     	popup.hide();
     }
     
     private void victoire () {
-    	Popup popup;
-    	JLabel label = new JLabel("VICTOIRE");
-    	popup = popupFactory.getPopup(fenetre, label, 100, 100);
-    	popup.show();
+    	MyPopup popup = new MyPopup(fenetre, Alignement.CENTER);
+    	popup.addComponent(new JLabel("VICTOIRE"), true);
     	this.attendre(2000);
     	popup.hide();
     }
@@ -480,7 +471,7 @@ public class ChapterView {
         JLabel labelPersoPV = new JLabel("PV  " + perso.getPv() + "/" + perso.getPvMax());
         boxStat.add(labelPersoPV);
         boxPerso.add(boxStat);
-        this.fenetrePerso.addComponent(boxPerso);
+        this.fenetrePerso.addComponent(boxPerso, true);
     }
     
     private void deplacePerso (CharacterAbstract perso, Position oldPosition) {
@@ -494,30 +485,16 @@ public class ChapterView {
         	color = Color.GREEN;
         }
         if (oldPosition != null) {
-        	this.camera.refresh(this.panel, oldPosition, 1, this.centerPosition, this.components, null);
         	this.camera.refresh(this.panel, oldPosition, 2, this.centerPosition, this.components, null);
+        	this.camera.refresh(this.panel, oldPosition, 3, this.centerPosition, this.components, null);
         }
-        this.camera.refresh(this.panel, p.getPosition(), 1, this.centerPosition, this.components, new ComponentView(new PanelDrawing(color, PanelDrawing.drawingType.circle, width, height)));
-    	this.camera.refresh(this.panel, p.getPosition(), 2, this.centerPosition, this.components, new ComponentView(new PanelImage(CharacterImage.getImageIconMapFromPersonnage(perso), width, height)));
+        this.camera.refresh(this.panel, p.getPosition(), 2, this.centerPosition, this.components, new ComponentView(new PanelDrawing(color, PanelDrawing.drawingType.circle, width, height)));
+    	this.camera.refresh(this.panel, p.getPosition(), 3, this.centerPosition, this.components, new ComponentView(new PanelImage(CharacterImage.getImageIconMapFromPersonnage(perso), width, height)));
     }
     
     private void enlevePerso (Character perso) {
-    	this.camera.refresh(this.panel, perso.getPosition(), 1, this.centerPosition, this.components, null);
     	this.camera.refresh(this.panel, perso.getPosition(), 2, this.centerPosition, this.components, null);
-    }
-    
-    private void afficheDeplacementDisponible (List<ZoneAbstract> zones) {
-        for (ZoneAbstract zone : zones) {
-            Square c = (Square) zone;
-            this.camera.refresh(this.panel, c.getPosition(), 1, this.centerPosition, this.components, new ComponentView(new ColoredCase(width, height, new Color(0, 0, 255, 50))));
-        }
-    }
-    
-    private void effaceDeplacementDisponible (List<ZoneAbstract> zones) {
-        for (ZoneAbstract zone : zones) {
-            Square c = (Square) zone;
-            this.camera.refresh(this.panel, c.getPosition(), 1, this.centerPosition, this.components, null);
-        }
+    	this.camera.refresh(this.panel, perso.getPosition(), 3, this.centerPosition, this.components, null);
     }
     
     private void afficheArmesPerso (CharacterAbstract personnage) {
@@ -542,7 +519,7 @@ public class ChapterView {
             }
             objIndice++;
         }
-        this.fenetreMenu.addComponent(panel);
+        this.fenetreMenu.addComponent(panel, true);
         
         MenuKeyAction menuKeyAction = new MenuKeyAction(components);
         menuKeyAction.ajouterEcouteur(new PropertyChangeListener() {
@@ -572,6 +549,20 @@ public class ChapterView {
             }
         });
         this.fenetre.addKeyBoardManager(new KeyDispatcher(simpleKeyAction));
+    }
+    
+    private void afficheDeplacementDisponible (List<ZoneAbstract> zones) {
+        for (ZoneAbstract zone : zones) {
+            Square c = (Square) zone;
+            this.camera.refresh(this.panel, c.getPosition(), 1, this.centerPosition, this.components, new ComponentView(new ColoredCase(width, height, new Color(0, 0, 255, 50))));
+        }
+    }
+    
+    private void effaceDeplacementDisponible (List<ZoneAbstract> zones) {
+        for (ZoneAbstract zone : zones) {
+            Square c = (Square) zone;
+            this.camera.refresh(this.panel, c.getPosition(), 1, this.centerPosition, this.components, null);
+        }
     }
     
     private void afficheAttaqueDisponible (List<ZoneAbstract> zones) {
@@ -802,7 +793,7 @@ public class ChapterView {
             JPanel panelEquipement = new JPanel(new GridLayout(3, 2));
     		panelEquipement.add(new JLabel("Equipement"));
     		panelEquipement.add(new JLabel("Pté " + weapon.getPorte()));
-    		panelEquipement.add(new JLabel("Dmg  " + character.getPuissance() + weapon.getPuisance()));
+    		panelEquipement.add(new JLabel("Dmg  " + (character.getPuissance() + weapon.getPuisance())));
     		panelEquipement.add(new JLabel("Crt  " + critique));
     		panelEquipement.add(new JLabel("Prc  " + precision));
     		panelEquipement.add(new JLabel("Esq  " + avoid));
@@ -919,6 +910,25 @@ public class ChapterView {
         @Override
         public void actionPerformed (ActionEvent event) {
             chapitre.ordre(this.ordre);
+            MyPopup popup = new MyPopup(fenetre, Alignement.CENTER);
+            JLabel label = null;
+            switch (this.ordre) {
+            	case immobile:
+            		label = new JLabel("Rester à votre position.");
+            		break;
+            	case plusProche:
+            		label = new JLabel("Dirigez vous vers l'adversaire le plus proche.");
+            		break;
+            	case portee:
+            		label = new JLabel("Avancée vers l'adversaire seulement si il est à votre portée.");
+            		break;
+            	case rien:
+            		label = new JLabel("Ne faites rien..");
+            		break;
+            }
+            System.out.println("label.getWidth() : " + label.getWidth());
+            popup.addComponent(label, false);
+            new PopupDisplay(popup, 2000).start();
         }
     }
     
@@ -991,6 +1001,32 @@ public class ChapterView {
         public void actionPerformed (ActionEvent event) {
             chapitre.jeterObjet(this.indice);
         }
+    }
+    
+    private class PopupDisplay extends Thread {
+    	
+    	private MyPopup popup;
+    	private int duration;
+    	
+    	public PopupDisplay (MyPopup popup, int duration) {
+    		this.popup = popup;
+    		this.duration = duration;
+    	}
+    	
+    	public void run () {
+    		this.popup.show();
+    		this.attendre(this.duration);
+    		this.popup.hide();
+    	}
+        
+        public synchronized void attendre (int time) {
+            try {
+                this.wait(time);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(CombatView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    	
     }
     
 }

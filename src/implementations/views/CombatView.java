@@ -1,8 +1,10 @@
 package implementations.views;
 
 import implementations.character.Character;
+import implementations.combat.FightBehaviour;
 import implementations.controller.Combat;
 import implementations.media.character.CharacterImage;
+import implementations.object.WeaponType;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -268,7 +270,7 @@ public class CombatView {
     
     private void modifyExpPerso (int exp, Character perso) {
         PanelExp panelExp = new PanelExp(perso.getExperience(), 300, 30);
-        Popup popup = popupFactory.getPopup(fenetre, panelExp, 600, 600);
+        Popup popup = popupFactory.getPopup(fenetre, panelExp, 600, 450);
     	popup.show();
     	panelExp.addExp(exp);
     	this.attendre(2000);
@@ -276,7 +278,7 @@ public class CombatView {
     }
     
     private void modifyNivPerso (Character oldPerso, Character perso) {
-        Popup popupTexte = popupFactory.getPopup(fenetre, new JLabel("Changement de niveau"), 600, 400);
+        Popup popupTexte = popupFactory.getPopup(fenetre, new JLabel("Changement de niveau"), 650, 450);
         popupTexte.show();
     	this.attendre(2000);
     	popupTexte.hide();
@@ -342,7 +344,7 @@ public class CombatView {
     }
     
     private void modifyClassPerso (Character oldPerso, Character perso) {
-        Popup popupTexte = popupFactory.getPopup(fenetre, new JLabel("Changement de classe"), 600, 400);
+        Popup popupTexte = popupFactory.getPopup(fenetre, new JLabel("Changement de classe"), 650, 450);
         popupTexte.show();
     	this.attendre(2000);
     	popupTexte.hide();
@@ -401,7 +403,33 @@ public class CombatView {
     	popup.show();
     	this.attendre(5000);
     	popup.hide();
-    	
+    	WeaponType[] oldWeapons = ((FightBehaviour)oldPerso.getBehaviour()).getWeaponTypes();
+    	WeaponType[] newWeapons = ((FightBehaviour)perso.getBehaviour()).getWeaponTypes();
+    	if (oldWeapons.length < newWeapons.length) {
+    		WeaponType[] winWeapons = new WeaponType[newWeapons.length-oldWeapons.length];
+    		int indice = 0;
+    		for (WeaponType newWeapon : newWeapons) {
+    			boolean find = false;
+    			for (WeaponType oldWeapon : oldWeapons) {
+        			if (newWeapon == oldWeapon) {
+        				find = true;
+        			}
+        		}
+    			if (!find) {
+    				winWeapons[indice] = newWeapon;
+    				indice++;
+    			}
+    		}
+    		String winWeapon = "";
+    		for (WeaponType weapon : winWeapons) {
+    			winWeapon += weapon.name();
+    		}
+    		JLabel weaponLabel = new JLabel(winWeapon + " peut maintenant être utilisé");
+    		Popup weaponPopup = popupFactory.getPopup(fenetre, weaponLabel, 630, 450);
+    		weaponPopup.show();
+        	this.attendre(3000);
+        	weaponPopup.hide();
+    	}
     }
     
     private void annimationAttaquePerso (Character perso) {

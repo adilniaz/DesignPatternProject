@@ -97,7 +97,7 @@ public class Camera {
 		System.out.println("minX = " + minX + " ; minY = " + minY);*/
 		for (int i = 0 ; i < this.colone ; i++) {
 			for (int j = 0 ; j < this.ligne ; j++) {
-				for (int k = 0 ; k < 3 ; k++) {
+				for (int k = 0 ; k < 4 ; k++) {
 					/*System.out.println("i = " + i + " ; j = " + j + " ; k = " + k);*/
 					if (components[minX+i][minY+j][k] != null) {
 						if (k == 0) {
