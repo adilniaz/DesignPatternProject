@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <chapitre name="blazing sword" objectif="battre le boss">
 <personnages>
-<personnage etat="normal" nom="Eliwood" status="boss" type="lord_eliwood">
+<personnage etat="normal" nom="eliwood" status="boss" type="lord_eliwood">
 <stat capacitegagne="8" chancegagne="8" defgagne="5" experience="25" niv="17" puissancegagne="8" pv="31" pvgagne="13" resistancegagne="6" vitessegagne="7"/>
 <position x="15" y="9"/>
 <objets>
@@ -70,7 +70,7 @@
 </objets>
 <strategie nom="immobile"/>
 </ennemie>
-<ennemie etat="normal" nom="Combattant" status="normal" type="combattant">
+<ennemie etat="normal" nom="combattant" status="normal" type="combattant">
 <stat capacitegagne="14" chancegagne="15" defgagne="5" experience="0" niv="10" puissancegagne="4" pv="28" pvgagne="8" resistancegagne="5" vitessegagne="4"/>
 <position x="4" y="3"/>
 <objets>
@@ -78,7 +78,7 @@
 </objets>
 <strategie nom="portee"/>
 </ennemie>
-<ennemie etat="normal" nom="Combattant" status="normal" type="combattant">
+<ennemie etat="normal" nom="combattant" status="normal" type="combattant">
 <stat capacitegagne="17" chancegagne="17" defgagne="2" experience="0" niv="10" puissancegagne="1" pv="27" pvgagne="7" resistancegagne="3" vitessegagne="4"/>
 <position x="4" y="18"/>
 <objets>
@@ -102,7 +102,7 @@
 </objets>
 <strategie nom="plusProche"/>
 </ennemie>
-<ennemie etat="normal" nom="Combattant" status="normal" type="combattant">
+<ennemie etat="normal" nom="combattant" status="normal" type="combattant">
 <stat capacitegagne="8" chancegagne="3" defgagne="2" experience="0" niv="5" puissancegagne="3" pv="23" pvgagne="3" resistancegagne="2" vitessegagne="2"/>
 <position x="12" y="9"/>
 <objets>
@@ -118,7 +118,7 @@
 </objets>
 <strategie nom="immobile"/>
 </ennemie>
-<ennemie etat="normal" nom="Combattant" status="normal" type="combattant">
+<ennemie etat="normal" nom="combattant" status="normal" type="combattant">
 <stat capacitegagne="8" chancegagne="7" defgagne="4" experience="0" niv="5" puissancegagne="3" pv="23" pvgagne="3" resistancegagne="1" vitessegagne="3"/>
 <position x="10" y="14"/>
 <objets>

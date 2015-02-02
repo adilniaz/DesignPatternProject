@@ -26,19 +26,19 @@ public class MapImage extends Image {
     	 
         if (zone instanceof CaseChateau) {
         	if (this.aImage("chateau")) {
-                return this.getImage(this.getUrlImage("chateau"));
+                return this.getImage(this.getInputStreamImage("chateau"));
             }
         } else if (zone instanceof CaseFort) {
             if (this.aImage("fort")) {
-                return this.getImage(this.getUrlImage("fort"));
+                return this.getImage(this.getInputStreamImage("fort"));
             }
         } else if (zone instanceof CaseMontagne) {
             if (this.aImage("montagne")) {
-                return this.getImage(this.getUrlImage("montagne"));
+                return this.getImage(this.getInputStreamImage("montagne"));
             }
         } else if (zone instanceof CasePlaine) {
         	if (this.aImage("plaine")) {
-                return this.getImage(this.getUrlImage("plaine"));
+                return this.getImage(this.getInputStreamImage("plaine"));
             }
         }
         return null;

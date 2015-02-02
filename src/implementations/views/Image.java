@@ -4,11 +4,8 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,15 +21,15 @@ public class Image {
         
     }
     
-    public URL getUrlImage (String nom) {
+    /*public URL getUrlImage (String nom) {
         return this.getUrlImage(nom, defaut);
-    }
+    }*/
     
     public InputStream getInputStreamImage (String nom) {
         return this.getInputStreamImage(nom, defaut);
     }
     
-    public URL getUrlImage (String nom, String type) {
+    /*public URL getUrlImage (String nom, String type) {
         nom = this.formatString(nom);
         URL url = null;
         Extension[] extensions = Extension.values();
@@ -46,7 +43,7 @@ public class Image {
             return this.getUrlImage(nom, defaut);
         }
         return url;
-    }
+    }*/
     
     public InputStream getInputStreamImage (String nom, String type) {
         nom = this.formatString(nom);
@@ -69,7 +66,7 @@ public class Image {
     }
     
     public boolean aImage (String nom, String type) {
-    	System.out.println("aImage : " + type + nom);
+    	//System.out.println("aImage : " + type + nom);
         return this.getInputStreamImage(nom, type) != null;
     }
     
@@ -208,7 +205,7 @@ public class Image {
         return new ImageIcon(url);
     }
     
-    protected ImageIcon getImageIcon (InputStream stream) {
+    /*protected ImageIcon getImageIcon (InputStream stream) {
         try {  
             OutputStream os = new FileOutputStream(stream.toString()+".gif");  
             try {  
@@ -234,6 +231,35 @@ public class Image {
             }
         }
         return new ImageIcon(stream.toString()+".gif");
+    }*/
+    
+    protected ImageIcon getImageIcon (InputStream stream) {
+        byte [] imageData = this.getImageData(stream);
+        return new ImageIcon(imageData);
+    }
+    
+    public byte[] getImageData (InputStream stream) {
+    	byte [] imageData = null;
+    	try {  
+            byte[] buffer = new byte[4096];  
+            for (int n; (n = stream.read(buffer)) != -1; ) {
+            	if (imageData != null) {
+            		byte [] tmp = imageData;
+                	imageData = new byte[tmp.length + n];
+                	for (int i = 0 ; i < tmp.length ; i++) {
+                		imageData[i] = tmp[i];
+                	}
+                	for (int i = 0 ; i < n ; i++) {
+                		imageData[i+tmp.length] = buffer[i];
+                	}
+            	} else {
+            		imageData = buffer;
+            	}
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Image.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    	return imageData;
     }
     
     protected BufferedImage getImage (URL url, int width, int height) {

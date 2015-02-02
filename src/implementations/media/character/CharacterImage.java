@@ -72,9 +72,9 @@ public class CharacterImage extends Image {
     public BufferedImage getImageMenu (CharacterAbstract perso) {
         Character p = (Character) perso;
         if (this.aImage(perso.getName(), MENU)) {
-            return this.getImage(this.getUrlImage(perso.getName(), MENU));
+            return this.getImage(this.getInputStreamImage(perso.getName(), MENU));
         } else if (this.aImage(this.getNameFromComportement(p.getComportementPersonnage()), MENU)) {
-            return this.getImage(this.getUrlImage(this.getNameFromComportement(p.getComportementPersonnage()), MENU));
+            return this.getImage(this.getInputStreamImage(this.getNameFromComportement(p.getComportementPersonnage()), MENU));
         }
         return this.getImage(DEFAULT_IMAGE, MENU);
     }
@@ -82,13 +82,13 @@ public class CharacterImage extends Image {
     public BufferedImage getImageCombat (CharacterAbstract perso) {
         Character p = (Character) perso;
         if (this.aImage(p.getName()+"_"+this.getNameFromComportement(p.getComportementPersonnage())+"_"+p.getArme().getTypeArme().name()+"1", COMBAT)) {
-        	return this.getImage(this.getUrlImage(p.getName()+"_"+this.getNameFromComportement(p.getComportementPersonnage())+"_"+p.getArme().getTypeArme().name()+"1", COMBAT));
+        	return this.getImage(this.getInputStreamImage(p.getName()+"_"+this.getNameFromComportement(p.getComportementPersonnage())+"_"+p.getArme().getTypeArme().name()+"1", COMBAT));
         } else if (this.aImage(perso.getName()+"_"+this.getNameFromComportement(p.getComportementPersonnage())+"1", COMBAT)) {
-        	return this.getImage(this.getUrlImage(perso.getName()+"_"+this.getNameFromComportement(p.getComportementPersonnage())+"1", COMBAT));
+        	return this.getImage(this.getInputStreamImage(perso.getName()+"_"+this.getNameFromComportement(p.getComportementPersonnage())+"1", COMBAT));
         } else if (this.aImage(perso.getName()+"1", COMBAT)) {
-        	return this.getImage(this.getUrlImage(perso.getName()+"1", COMBAT));
+        	return this.getImage(this.getInputStreamImage(perso.getName()+"1", COMBAT));
         } else if (this.aImage(this.getNameFromComportement(p.getComportementPersonnage())+"1", COMBAT)) {
-        	return this.getImage(this.getUrlImage(this.getNameFromComportement(p.getComportementPersonnage())+"1", COMBAT));
+        	return this.getImage(this.getInputStreamImage(this.getNameFromComportement(p.getComportementPersonnage())+"1", COMBAT));
         }
         return this.getImage(DEFAULT_IMAGE, COMBAT);
     }
@@ -109,7 +109,7 @@ public class CharacterImage extends Image {
         }
         while (this.aImage(persoName+indice, COMBAT)) {
             ImageManager imageManager = new ImageManager();
-            imageManager.setImage(this.getImage(this.getUrlImage(persoName+indice, COMBAT)));
+            imageManager.setImage(this.getImage(this.getInputStreamImage(persoName+indice, COMBAT)));
             imageManager.setDisplayTime(120);
             imageManager.setDeplacement(0);
             images.put(indice, imageManager);
@@ -117,7 +117,7 @@ public class CharacterImage extends Image {
         }
         if (!persoName.equals("")) {
 	        ImageManager imageManager = new ImageManager();
-	        imageManager.setImage(this.getImage(this.getUrlImage(persoName+"1", COMBAT)));
+	        imageManager.setImage(this.getImage(this.getInputStreamImage(persoName+"1", COMBAT)));
 	        imageManager.setDisplayTime(120);
 	        imageManager.setDeplacement(0);
 	        images.put(indice, imageManager);
@@ -165,22 +165,22 @@ public class CharacterImage extends Image {
         Character p = (Character) perso;
         if (p.getEtat() == Etat.attendre) {
         	if (this.aImage(perso.getName()+"_"+this.getNameFromComportement(p.getComportementPersonnage()) + "_attente", MAP)) {
-	            return this.getImageIcon(this.getUrlImage(perso.getName()+"_"+this.getNameFromComportement(p.getComportementPersonnage()) + "_attente", MAP));
+	            return this.getImageIcon(this.getInputStreamImage(perso.getName()+"_"+this.getNameFromComportement(p.getComportementPersonnage()) + "_attente", MAP));
 	        } else if (this.aImage(perso.getName() + "_attente", MAP)) {
-	            return this.getImageIcon(this.getUrlImage(perso.getName() + "_attente", MAP));
+	            return this.getImageIcon(this.getInputStreamImage(perso.getName() + "_attente", MAP));
 	        } else if (this.aImage(this.getNameFromComportement(p.getComportementPersonnage()) + "_attente", MAP)) {
-	            return this.getImageIcon(this.getUrlImage(this.getNameFromComportement(p.getComportementPersonnage()) + "_attente", MAP));
+	            return this.getImageIcon(this.getInputStreamImage(this.getNameFromComportement(p.getComportementPersonnage()) + "_attente", MAP));
 	        }
         } else {
 	        if (this.aImage(perso.getName()+"_"+this.getNameFromComportement(p.getComportementPersonnage()), MAP)) {
-	            return this.getImageIcon(this.getUrlImage(perso.getName()+"_"+this.getNameFromComportement(p.getComportementPersonnage()), MAP));
+	            return this.getImageIcon(this.getInputStreamImage(perso.getName()+"_"+this.getNameFromComportement(p.getComportementPersonnage()), MAP));
 	        } else if (this.aImage(perso.getName(), MAP)) {
-	            return this.getImageIcon(this.getUrlImage(perso.getName(), MAP));
+	            return this.getImageIcon(this.getInputStreamImage(perso.getName(), MAP));
 	        } else if (this.aImage(this.getNameFromComportement(p.getComportementPersonnage()), MAP)) {
-	            return this.getImageIcon(this.getUrlImage(this.getNameFromComportement(p.getComportementPersonnage()), MAP));
+	            return this.getImageIcon(this.getInputStreamImage(this.getNameFromComportement(p.getComportementPersonnage()), MAP));
 	        }
         }
-        return this.getImageIcon(this.getUrlImage(DEFAULT_IMAGE, MAP));
+        return this.getImageIcon(this.getInputStreamImage(DEFAULT_IMAGE, MAP));
     }
     
     public ImageIcon getImageIconMapFocus (CharacterAbstract perso) {
@@ -189,14 +189,14 @@ public class CharacterImage extends Image {
         	return this.getImageIconMap(p);
         } else {
 	        if (this.aImage(perso.getName()+"_" + this.getNameFromComportement(p.getComportementPersonnage()) + "_focus", MAP)) {
-	            return this.getImageIcon(this.getUrlImage(perso.getName()+"_"+this.getNameFromComportement(p.getComportementPersonnage())+"_focus", MAP));
+	            return this.getImageIcon(this.getInputStreamImage(perso.getName()+"_"+this.getNameFromComportement(p.getComportementPersonnage())+"_focus", MAP));
 	        } else if (this.aImage(perso.getName()+"_focus", MAP)) {
-	            return this.getImageIcon(this.getUrlImage(perso.getName()+"_focus", MAP));
+	            return this.getImageIcon(this.getInputStreamImage(perso.getName()+"_focus", MAP));
 	        } else if (this.aImage(this.getNameFromComportement(p.getComportementPersonnage()), MAP)) {
-	            return this.getImageIcon(this.getUrlImage(this.getNameFromComportement(p.getComportementPersonnage()), MAP));
+	            return this.getImageIcon(this.getInputStreamImage(this.getNameFromComportement(p.getComportementPersonnage()), MAP));
 	        }
         }
-        return this.getImageIcon(this.getUrlImage(DEFAULT_IMAGE, MAP));
+        return this.getImageIcon(this.getInputStreamImage(DEFAULT_IMAGE, MAP));
     }
     
 }
