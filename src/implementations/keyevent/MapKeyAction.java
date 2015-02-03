@@ -85,7 +85,6 @@ public class MapKeyAction implements KeyListener  {
 
     @Override
     public void keyPressed(KeyEvent ke) {
-        System.out.println("Code touche pressée : " + ke.getKeyCode() + " - caractère touche pressée : " + ke.getKeyChar());
         switch (ke.getKeyCode()) {
             case ButtonCode.BAS :
                 Square c1 = (Square) this.currentZone;
@@ -114,7 +113,6 @@ public class MapKeyAction implements KeyListener  {
                 this.pcsControlleurVue.firePropertyChange("annulation", null, null);
                 break;
             case ButtonCode.R :
-            	System.out.println("bouton r : info");
                 this.pcsControlleurVue.firePropertyChange("info", null, null);
                 break;
         }

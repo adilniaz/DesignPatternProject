@@ -4,7 +4,6 @@ import implementations.character.Character;
 import implementations.character.Character.Status;
 import implementations.gameplatform.Square;
 import implementations.object.Weapon;
-import implementations.object.WeaponType;
 
 import java.util.ArrayList;
 import java.util.List;

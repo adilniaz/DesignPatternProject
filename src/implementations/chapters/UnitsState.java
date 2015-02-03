@@ -1,27 +1,27 @@
 package implementations.chapters;
 
 import implementations.controller.Chapter;
-import abstracts_interfaces.state.AbstractState;
 
-public class UnitsState implements AbstractState {
-	
-	private Chapter chapter;
+public class UnitsState extends DefaultState {
+
 	private int page;
 	
 	public UnitsState (Chapter chapter) {
-		this.chapter = chapter;
+		super(chapter);
 		this.page = 1;
 		this.chapter.fire(this.chapter.UNITES, this.page, null);
 	}
 
 	@Override
 	public void action() {
-		this.chapter.unitsStateCancel();
+		this.chapter.fire(this.chapter.HIDE_UNITS, null, null);
+		this.chapter.setState(new FreeState(this.chapter));
 	}
 
 	@Override
 	public void cancel() {
-		this.chapter.unitsStateCancel();
+		this.chapter.fire(this.chapter.HIDE_UNITS, null, null);
+		this.chapter.setState(new FreeState(this.chapter));
 	}
 
 	@Override
@@ -38,29 +38,5 @@ public class UnitsState implements AbstractState {
 			this.page++;
 			this.chapter.fire(this.chapter.UNITES, this.page, null);
 		}
-	}
-
-	@Override
-	public void up() {
-	}
-
-	@Override
-	public void down() {
-	}
-
-	@Override
-	public void start() {
-	}
-
-	@Override
-	public void select() {
-	}
-
-	@Override
-	public void info() {
-	}
-
-	@Override
-	public void l() {
 	}
 }

@@ -1,55 +1,25 @@
 package implementations.chapters;
 
+import implementations.Position;
+import implementations.character.Character;
 import implementations.controller.Chapter;
-import abstracts_interfaces.state.AbstractState;
 
-public class ActionMenuState implements AbstractState {
-	
-	private Chapter chapter;
+public class ActionMenuState extends DefaultState {
 	
 	public ActionMenuState (Chapter chapter) {
-		this.chapter = chapter;
-	}
-
-	@Override
-	public void action() {
+		super(chapter);
 	}
 
 	@Override
 	public void cancel() {
-		this.chapter.actionMenuStateCancel();
-	}
-
-	@Override
-	public void left() {
-	}
-
-	@Override
-	public void right() {
-	}
-
-	@Override
-	public void up() {
-	}
-
-	@Override
-	public void down() {
-	}
-
-	@Override
-	public void start() {
-	}
-
-	@Override
-	public void select() {
-	}
-
-	@Override
-	public void info() {
-	}
-
-	@Override
-	public void l() {
+		Character perso = (Character) this.chapter.getPersoEnCours();
+        Position pos = new Position(perso.getPosition());
+        perso.setPosition(this.chapter.getOldPosition());
+        this.chapter.fire(this.chapter.DEPLACE_PERSO, perso, pos);
+        this.chapter.fire(this.chapter.AFFICHE_DEPLACEMENT_DISPONIBLE, this.chapter.getZonesSelectionner(), null);
+        this.chapter.fire(this.chapter.AFFICHE_ATTAQUE_DISPONIBLE, this.chapter.getZonesAtkSelectionner(), null);
+        this.chapter.fire(this.chapter.CANCEL_ACTION_PERSO, null, null);
+        this.chapter.setState(new MoveState(this.chapter));
 	}
 
 }

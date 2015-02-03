@@ -1,8 +1,6 @@
 package implementations.controller;
 
 import implementations.Position;
-import implementations.chapters.ActionMenuState;
-import implementations.chapters.CharacterViewState;
 import implementations.chapters.FightSimulationState;
 import implementations.chapters.FreeState;
 import implementations.chapters.MenuState;
@@ -162,6 +160,30 @@ public class Chapter extends Controller {
     	return this.persoEnCours;
     }
     
+    public void setPersoEnCours (CharacterAbstract characterAbstract) {
+    	this.persoEnCours = characterAbstract;
+    }
+    
+    public Position getCurrentPosition () {
+    	return this.currentPosition;
+    }
+    
+    public Position getOldPosition () {
+    	return this.oldPosition;
+    }
+    
+    public void setState (AbstractState state) {
+    	this.state = state;
+    }
+    
+    public List<ZoneAbstract> getZonesSelectionner () {
+    	return this.zonesSelectionner;
+    }
+    
+    public List<ZoneAbstract> getZonesAtkSelectionner () {
+    	return this.zonesAtkSelectionner;
+    }
+    
     public void run () {
         this.pcsControlleurVue.firePropertyChange(AFFICHE_MAP, null, null);
         this.tour = Tour.perso;
@@ -189,7 +211,6 @@ public class Chapter extends Controller {
     }
     
     public void continuer () {
-    	System.out.println("continuer : " + this.tour);
     	switch (this.tour) {
 			case perso:
 				boolean hasPersoNormal = false;
@@ -224,10 +245,8 @@ public class Chapter extends Controller {
 				}
 				break;
 			case ennemie:
-				System.out.println("ennemies : " + this.plateauDeJeu.getEnnemies().size());
 				for (int i = 0 ; i < this.plateauDeJeu.getEnnemies().size() ; i++) {
 					Character p = (Character) this.plateauDeJeu.getEnnemies().get(i);
-					System.out.println("ennemie : " + p.getName());
 					this.persoEnCours = p;
 					p.getStrategie().run(this);
 					if (p.estKo()) {
@@ -308,7 +327,6 @@ public class Chapter extends Controller {
     }
     
     public void action () {
-    	System.out.println(this.state.getClass().getName());
     	this.state.action();
     }
     
@@ -419,112 +437,6 @@ public class Chapter extends Controller {
         this.state = new MenuState(this);
     }
     
-    public void freeStateInfo () {
-    	for (CharacterAbstract perso : this.plateauDeJeu.getPersonnages()) {
-            Character p = (Character) perso;
-            if (p.getPosition().equals(this.currentPosition)) {
-                this.persoEnCours = p;
-                this.state = new CharacterViewState(this);
-                break;
-            }
-        }
-    	for (CharacterAbstract perso : this.plateauDeJeu.getAnnexes()) {
-            Character p = (Character) perso;
-            if (p.getPosition().equals(this.currentPosition)) {
-                this.persoEnCours = p;
-                this.state = new CharacterViewState(this);
-                break;
-            }
-        }
-    	for (CharacterAbstract perso : this.plateauDeJeu.getEnnemies()) {
-            Character p = (Character) perso;
-            if (p.getPosition().equals(this.currentPosition)) {
-                this.persoEnCours = p;
-                this.state = new CharacterViewState(this);
-                break;
-            }
-        }
-    }
-    
-    public void menuStateCancel () {
-    	this.pcsControlleurVue.firePropertyChange(HIDE_MENU, null, null);
-    	this.state = new FreeState(this);
-    }
-    
-    public void moveStateAction () {
-    	boolean inZone = false;
-    	for (ZoneAbstract zone : this.zonesSelectionner) {
-            Square c = (Square) zone;
-            if (c.getPosition().equals(this.currentPosition)) {
-            	inZone = true;
-                break;
-            }
-        }
-    	if (!inZone) {
-    		return;
-    	}
-        for (CharacterAbstract perso : this.plateauDeJeu.getPersonnages()) {
-            Character p = (Character) perso;
-            if (p.getPosition().equals(this.currentPosition) && !p.equals(this.persoEnCours)) {
-                return;
-            }
-        }
-        Character p = (Character) this.persoEnCours;
-        this.deplacePerso(p, this.currentPosition);
-        List<CharacterAbstract> ennemies = this.getEnnemies();
-        List<actionPerso> list = new ArrayList<>();
-        if (!ennemies.isEmpty()) {
-        	list.add(actionPerso.attaquer);
-        }
-        list.add(actionPerso.objet);
-        List<CharacterAbstract> alies = this.getAlies();
-        if (!alies.isEmpty()) {
-        	list.add(actionPerso.echange);
-        }
-        list.add(actionPerso.attendre);
-        actionPerso actions[] = new actionPerso[list.size()];
-        for (int i =  0 ; i < list.size() ; i++) {
-            actions[i] = list.get(i);
-        }
-        this.pcsControlleurVue.firePropertyChange(AFFICHE_ACTION_PERSO, actions, null);
-        this.pcsControlleurVue.firePropertyChange(EFFACE_DEPLACEMENT_DISPONIBLE, this.zonesSelectionner, null);
-        this.pcsControlleurVue.firePropertyChange(EFFACE_ATTAQUE_DISPONIBLE, this.zonesAtkSelectionner, null);
-        this.state = new ActionMenuState(this);
-    }
-    
-    public void moveStateCancel () {
-    	this.pcsControlleurVue.firePropertyChange(EFFACE_DEPLACEMENT_DISPONIBLE, this.zonesSelectionner, null);
-        this.pcsControlleurVue.firePropertyChange(EFFACE_ATTAQUE_DISPONIBLE, this.zonesAtkSelectionner, null);
-        this.state = new FreeState(this);
-    }
-    
-    public void actionMenuStateCancel () {
-    	Character perso = (Character) this.persoEnCours;
-        Position pos = new Position(perso.getPosition());
-        perso.setPosition(this.oldPosition);
-        this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, this.persoEnCours, pos);
-        this.pcsControlleurVue.firePropertyChange(AFFICHE_DEPLACEMENT_DISPONIBLE, this.zonesSelectionner, null);
-        this.pcsControlleurVue.firePropertyChange(AFFICHE_ATTAQUE_DISPONIBLE, this.zonesAtkSelectionner, null);
-        this.pcsControlleurVue.firePropertyChange(CANCEL_ACTION_PERSO, null, null);
-        this.state = new MoveState(this);
-    }
-    
-    public void characterViewStateCancel () {
-    	this.pcsControlleurVue.firePropertyChange(HIDE_CHARACTER_VIEW, null, null);
-    	this.state = new FreeState(this);
-    }
-    
-    public void unitsStateCancel () {
-    	this.pcsControlleurVue.firePropertyChange(HIDE_UNITS, null, null);
-    	this.state = new FreeState(this);
-    }
-    
-    public void statusStateCancel () {
-    	System.out.println("statusStateCancel");
-    	this.pcsControlleurVue.firePropertyChange(HIDE_STATUS, null, null);
-    	this.state = new FreeState(this);
-    }
-    
     public void ordre (Ordre ordre) {
     	this.organization.setOrder(ordre);
     	this.pcsControlleurVue.firePropertyChange(HIDE_ORDRE, null, null);
@@ -533,26 +445,6 @@ public class Chapter extends Controller {
     
     public void ordreStateCancel () {
     	this.displayMenu();
-    }
-    
-    public void weaponChoiceStateCancel () {
-    	List<actionPerso> list = new ArrayList<>();
-        List<CharacterAbstract> ennemies = this.getEnnemies();
-        if (!ennemies.isEmpty()) {
-        	list.add(actionPerso.attaquer);
-        }
-        list.add(actionPerso.objet);
-        List<CharacterAbstract> alies = this.getAlies();
-        if (!alies.isEmpty()) {
-        	list.add(actionPerso.echange);
-        }
-        list.add(actionPerso.attendre);
-        actionPerso actions[] = new actionPerso[list.size()];
-        for (int i =  0 ; i < list.size() ; i++) {
-            actions[i] = list.get(i);
-        }
-    	this.pcsControlleurVue.firePropertyChange(AFFICHE_ACTION_PERSO, actions, null);
-        this.state = new ActionMenuState(this);
     }
     
     public void choiceWeapon (int indice) {
@@ -719,7 +611,9 @@ public class Chapter extends Controller {
             		this.plateauDeJeu.ajouterAnnexe(character);
             		this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, character, null);
             		this.renfortAppeler = true;
-            		this.menuStateCancel();
+            		//this.menuStateCancel();
+            		this.pcsControlleurVue.firePropertyChange(HIDE_MENU, null, null);
+                	this.state = new FreeState(this);
             	}
             	break;
             case ordre:
@@ -738,7 +632,8 @@ public class Chapter extends Controller {
             		((Character)perso).setEtat(Etat.attendre);
             		this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, perso, null);
             	}
-            	this.menuStateCancel();
+            	this.pcsControlleurVue.firePropertyChange(HIDE_MENU, null, null);
+            	this.state = new FreeState(this);
             	this.continuer = true;
             	break;
             case quitter:
@@ -811,11 +706,6 @@ public class Chapter extends Controller {
     	this.state = new ObjectActionState(this);
     }
     
-    public void cancelObjectActionState () {
-    	this.pcsControlleurVue.firePropertyChange(CANCEL_OBJET_ACTION, null, null);
-    	this.actionPerso(actionPerso.objet);
-    }
-    
     public void utiliserObjet (int choix) {
     	Character now = (Character)this.persoEnCours;
     	Character tmp = new Character(now);
@@ -827,7 +717,8 @@ public class Chapter extends Controller {
     
     public void equiperObjet (int choix) {
     	((Character)this.persoEnCours).setArme(choix);
-    	this.cancelObjectActionState();
+    	this.pcsControlleurVue.firePropertyChange(CANCEL_OBJET_ACTION, null, null);
+    	this.actionPerso(actionPerso.objet);
     }
     
     public void jeterObjet (int choix) {
@@ -836,7 +727,8 @@ public class Chapter extends Controller {
     		objets[i] = objets[i+1];
     	}
     	objets[objets.length-1] = null;
-    	this.cancelObjectActionState();
+    	this.pcsControlleurVue.firePropertyChange(CANCEL_OBJET_ACTION, null, null);
+    	this.actionPerso(actionPerso.objet);
     }
     
     public void verifMort () {

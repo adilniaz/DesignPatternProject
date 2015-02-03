@@ -99,7 +99,6 @@ public class ChapterView {
             @SuppressWarnings("unchecked")
 			@Override
             public void propertyChange(PropertyChangeEvent evt) {
-            	System.out.println("propertyChange : " + evt.getPropertyName());
                 if (evt.getPropertyName().equals(ChapterView.this.chapitre.AFFICHE_MAP)) {
                     afficheMap();
                 } else if (evt.getPropertyName().equals(ChapterView.this.chapitre.AFFICHE_ARMES_PERSO)) {

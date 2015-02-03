@@ -1,71 +1,37 @@
 package implementations.chapters;
 
-import implementations.controller.Chapter;
-import abstracts_interfaces.state.AbstractState;
+import java.util.ArrayList;
+import java.util.List;
 
-public class WeaponChoiceState implements AbstractState {
-	
-	private Chapter chapter;
+import implementations.controller.Chapter;
+import implementations.controller.Chapter.actionPerso;
+import abstracts_interfaces.CharacterAbstract;
+
+public class WeaponChoiceState extends DefaultState {
 	
 	public WeaponChoiceState (Chapter chapter) {
-		this.chapter = chapter;
-	}
-
-	@Override
-	public void action() {
+		super(chapter);
 	}
 
 	@Override
 	public void cancel() {
-		this.chapter.weaponChoiceStateCancel();
-		
-	}
-
-	@Override
-	public void left() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void right() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void up() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void down() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void start() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void select() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void info() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void l() {
-		// TODO Auto-generated method stub
+		List<actionPerso> list = new ArrayList<>();
+        List<CharacterAbstract> ennemies = this.chapter.getEnnemies();
+        if (!ennemies.isEmpty()) {
+        	list.add(actionPerso.attaquer);
+        }
+        list.add(actionPerso.objet);
+        List<CharacterAbstract> alies = this.chapter.getAlies();
+        if (!alies.isEmpty()) {
+        	list.add(actionPerso.echange);
+        }
+        list.add(actionPerso.attendre);
+        actionPerso actions[] = new actionPerso[list.size()];
+        for (int i =  0 ; i < list.size() ; i++) {
+            actions[i] = list.get(i);
+        }
+        this.chapter.fire(this.chapter.AFFICHE_ACTION_PERSO, actions, null);
+        this.chapter.setState(new ActionMenuState(this.chapter));
 		
 	}
 

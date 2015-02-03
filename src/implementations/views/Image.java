@@ -17,33 +17,9 @@ public class Image {
     
     public final static String defaut = "";
     
-    public Image () {
-        
-    }
-    
-    /*public URL getUrlImage (String nom) {
-        return this.getUrlImage(nom, defaut);
-    }*/
-    
     public InputStream getInputStreamImage (String nom) {
         return this.getInputStreamImage(nom, defaut);
     }
-    
-    /*public URL getUrlImage (String nom, String type) {
-        nom = this.formatString(nom);
-        URL url = null;
-        Extension[] extensions = Extension.values();
-        for (Extension extension : extensions) {
-            url = getClass().getResource(type+nom+"."+extension.name());
-            if (url != null) {
-                return url;
-            }
-        }
-        if (url == null && !defaut.equals(type)) {
-            return this.getUrlImage(nom, defaut);
-        }
-        return url;
-    }*/
     
     public InputStream getInputStreamImage (String nom, String type) {
         nom = this.formatString(nom);
@@ -66,7 +42,6 @@ public class Image {
     }
     
     public boolean aImage (String nom, String type) {
-    	//System.out.println("aImage : " + type + nom);
         return this.getInputStreamImage(nom, type) != null;
     }
     
@@ -204,34 +179,6 @@ public class Image {
     protected ImageIcon getImageIcon (URL url) {
         return new ImageIcon(url);
     }
-    
-    /*protected ImageIcon getImageIcon (InputStream stream) {
-        try {  
-            OutputStream os = new FileOutputStream(stream.toString()+".gif");  
-            try {  
-                byte[] buffer = new byte[4096];  
-                for (int n; (n = stream.read(buffer)) != -1; )   
-                    os.write(buffer, 0, n);
-            } catch (IOException ex) {
-                Logger.getLogger(Image.class.getName()).log(Level.SEVERE, null, ex);
-            } finally { 
-                try {
-                    os.close();
-                } catch (IOException ex) {
-                    Logger.getLogger(Image.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            } 
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Image.class.getName()).log(Level.SEVERE, null, ex);
-        } finally { 
-            try {
-                stream.close();
-            } catch (IOException ex) {
-                Logger.getLogger(Image.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        return new ImageIcon(stream.toString()+".gif");
-    }*/
     
     protected ImageIcon getImageIcon (InputStream stream) {
         byte [] imageData = this.getImageData(stream);

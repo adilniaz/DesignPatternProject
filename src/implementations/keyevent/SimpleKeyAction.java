@@ -20,7 +20,6 @@ public class SimpleKeyAction implements KeyListener  {
 
     @Override
     public void keyPressed(KeyEvent ke) {
-        System.out.println("Code touche pressée : " + ke.getKeyCode() + " - caractère touche pressée : " + ke.getKeyChar());
         switch (ke.getKeyCode()) {
             case ButtonCode.BAS :
             	this.pcsControlleurVue.firePropertyChange("down", null, null);

@@ -1,57 +1,36 @@
 package implementations.chapters;
 
-import implementations.controller.Chapter;
-import abstracts_interfaces.state.AbstractState;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ObjectMenuState implements AbstractState {
-	
-	private Chapter chapter;
+import implementations.controller.Chapter;
+import implementations.controller.Chapter.actionPerso;
+import abstracts_interfaces.CharacterAbstract;
+
+public class ObjectMenuState extends DefaultState {
 	
 	public ObjectMenuState (Chapter chapter) {
-		this.chapter = chapter;
-	}
-
-	@Override
-	public void action() {
-		
+		super(chapter);
 	}
 
 	@Override
 	public void cancel() {
-		this.chapter.weaponChoiceStateCancel();
-	}
-
-	@Override
-	public void left() {
-		
-	}
-
-	@Override
-	public void right() {
-		
-	}
-
-	@Override
-	public void up() {
-	}
-
-	@Override
-	public void down() {
-	}
-
-	@Override
-	public void start() {
-	}
-
-	@Override
-	public void select() {
-	}
-
-	@Override
-	public void info() {
-	}
-
-	@Override
-	public void l() {
+		List<actionPerso> list = new ArrayList<>();
+        List<CharacterAbstract> ennemies = this.chapter.getEnnemies();
+        if (!ennemies.isEmpty()) {
+        	list.add(actionPerso.attaquer);
+        }
+        list.add(actionPerso.objet);
+        List<CharacterAbstract> alies = this.chapter.getAlies();
+        if (!alies.isEmpty()) {
+        	list.add(actionPerso.echange);
+        }
+        list.add(actionPerso.attendre);
+        actionPerso actions[] = new actionPerso[list.size()];
+        for (int i =  0 ; i < list.size() ; i++) {
+            actions[i] = list.get(i);
+        }
+        this.chapter.fire(this.chapter.AFFICHE_ACTION_PERSO, actions, null);
+        this.chapter.setState(new ActionMenuState(this.chapter));
 	}
 }

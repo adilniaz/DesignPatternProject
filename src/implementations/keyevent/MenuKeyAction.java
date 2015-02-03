@@ -48,7 +48,6 @@ public class MenuKeyAction implements KeyListener  {
 
     @Override
     public void keyPressed(KeyEvent ke) {
-        System.out.println("Code touche pressée : " + ke.getKeyCode() + " - caractère touche pressée : " + ke.getKeyChar());
         switch (ke.getKeyCode()) {
             case ButtonCode.BAS :
             	if (this.cursor < this.components.length -1) {
@@ -70,7 +69,6 @@ public class MenuKeyAction implements KeyListener  {
                 break;
             case ButtonCode.ACTION :
             	((JButton)this.components[this.cursor]).getActionListeners()[0].actionPerformed(null);
-                //this.pcsControlleurVue.firePropertyChange("action", null, null);
                 break;
             case ButtonCode.ANNULATION :
                 this.pcsControlleurVue.firePropertyChange("annulation", null, null);

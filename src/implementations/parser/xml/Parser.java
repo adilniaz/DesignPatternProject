@@ -18,7 +18,6 @@ public class Parser {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Parser.class.getName()).log(Level.SEVERE, null, ex);
         }
-		System.out.println(inputStream.toString());
         XMLInputFactory factory = XMLInputFactory.newInstance();
         XMLStreamReader reader = null;
         try {
