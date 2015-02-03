@@ -15,6 +15,7 @@ import implementations.chapters.ViewMoveState;
 import implementations.chapters.WeaponChoiceState;
 import implementations.character.Character;
 import implementations.character.Character.Etat;
+import implementations.character.Character.Status;
 import implementations.character.FireEmblemCharacterFactory;
 import implementations.character.FireEmblemCharacterType;
 import implementations.combat.FightBehaviour;
@@ -82,6 +83,7 @@ public class Chapter extends Controller {
     public final String OBJETS_ACTION = "objetsAction";
     public final String ORDRES = "ordres";
     public final String PARTIE_SUSPENDU = "partieSuspendu";
+    public final String QUITTER = "quitter";
     public final String SHOW_CHARACTER_VIEW = "showCaractereView";
     public final String SIMULATION_COMBAT = "simulationCombat";
     public final String STATUS = "status";
@@ -195,15 +197,18 @@ public class Chapter extends Controller {
         	}
         	this.attendre(100);
         }
-        this.finPartie();
     }
     
-    private void finPartie () {
-    	if (this.plateauDeJeu.getEnnemies().isEmpty()) {
-    		this.pcsControlleurVue.firePropertyChange(VICTOIRE, null, null);
-    	} else if (this.plateauDeJeu.getPersonnages().isEmpty()) {
-    		this.pcsControlleurVue.firePropertyChange(GAME_OVER, null, null);
-    	}
+    public void victoire () {
+    	this.pcsControlleurVue.firePropertyChange(VICTOIRE, null, null);
+    	this.pcsControlleurVue.firePropertyChange(QUITTER, null, null);
+    	this.fin = true;
+    }
+    
+    public void defaite () {
+    	this.pcsControlleurVue.firePropertyChange(GAME_OVER, null, null);
+    	this.pcsControlleurVue.firePropertyChange(QUITTER, null, null);
+    	this.fin = true;
     }
     
     public void doContinue () {
@@ -257,11 +262,12 @@ public class Chapter extends Controller {
 						p.setEtat(Etat.attendre);
 		                this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, p, null);
 					}
+					if (this.fin) {
+						break;
+					}
 					this.attendre(1000);
 				}
-				if (this.plateauDeJeu.getEnnemies().isEmpty()) {
-					this.fin = true;
-				} else {
+				if (!this.fin) {
 					this.tour = Tour.annexes;
 					for (CharacterAbstract perso : this.plateauDeJeu.getEnnemies()) {
 						((Character)perso).setEtat(Etat.normal);
@@ -297,30 +303,35 @@ public class Chapter extends Controller {
 						p.setEtat(Etat.attendre);
 		                this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, p, null);
 					}
+					if (this.fin) {
+						break;
+					}
 					this.attendre(1000);
 				}
-				for (CharacterAbstract perso : this.plateauDeJeu.getAnnexes()) {
-					((Character)perso).setEtat(Etat.normal);
-					this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, perso, null);
-				}
-				this.tour = Tour.perso;
-				this.pcsControlleurVue.firePropertyChange(CHANGE_TOUR, this.tour, null);
-				this.renfortAppeler = false;
-				this.state = new FreeState(this);
-				this.nbTour++;
-				for (int i = 0 ; i < this.plateauDeJeu.getPersonnages().size() ; i++) {
-					Character p = (Character) this.plateauDeJeu.getPersonnages().get(i);
-					for (ZoneAbstract zone : this.plateauDeJeu.getZones()) {
-			            Square c = (Square) zone;
-			            if (c.getPosition().equals(p.getPosition())) {
-			            	Character tmp = new Character(p);
-			            	c.effect(p);
-			            	if (tmp.getPv() < p.getPv()) {
-			            		this.pcsControlleurVue.firePropertyChange(USE_OBJECT, tmp, p);
-			            	}
-			                break;
-			            }
-			        }
+				if (!this.fin) {
+					for (CharacterAbstract perso : this.plateauDeJeu.getAnnexes()) {
+						((Character)perso).setEtat(Etat.normal);
+						this.pcsControlleurVue.firePropertyChange(DEPLACE_PERSO, perso, null);
+					}
+					this.tour = Tour.perso;
+					this.pcsControlleurVue.firePropertyChange(CHANGE_TOUR, this.tour, null);
+					this.renfortAppeler = false;
+					this.state = new FreeState(this);
+					this.nbTour++;
+					for (int i = 0 ; i < this.plateauDeJeu.getPersonnages().size() ; i++) {
+						Character p = (Character) this.plateauDeJeu.getPersonnages().get(i);
+						for (ZoneAbstract zone : this.plateauDeJeu.getZones()) {
+				            Square c = (Square) zone;
+				            if (c.getPosition().equals(p.getPosition())) {
+				            	Character tmp = new Character(p);
+				            	c.effect(p);
+				            	if (tmp.getPv() < p.getPv()) {
+				            		this.pcsControlleurVue.firePropertyChange(USE_OBJECT, tmp, p);
+				            	}
+				                break;
+				            }
+				        }
+					}
 				}
 				break;
 		}
@@ -637,6 +648,7 @@ public class Chapter extends Controller {
             	this.continuer = true;
             	break;
             case quitter:
+            	this.pcsControlleurVue.firePropertyChange(QUITTER, null, null);
             	this.fin = true;
                break;
         }
@@ -733,13 +745,19 @@ public class Chapter extends Controller {
     
     public void verifMort () {
     	if (((Character)this.persoAttaquer).estKo()) {
-			pcsControlleurVue.firePropertyChange(ENLEVE_PERSO, this.persoAttaquer, null);
+    		this.pcsControlleurVue.firePropertyChange(ENLEVE_PERSO, this.persoAttaquer, null);
 			if (this.plateauDeJeu.getAnnexes().contains(this.persoAttaquer)) {
 				this.plateauDeJeu.getAnnexes().remove(this.persoAttaquer);
 			} else if (this.plateauDeJeu.getEnnemies().contains(this.persoAttaquer)) {
 				this.plateauDeJeu.getEnnemies().remove(this.persoAttaquer);
+				if (((Character)this.persoAttaquer).getStatus() == Status.boss) {
+					this.victoire();
+				}
 			} else if (this.plateauDeJeu.getPersonnages().contains(this.persoAttaquer)) {
 				this.plateauDeJeu.getPersonnages().remove(this.persoAttaquer);
+				if (((Character)this.persoAttaquer).getStatus() == Status.boss) {
+					this.defaite();
+				}
 			}
 		}
     	if (((Character)this.persoEnCours).estKo()) {
@@ -748,8 +766,14 @@ public class Chapter extends Controller {
 				this.plateauDeJeu.getAnnexes().remove(this.persoEnCours);
 			} else if (this.plateauDeJeu.getEnnemies().contains(this.persoEnCours)) {
 				this.plateauDeJeu.getEnnemies().remove(this.persoEnCours);
+				if (((Character)this.persoEnCours).getStatus() == Status.boss) {
+					this.victoire();
+				}
 			} else if (this.plateauDeJeu.getPersonnages().contains(this.persoEnCours)) {
 				this.plateauDeJeu.getPersonnages().remove(this.persoEnCours);
+				if (((Character)this.persoEnCours).getStatus() == Status.boss) {
+					this.defaite();
+				}
 			}
 		}
     }

@@ -12,22 +12,26 @@ import abstracts_interfaces.SimulationAbstract;
 
 public class SimulationLauncher {
 	
+	private Window window;
+	
+	public SimulationLauncher () {
+		this.window = new Window("Game simulation");
+	}
+	
 	public void initComponents() {
-		Window window = new Window("Game simulation");
 		
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 		
 		int index = 0;
-		SimulationLauncher simulationLauncher = new SimulationLauncher();
 		for (SimulationType simulationType : SimulationType.values()) {
 			JButton button = new JButton(simulationType.name());
-			button.setBounds(window.getWidth()/2-100, 75 * index + 20, 200, 75);
-			button.addActionListener(simulationLauncher.new StartButton(simulationType, window));
+			button.setBounds(this.window.getWidth()/2-100, 75 * index + 20, 200, 75);
+			button.addActionListener(new StartButton(simulationType, this.window));
             panel.add(button);
             index++;
 		}
-		window.ajouterPanel(panel);
+		this.window.ajouterPanel(panel);
 	}
     public class StartButton implements ActionListener {
         
@@ -59,6 +63,7 @@ public class SimulationLauncher {
 		@Override
 		public void run () {
 			this.simulationAbstract.run(window);
+			initComponents();
 		}
 		
 	}

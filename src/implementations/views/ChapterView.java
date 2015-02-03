@@ -145,6 +145,8 @@ public class ChapterView {
                     afficheObjets((Objet[])evt.getOldValue());
                 } else if (evt.getPropertyName().equals(ChapterView.this.chapitre.OBJETS_ACTION)) {
                 	afficheMenuObjet((ObjectAction[])evt.getOldValue(), (int)evt.getNewValue());
+                } else if (evt.getPropertyName().equals(ChapterView.this.chapitre.QUITTER)) {
+                	quitter();
                 } else if (evt.getPropertyName().equals(ChapterView.this.chapitre.SHOW_CHARACTER_VIEW)) {
                     showCharacterView((Character) evt.getOldValue(), (int)evt.getNewValue());
                 } else if (evt.getPropertyName().equals(ChapterView.this.chapitre.SIMULATION_COMBAT)) {
@@ -160,6 +162,17 @@ public class ChapterView {
                 }
             }
         });
+    }
+    
+    public void quitter () {
+    	this.fenetreMenu.hide();
+    	this.fenetreObjectif.hide();
+    	if (this.fenetreObjet != null) {
+    		this.fenetreObjet.hide();
+    	}
+    	this.fenetrePerso.hide();
+    	this.fenetreTerrain.hide();
+    	this.fenetre.removeKeyBoardManager();
     }
     
     public void afficheMap () {

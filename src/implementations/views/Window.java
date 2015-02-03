@@ -58,6 +58,13 @@ public class Window extends JFrame {
         manager.addKeyEventDispatcher(dispatcher);
     }
     
+    public void removeKeyBoardManager () {
+    	KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+        if (this.dispatcher != null) {
+            manager.removeKeyEventDispatcher(this.dispatcher);
+        }
+    }
+    
     public void close () {
         this.processWindowEvent( new WindowEvent( this, WindowEvent.WINDOW_CLOSING) );
     }

@@ -125,13 +125,14 @@ public class Combat extends Controller {
         int sRankBonus = perso1.getArme().getRang() == Weapon.Rang.S ? 5 : 0;
         int precision = perso1.getArme().getPrecision() + (perso1.getCapacite() * 2) + (perso1.getChance() /2) + supportBonus + 
                 weaponTriangleBonus + sRankBonus;
-        if (precision > 100) {
-            precision = 100;
+        int total = precision - this.calculeEsquive(perso2);
+        if (total > 100) {
+        	total = 100;
         }
-        if (precision < 0) {
-            precision = 0;
+        if (total < 0) {
+        	total = 0;
         }
-        return precision - this.calculeEsquive(perso2);
+        return total;
     }
     
     public int calculeEsquive (Character perso) {
