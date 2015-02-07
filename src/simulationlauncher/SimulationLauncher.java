@@ -1,5 +1,6 @@
 package simulationlauncher;
 
+import implementations.AgeOfWar;
 import implementations.views.Window;
 
 import java.awt.event.ActionEvent;
@@ -63,7 +64,9 @@ public class SimulationLauncher {
 		@Override
 		public void run () {
 			this.simulationAbstract.run(window);
-			initComponents();
+			if (!(this.simulationAbstract instanceof AgeOfWar)) {
+				initComponents();
+			}
 		}
 		
 	}
