@@ -139,12 +139,10 @@ public class AgeOfWar implements SimulationAbstract, ActionListener{
 		
 		mainPanel = new JPanel();
 		mainPanel.setBounds(0, 0, winW-6, winH-29);
-		mainPanel.setBackground(Color.WHITE);
 		mainPanel.setLayout(null);
 		
 		actionsPanel = new JPanel();
 		actionsPanel.setBounds(0, 0, mainPanel.getWidth(), 100);
-		actionsPanel.setBackground(Color.BLACK);
 		actionsPanel.setLayout(null);
 		
 		gamePanel = new JPanel();
@@ -324,53 +322,18 @@ public class AgeOfWar implements SimulationAbstract, ActionListener{
 			} else {
 				count++;
 			}
+			
 			if (e.getSource() == characterButton1) {
-				if (playersCharacters.size() < 10) {
-					CharacterAbstract charac = characterFatory.createCharacter(agePlayer, 0, player);
-					if (charac.cost <= playerGold) {
-						playersCharacters.add(charac);
-						charac.setMoveDirection(1);
-						addLabel(playerLabelList, charac, 0);
-						setCharactersInformation(textAreaMap.get("playertextAreaAlive"), playersCharacters);
-						playerGold -= charac.cost;
-					}
-				}
+				characterCreator(0);
 			}
 			if (e.getSource() == characterButton2) {
-				if (playersCharacters.size() < 10) {
-					CharacterAbstract charac = characterFatory.createCharacter(agePlayer, 1, player);
-					if (charac.cost <= playerGold) {
-						playersCharacters.add(charac);
-						charac.setMoveDirection(1);
-						addLabel(playerLabelList, charac, 0);
-						setCharactersInformation(textAreaMap.get("playertextAreaAlive"), playersCharacters);
-						playerGold -= charac.cost;
-					}
-				}
+				characterCreator(1);
 			}
 			if (e.getSource() == characterButton3) {
-				if (playersCharacters.size() < 10) {
-					CharacterAbstract charac = characterFatory.createCharacter(agePlayer, 2, player);
-					if (charac.cost <= playerGold) {
-						playersCharacters.add(charac);
-						charac.setMoveDirection(1);
-						addLabel(playerLabelList, charac, 0);
-						setCharactersInformation(textAreaMap.get("playertextAreaAlive"), playersCharacters);
-						playerGold -= charac.cost;
-					}
-				}
+				characterCreator(2);
 			}
 			if (e.getSource() == characterButton4) {
-				if (playersCharacters.size() < 10) {
-					CharacterAbstract charac = characterFatory.createCharacter(agePlayer, 3, player);
-					if (charac.cost <= playerGold) {
-						playersCharacters.add(charac);
-						charac.setMoveDirection(1);
-						addLabel(playerLabelList, charac, 0);
-						setCharactersInformation(textAreaMap.get("playertextAreaAlive"), playersCharacters);
-						playerGold -= charac.cost;
-					}	
-				}
+				characterCreator(3);
 			}
 			
 			if (e.getSource() == weaponBonus) {
@@ -425,8 +388,12 @@ public class AgeOfWar implements SimulationAbstract, ActionListener{
 				}
 			}
 			
+
 			if (e.getSource() == goldExpBonus) {
-				goldExperienceBonus += 20;
+				if (agePlayer < 4 && playerExperience > 1000) {
+					goldExperienceBonus += 20;
+					playerExperience -= 1000;
+				}
 			}
 			
 			if (e.getSource() == exitButton) {
@@ -442,6 +409,19 @@ public class AgeOfWar implements SimulationAbstract, ActionListener{
 			showLabels();
 		}
 		
+	}
+
+	public void characterCreator(int characterIndex) {
+		if (playersCharacters.size() < 10) {
+			CharacterAbstract charac = characterFatory.createCharacter(agePlayer, characterIndex, player);
+			if (charac.cost <= playerGold) {
+				playersCharacters.add(charac);
+				charac.setMoveDirection(1);
+				addLabel(playerLabelList, charac, 0);
+				setCharactersInformation(textAreaMap.get("playertextAreaAlive"), playersCharacters);
+				playerGold -= charac.cost;
+			}
+		}
 	}
 	
 	private void limitEliminater() {
@@ -471,7 +451,6 @@ public class AgeOfWar implements SimulationAbstract, ActionListener{
 			int aiweaponRange = artifIntelCharacters.get(0).getWeapon().getRange();
 			int aiweaponDamage = artifIntelCharacters.get(0).getWeapon().getDamage();
 			int aiBaseLocation = aiBase.getLocation().x;
-			System.out.println(aiLocation);
 			
 			int playerLocation = playerLabelList.get(0).getLocation().x;
 			int playerHealth = playersCharacters.get(0).statistics.getHealth();
@@ -514,33 +493,29 @@ public class AgeOfWar implements SimulationAbstract, ActionListener{
 				aiBaseHealth -= playerweaponDamage;
 				aiBase.setText("<html>BASE<br>"+aiBaseHealth+"</html>");
 				if (aiBaseHealth < 0) {
-					gameRunning = false;
-					timer.stop();
-					mainPanel.removeAll();
-					refresher();
-					finalTextArea.setText("YOU WON!!");
-					finalTextArea.setFont(new Font("", 50, 50));
-					mainPanel.add(finalTextArea);
-					refresher();
+					gameEnd("YOU WON!!");
 				}
 			}
 			
 			if (playerBaseLocation >= aiLocation - 100 - aiweaponRange) {
 				playerBaseHealth -= aiweaponDamage;
 				playerBase.setText("<html>BASE<br>"+playerBaseHealth+"</html>");
-				System.out.println(playerBaseHealth);
 				if (playerBaseHealth < 0) {
-					gameRunning = false;
-					timer.stop();
-					mainPanel.removeAll();
-					refresher();
-					finalTextArea.setText("YOU LOST!!");
-					finalTextArea.setFont(new Font("", 50, 50));
-					mainPanel.add(finalTextArea);
-					refresher();
+					gameEnd("YOU LOST!!");
 				}
 			}
 		}
+	}
+
+	public void gameEnd(String state) {
+		gameRunning = false;
+		timer.stop();
+		mainPanel.removeAll();
+		refresher();
+		finalTextArea.setText(state);
+		finalTextArea.setFont(new Font("", 50, 50));
+		mainPanel.add(finalTextArea);
+		refresher();
 	}
 
 	private void labelMovement() {
