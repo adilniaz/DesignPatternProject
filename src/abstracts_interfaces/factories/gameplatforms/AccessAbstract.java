@@ -1,7 +1,5 @@
  package abstracts_interfaces.factories.gameplatforms;
 
-
-
 public abstract class AccessAbstract {
 	
 	public String id;
@@ -16,8 +14,6 @@ public abstract class AccessAbstract {
 		this.zoneA = zone1;
 		this.zoneB = zone2;
 	}
-	
-	public abstract String createAccess(ZoneAbstract zone1, ZoneAbstract zone2);
 	
 	public ZoneAbstract getZoneA () {
 		return zoneA;

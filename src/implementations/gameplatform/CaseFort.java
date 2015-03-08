@@ -30,9 +30,4 @@ public class CaseFort extends Square {
     	}
     }
 
-	@Override
-	public String createZone() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

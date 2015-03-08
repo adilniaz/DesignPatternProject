@@ -88,7 +88,6 @@ public class AgeOfWar implements SimulationAbstract, ActionListener{
 		playerBaseHealth = 1000;
 		
 		this.window = window;
-		
 		finalTextArea = new JTextArea();
 		finalTextArea.setBounds(600, 300, 500, 500);
 		

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package abstracts_interfaces.factories.gameplatforms;
 
 import java.util.ArrayList;

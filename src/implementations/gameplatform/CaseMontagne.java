@@ -28,9 +28,4 @@ public class CaseMontagne extends Square {
     	
     }
 
-	@Override
-	public String createZone() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

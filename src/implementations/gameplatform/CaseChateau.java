@@ -27,10 +27,5 @@ public class CaseChateau extends Square {
     public void effect (Character character) {
     	
     }
-
-	@Override
-	public String createZone() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    
 }
