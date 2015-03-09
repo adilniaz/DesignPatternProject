@@ -35,6 +35,7 @@ import javax.swing.JTextArea;
 import javax.swing.Timer;
 import javax.swing.border.Border;
 
+import simulationlauncher.Launcher;
 import simulationlauncher.SimulationLauncher;
 import abstracts_interfaces.CharacterAbstract;
 import abstracts_interfaces.SimulationAbstract;
@@ -100,7 +101,7 @@ public class AgeOfWar implements SimulationAbstract, ActionListener{
 		agePlayer = 0;
 		ageAI = 0;
 
-		playerGold = 500;
+		playerGold = 1500;
 		playerExperience = 0;
 
 		aiGold = 500;
@@ -176,7 +177,7 @@ public class AgeOfWar implements SimulationAbstract, ActionListener{
 		
 		infoTextArea = new JTextArea();
 		infoTextArea.setSize(200, actionsPanel.getHeight());
-		infoTextArea.setLocation(1274, 0);
+		infoTextArea.setLocation(1200, 0);
 		infoTextArea.setEditable(false);
 		setInformation();
 		
@@ -321,7 +322,7 @@ public class AgeOfWar implements SimulationAbstract, ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (gameRunning) {
-			if (count == 100) {
+			if (count == 150) {
 				aiManager();
 				count = 0;
 			} else {
@@ -376,7 +377,6 @@ public class AgeOfWar implements SimulationAbstract, ActionListener{
 						Health h = new Health(statistics);
 						Speed s = new Speed(statistics);
 						
-								
 						statistics.setHealth(h.getHealth());
 						statistics.setDefence(d.getDefence());
 						statistics.setSpeed(s.getSpeed());
@@ -423,8 +423,9 @@ public class AgeOfWar implements SimulationAbstract, ActionListener{
 			
 			if (e.getSource() == exitButton) {
 				timer.stop();
-				new SimulationLauncher();
-				window.close();
+				window.dispose();
+				SimulationLauncher simulationLauncher = new SimulationLauncher();
+				simulationLauncher.initComponents();
 			}
 			
 			labelMovement();

@@ -37,4 +37,9 @@ public class Parametres {
     public static final int rendementRadis = 2;
     public static final int rendementTomate = 3;
     public static final int rendementRiz = 4;
+    
+    /*Cycle de croissance*/
+    public static final int croissanceRadis = 2;
+    public static final int croissanceRiz = 4;
+    public static final int croissanceTomate = 3;
 }

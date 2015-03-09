@@ -1,20 +1,22 @@
 package survivalPotager.modele.mangeables;
 
+import survivalPotager.configuration.Parametres;
+
 public class Riz extends Mangeable {
 
 	@Override
 	public int getBesoinIrrigation() {
-		return 4;
+		return Parametres.besoinEauRiz;
 	}
 
 	@Override
 	public int getCycleDeCroissance() {
-		return 5;
+		return Parametres.croissanceRiz;
 	}
 
 	@Override
 	public int getRendement() {
-		return 4;
+		return Parametres.rendementRiz;
 	}
 
 	public Riz() {

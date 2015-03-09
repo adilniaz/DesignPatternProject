@@ -1,21 +1,23 @@
 package survivalPotager.modele.mangeables;
 
+import survivalPotager.configuration.Parametres;
+
 public class Tomate extends Mangeable {
 
 
 	@Override
 	public int getBesoinIrrigation() {
-		return 2;
+		return Parametres.besoinEauTomate;
 	}
 
 	@Override
 	public int getCycleDeCroissance() {
-		return 3;
+		return Parametres.croissanceTomate;
 	}
 
 	@Override
 	public int getRendement() {
-		return 3;
+		return Parametres.rendementTomate;
 	}
 
 	public Tomate() { 

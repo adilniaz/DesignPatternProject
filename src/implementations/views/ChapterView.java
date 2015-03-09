@@ -145,6 +145,8 @@ public class ChapterView {
                     afficheObjets((Objet[])evt.getOldValue());
                 } else if (evt.getPropertyName().equals(ChapterView.this.chapitre.OBJETS_ACTION)) {
                 	afficheMenuObjet((ObjectAction[])evt.getOldValue(), (int)evt.getNewValue());
+                } else if (evt.getPropertyName().equals(ChapterView.this.chapitre.PARTIE_SUSPENDU)) {
+                	partieSuspendu();
                 } else if (evt.getPropertyName().equals(ChapterView.this.chapitre.QUITTER)) {
                 	quitter();
                 } else if (evt.getPropertyName().equals(ChapterView.this.chapitre.SHOW_CHARACTER_VIEW)) {
@@ -864,6 +866,10 @@ public class ChapterView {
     	this.fenetreTerrain.show();
     	this.fenetreObjectif.show();
     	this.fenetrePerso.show();
+    }
+    
+    private void partieSuspendu () {
+    	this.fenetreMenu.hide();
     }
     
     private void action () {

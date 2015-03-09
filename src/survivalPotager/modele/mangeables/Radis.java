@@ -1,24 +1,26 @@
 package survivalPotager.modele.mangeables;
 
+import survivalPotager.configuration.Parametres;
+
 
 public class Radis extends Mangeable {
 
 	@Override
 	public int getBesoinIrrigation() {
 		 
-		return 1;
+		return Parametres.besoinEauRadis;
 	}
 
 	@Override
 	public int getCycleDeCroissance() {
 		 
-		return 2;
+		return Parametres.croissanceRadis;
 	}
 
 	@Override
 	public int getRendement() {
 		 
-		return 2;
+		return Parametres.rendementRadis;
 	}
 
 	public Radis() {

@@ -121,7 +121,7 @@ public class SurvivalIHM extends JFrame {
         this.setSize(800, 600);
         this.setLayout(new BorderLayout());
         this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         actualiserAffichage();
         this.setVisible(true);
     }
