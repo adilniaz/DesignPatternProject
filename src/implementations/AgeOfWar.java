@@ -564,7 +564,7 @@ public class AgeOfWar implements SimulationAbstract, ActionListener{
 		Random rand = new Random();
 		int rN = rand.nextInt((3 - 0) + 1) + 0;
 		if (artifIntelCharacters.size()<10) {
-			CharacterAbstract charac = characterFatory.createCharacter(ageAI, rN, player);
+			CharacterAbstract charac = characterFatory.createCharacter(ageAI, rN, artifIntel);
 			artifIntelCharacters.add(charac);
 			charac.setMoveDirection(-1);
 			addLabel(aiLabelList, charac, gamePanel.getWidth()-100);
