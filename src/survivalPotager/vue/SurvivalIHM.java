@@ -26,7 +26,8 @@ import survivalPotager.outils.Coordonnees;
 
 public class SurvivalIHM extends JFrame {
 
-    private Jeu jeu;
+	private static final long serialVersionUID = -1892905009127269377L;
+	private Jeu jeu;
     private Terrain terrain;
     private JPanel panelTerrain;
     private JPanel menu;
@@ -281,7 +282,8 @@ public class SurvivalIHM extends JFrame {
 
     private class Button extends JButton {
 
-        Coordonnees coordBout;
+		private static final long serialVersionUID = 6352813703848772069L;
+		Coordonnees coordBout;
 
         public Button(Coordonnees coord) {
             this.coordBout = coord;
