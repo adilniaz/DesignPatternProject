@@ -1,5 +1,11 @@
 package implementations;
 
+import implementations.decorators.statistics.statisticsdecorators.Defence;
+import implementations.decorators.statistics.statisticsdecorators.Health;
+import implementations.decorators.statistics.statisticsdecorators.Speed;
+import implementations.decorators.weapons.weaponsdecorators.AttackRate;
+import implementations.decorators.weapons.weaponsdecorators.Damage;
+import implementations.decorators.weapons.weaponsdecorators.Range;
 import implementations.factories.GeneralCharacterFactory;
 import implementations.organizations.Organization;
 import implementations.views.Window;
@@ -315,7 +321,7 @@ public class AgeOfWar implements SimulationAbstract, ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (gameRunning) {
-			if (count == 150) {
+			if (count == 100) {
 				aiManager();
 				count = 0;
 			} else {
@@ -323,25 +329,40 @@ public class AgeOfWar implements SimulationAbstract, ActionListener{
 			}
 			
 			if (e.getSource() == characterButton1) {
-				characterCreator(0);
+				if (playersCharacters.size()<10) {
+					characterCreator(0);
+				}
 			}
 			if (e.getSource() == characterButton2) {
-				characterCreator(1);
+				if (playersCharacters.size()<10) {
+					characterCreator(1);
+				}
 			}
 			if (e.getSource() == characterButton3) {
-				characterCreator(2);
+				if (playersCharacters.size()<10) {
+					characterCreator(2);
+				}
 			}
 			if (e.getSource() == characterButton4) {
-				characterCreator(3);
+				if (playersCharacters.size()<10) {
+					characterCreator(3);
+				}
 			}
 			
 			if (e.getSource() == weaponBonus) {
 				if (playerExperience >= 1000) {
 					for (int i = 0; i < playersCharacters.size(); i++) {
 						WeaponAbstract weapon = playersCharacters.get(i).getWeapon();
-						weapon.setAccuracy((weapon.getAccuracy()*125)/100);
-						weapon.setDamage((weapon.getAccuracy()*125)/100);
-						weapon.setRange((weapon.getAccuracy()*125)/100);
+						System.out.println(weapon.getAttackRate() + " " + weapon.getDamage() + " " + weapon.getRange());
+						Damage d = new Damage(weapon);
+						AttackRate a = new AttackRate(weapon);
+						Range r = new Range(weapon);
+						
+						weapon.setAttackRate(a.getAttackRate());
+						weapon.setDamage(d.getDamage());
+						weapon.setRange(r.getRange());
+						
+						System.out.println(weapon.getAttackRate() + " " + weapon.getDamage() + " " + weapon.getRange());
 					}
 					playerExperience -= 1000;
 				}
@@ -351,9 +372,14 @@ public class AgeOfWar implements SimulationAbstract, ActionListener{
 				if (playerExperience >= 1000) {
 					for (int i = 0; i < playersCharacters.size(); i++) {
 						StatisticsAbstract statistics = playersCharacters.get(i).statistics;
-						statistics.setHealth((statistics.getHealth()*125)/100);
-						statistics.setDefence((statistics.getDefence()*125)/100);
-						statistics.setSpeed((statistics.getSpeed()*125)/100);
+						Defence d = new Defence(statistics);
+						Health h = new Health(statistics);
+						Speed s = new Speed(statistics);
+						
+								
+						statistics.setHealth(h.getHealth());
+						statistics.setDefence(d.getDefence());
+						statistics.setSpeed(s.getSpeed());
 					}
 					playerExperience -= 1000;
 				}
@@ -537,13 +563,13 @@ public class AgeOfWar implements SimulationAbstract, ActionListener{
 	private void aiManager() {
 		Random rand = new Random();
 		int rN = rand.nextInt((3 - 0) + 1) + 0;
-		
-		CharacterAbstract charac = characterFatory.createCharacter(ageAI, rN, player);
-		artifIntelCharacters.add(charac);
-		charac.setMoveDirection(-1);
-		addLabel(aiLabelList, charac, gamePanel.getWidth()-100);
-		setCharactersInformation(textAreaMap.get("aitextAreaAlive"), artifIntelCharacters);
-		
+		if (artifIntelCharacters.size()<10) {
+			CharacterAbstract charac = characterFatory.createCharacter(ageAI, rN, player);
+			artifIntelCharacters.add(charac);
+			charac.setMoveDirection(-1);
+			addLabel(aiLabelList, charac, gamePanel.getWidth()-100);
+			setCharactersInformation(textAreaMap.get("aitextAreaAlive"), artifIntelCharacters);
+		}
 		if (ageAI < 4 && aiExperience >= 1000) {
 			ageAI++;
 			aiExperience -= 1000;
