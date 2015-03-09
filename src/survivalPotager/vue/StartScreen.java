@@ -11,7 +11,8 @@ import survivalPotager.modele.jeu.Jeu;
 
 public class StartScreen extends JFrame {
 
-    private Jeu jeu;
+	private static final long serialVersionUID = 5344028866343351024L;
+	private Jeu jeu;
     private JButton imageDefond;
 
     public StartScreen() {
@@ -34,7 +35,7 @@ public class StartScreen extends JFrame {
     private class EcouteurBoutonJouer implements ActionListener {
 
         public void actionPerformed(ActionEvent event) {
-            SurvivalIHM GameSw = new SurvivalIHM(jeu);
+            new SurvivalIHM(jeu);
             dispose();
         }
     }
