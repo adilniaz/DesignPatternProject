@@ -10,7 +10,7 @@ public class SurvivalPotager implements SimulationAbstract{
 	@Override
 	public void run(Window window) {
 		new StartScreen();
-		window.dispose();
+		//window.dispose();
 	}
 
 }
